@@ -1,0 +1,11 @@
+/Users/kaz/Documents/Projects/Mingo/Domain/bin/Debug/net9.0/Domain.deps.json
+/Users/kaz/Documents/Projects/Mingo/Domain/bin/Debug/net9.0/Domain.dll
+/Users/kaz/Documents/Projects/Mingo/Domain/bin/Debug/net9.0/Domain.pdb
+/Users/kaz/Documents/Projects/Mingo/Domain/obj/Debug/net9.0/Domain.GeneratedMSBuildEditorConfig.editorconfig
+/Users/kaz/Documents/Projects/Mingo/Domain/obj/Debug/net9.0/Domain.AssemblyInfoInputs.cache
+/Users/kaz/Documents/Projects/Mingo/Domain/obj/Debug/net9.0/Domain.AssemblyInfo.cs
+/Users/kaz/Documents/Projects/Mingo/Domain/obj/Debug/net9.0/Domain.csproj.CoreCompileInputs.cache
+/Users/kaz/Documents/Projects/Mingo/Domain/obj/Debug/net9.0/Domain.dll
+/Users/kaz/Documents/Projects/Mingo/Domain/obj/Debug/net9.0/refint/Domain.dll
+/Users/kaz/Documents/Projects/Mingo/Domain/obj/Debug/net9.0/Domain.pdb
+/Users/kaz/Documents/Projects/Mingo/Domain/obj/Debug/net9.0/ref/Domain.dll
