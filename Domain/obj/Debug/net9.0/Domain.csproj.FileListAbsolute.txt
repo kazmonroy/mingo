@@ -9,3 +9,4 @@
 /Users/kaz/Documents/Projects/Mingo/Domain/obj/Debug/net9.0/refint/Domain.dll
 /Users/kaz/Documents/Projects/Mingo/Domain/obj/Debug/net9.0/Domain.pdb
 /Users/kaz/Documents/Projects/Mingo/Domain/obj/Debug/net9.0/ref/Domain.dll
+/Users/kaz/Documents/Projects/Mingo/Domain/obj/Debug/net9.0/Domain.sourcelink.json
