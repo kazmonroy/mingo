@@ -1,0 +1,16 @@
+# Build results
+**/bin/
+**/obj/
+
+# User-specific files
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Rider-specific
+.idea/
+
+# OS junk
+.DS_Store
+Thumbs.db
