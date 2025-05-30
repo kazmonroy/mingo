@@ -1,7 +1,8 @@
 ### DotnetCore ###
 # .NET Core build folders
-/bin
-/obj
+**/bin/
+**/obj/
+
 
 # Common node modules locations
 /node_modules
@@ -80,3 +81,8 @@ fabric.properties
 
 .idea/
 *.sln.iml
+**/rider.project.model.*
+
+# OS junk
+.DS_Store
+Thumbs.db
