@@ -1,3 +1,4 @@
+using Application;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using Scalar.AspNetCore;
@@ -8,9 +9,11 @@ public static class StartupExtensions
 {
     public static WebApplication ConfigureServices(this WebApplicationBuilder builder)
     {
+        builder.Services.AddApplicationServices();
+        builder.Services.AddPersistenceServices(builder.Configuration);
         builder.Services.AddControllers();
         builder.Services.AddOpenApi();
-        builder.Services.AddPersistenceServices(builder.Configuration);
+        
 
         return builder.Build();
     }
