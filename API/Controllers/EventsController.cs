@@ -1,5 +1,6 @@
 using Application.Features.Events.Commands.CreateEvent;
 using Application.Features.Events.Commands.DeleteEvent;
+using Application.Features.Events.Commands.UpdateEvent;
 using Application.Features.Events.Queries.GetEventDetails;
 using Application.Features.Events.Queries.GetEventsList;
 using Microsoft.AspNetCore.Mvc;
@@ -8,7 +9,9 @@ namespace API.Controllers;
 
 public class EventsController : BaseApiController
 {
-    [HttpGet]
+    [HttpGet(Name = "GetAllEvents")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesDefaultResponseType]
     public async Task<ActionResult<List<EventListVm>>> GetEvents()
     {
         var dtos = await Mediator.Send(new GetEventsListQuery());
@@ -41,6 +44,16 @@ public class EventsController : BaseApiController
     {
         var deleteEventCommand = new DeleteEventCommand { Id = id };
         await Mediator.Send(deleteEventCommand);
+        return NoContent();
+    }
+    
+    [HttpPut(Name = "UpdateEvent")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult> UpdateEvent([FromBody] UpdateEventCommand updateEventCommand)
+    {
+        await Mediator.Send(updateEventCommand);
         return NoContent();
     }
 }
