@@ -1,10 +1,32 @@
+import { useEffect, useState } from 'react';
 import { Button } from './components/ui/button';
+import type { Event } from './lib/types';
 
 function App() {
+  const [events, setEvents] = useState<Event[]>([]);
+  useEffect(() => {
+    const fetchEvents = async () => {
+      const response = await fetch('https://localhost:5001/api/events');
+      const data = (await response.json()) as Event[];
+      setEvents(data);
+    };
+
+    fetchEvents();
+    return () => {};
+  }, []);
+
+  console.log(events);
+
   return (
     <>
       <h1 className='text-3xl font-bold text-red-500'>Mingo!</h1>
       <Button>Click me</Button>
+      {events.map((event) => (
+        <div key={event.id}>
+          <h2>{event.title}</h2>
+          <p>{event.description}</p>
+        </div>
+      ))}
     </>
   );
 }
