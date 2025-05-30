@@ -11,9 +11,9 @@ public static class StartupExtensions
     {
         builder.Services.AddApplicationServices();
         builder.Services.AddPersistenceServices(builder.Configuration);
+        builder.Services.AddCors();
         builder.Services.AddControllers();
         builder.Services.AddOpenApi();
-        
 
         return builder.Build();
     }
@@ -26,6 +26,12 @@ public static class StartupExtensions
             app.MapScalarApiReference();
         }
 
+        app.UseCors(o =>
+            o.AllowAnyHeader()
+                .AllowAnyMethod()
+                .WithOrigins("http://localhost:3000", "https://localhost:3000")
+                .AllowCredentials()
+        );
         app.MapControllers();
 
         return app;
