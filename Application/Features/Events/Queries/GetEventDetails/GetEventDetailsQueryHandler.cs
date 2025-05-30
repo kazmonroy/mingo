@@ -18,6 +18,12 @@ public class GetEventDetailsQueryHandler :  IRequestHandler<GetEventDetailsQuery
     public async Task<EventDetailsVm> Handle(GetEventDetailsQuery request, CancellationToken cancellationToken)
     {
     var currentEvent = await _eventRepository.GetByIdAsync(request.Id);
+    
+    if (currentEvent == null)
+    {
+        throw new Exception("Event not found");
+    }
+
     return _mapper.Map<EventDetailsVm>(currentEvent);
     }
 }
