@@ -25,7 +25,13 @@ public class EventsController : BaseApiController
     [HttpGet("{id}")]
     public async Task<ActionResult<EventListVm>> GetEventDetails(string id)
     {
-        var eventDto = await _mediator.Send(new GetEventDetailsQuery() { Id = id }); 
+        var eventDto = await _mediator.Send(new GetEventDetailsQuery() { Id = id });
+
+        if (eventDto == null)
+        {
+            return NotFound();
+        }
+
         return Ok(eventDto); 
     }
 }
