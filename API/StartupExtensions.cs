@@ -1,3 +1,4 @@
+using Microsoft.EntityFrameworkCore;
 using Persistence;
 using Scalar.AspNetCore;
 
@@ -16,7 +17,6 @@ public static class StartupExtensions
 
     public static WebApplication ConfigurePipeline(this WebApplication app)
     {
-      
         if (app.Environment.IsDevelopment())
         {
             app.MapOpenApi();
