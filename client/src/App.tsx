@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
 import { Button } from './components/ui/button';
 import type { Event } from './lib/types';
+import axios from 'axios';
 
 function App() {
   const [events, setEvents] = useState<Event[]>([]);
   useEffect(() => {
     const fetchEvents = async () => {
-      const response = await fetch('https://localhost:5001/api/events');
-      const data = (await response.json()) as Event[];
+      const response = await axios.get<Event[]>(
+        'https://localhost:5001/api/events'
+      );
+      const { data } = response;
       setEvents(data);
     };
 
