@@ -1,3 +1,4 @@
+using Application.Features.Events.Commands.CreateEvent;
 using Application.Features.Events.Commands.DeleteEvent;
 using Application.Features.Events.Queries.GetEventDetails;
 using Application.Features.Events.Queries.GetEventsList;
@@ -21,6 +22,16 @@ public class EventsController : BaseApiController
 
         return Ok(eventDto);
     }
+    
+    [HttpPost(Name = "AddEvent")]
+    public async Task<ActionResult<CreateEventCommand>> CreateEvent(
+        [FromBody] CreateEventCommand createEventCommand
+    )
+    {
+        var newEvent = await Mediator.Send(createEventCommand);
+        return Ok(newEvent);
+    }
+
 
     [HttpDelete("{id}", Name = "DeleteEvent")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
