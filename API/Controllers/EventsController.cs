@@ -1,3 +1,4 @@
+using Application.Features.Events.Commands.DeleteEvent;
 using Application.Features.Events.Queries.GetEventDetails;
 using Application.Features.Events.Queries.GetEventsList;
 using Domain;
@@ -27,11 +28,17 @@ public class EventsController : BaseApiController
     {
         var eventDto = await _mediator.Send(new GetEventDetailsQuery() { Id = id });
 
-        if (eventDto == null)
-        {
-            return NotFound();
-        }
+        return Ok(eventDto);
+    }
 
-        return Ok(eventDto); 
+    [HttpDelete("{id}", Name = "DeleteEvent")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesDefaultResponseType]
+    public async Task<ActionResult> DeleteEvent(string id)
+    {
+        var deleteEventCommand = new DeleteEventCommand { Id = id };
+        await _mediator.Send(deleteEventCommand);
+        return NoContent();
     }
 }
