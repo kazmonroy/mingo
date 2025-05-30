@@ -1,3 +1,4 @@
+using Application.Features.Events.Queries.GetEventDetails;
 using Application.Features.Events.Queries.GetEventsList;
 using Domain;
 using MediatR;
@@ -19,5 +20,12 @@ public class EventsController : BaseApiController
     {
         var dtos = await _mediator.Send(new GetEventsListQuery());
         return Ok(dtos);
+    }
+
+    [HttpGet("{id}")]
+    public async Task<ActionResult<EventListVm>> GetEventDetails(string id)
+    {
+        var eventDto = await _mediator.Send(new GetEventDetailsQuery() { Id = id }); 
+        return Ok(eventDto); 
     }
 }
