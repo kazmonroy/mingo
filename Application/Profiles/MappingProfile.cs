@@ -1,3 +1,4 @@
+using Application.Features.Events.Commands.CreateEvent;
 using Application.Features.Events.Queries.GetEventDetails;
 using Application.Features.Events.Queries.GetEventsList;
 using AutoMapper;
@@ -11,5 +12,6 @@ public class MappingProfile : Profile
     {
         CreateMap<Event, EventListVm>().ReverseMap();
         CreateMap<Event, EventDetailsVm>().ReverseMap();
+        CreateMap<Event, CreateEventCommand>().ReverseMap();
     }
 }
