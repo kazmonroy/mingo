@@ -1,3 +1,4 @@
+using Persistence;
 using Scalar.AspNetCore;
 
 namespace API;
@@ -8,6 +9,7 @@ public static class StartupExtensions
     {
         builder.Services.AddControllers();
         builder.Services.AddOpenApi();
+        builder.Services.AddPersistenceServices(builder.Configuration);
 
         return builder.Build();
     }
