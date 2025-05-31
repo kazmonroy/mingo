@@ -1,4 +1,6 @@
 import type { Event } from '@/lib/types';
+import { format } from 'date-fns';
+
 export const EventDashboard = ({ events }: { events: Event[] }) => {
   return (
     <div>
@@ -10,11 +12,18 @@ export const EventDashboard = ({ events }: { events: Event[] }) => {
           Lorem ipsum dolor.
         </p>
       </div>
-      <div className='grid grid-cols-2'>
+      <div className='grid grid-cols-2 gap-4 mt-4'>
         {events.map((event) => (
-          <div key={event.id}>
-            <h2>{event.title}</h2>
-            <p>{event.description}</p>
+          <div key={event.id} className='flex items-center gap-4'>
+            <div className='bg-zinc-100 size-18 rounded-md'></div>
+
+            <div>
+              <h2 className='font-medium'>{event.title}</h2>
+              <p className='font-mono text-muted-foreground text-sm'>
+                {format(event.date, 'EEE, d MMM, yyyy')}
+              </p>
+              <p className='text-muted-foreground'>{event.description}</p>
+            </div>
           </div>
         ))}
       </div>
