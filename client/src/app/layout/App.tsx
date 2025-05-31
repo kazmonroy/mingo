@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
-import { Button } from './components/ui/button';
-import type { Event } from './lib/types';
+import { Button } from '../../components/ui/button';
+import type { Event } from '../../lib/types';
 import axios from 'axios';
+import { NavBar } from './NavBar';
 
 function App() {
   const [events, setEvents] = useState<Event[]>([]);
@@ -22,6 +23,7 @@ function App() {
 
   return (
     <>
+      <NavBar />
       <h1 className='text-3xl font-bold text-red-500'>Mingo!</h1>
       <Button>Click me</Button>
       {events.map((event) => (
