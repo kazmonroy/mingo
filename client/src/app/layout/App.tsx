@@ -1,41 +1,22 @@
-import { useEffect, useState } from 'react';
-import axios from 'axios';
 import type { Event } from '@/lib/types';
-
 import { EventDashboard } from '@/features/events/EventDashboard';
 import { CreateEventForm } from '@/features/events/CreateEventForm';
 
 function App() {
-  const [events, setEvents] = useState<Event[]>([]);
-  useEffect(() => {
-    const fetchEvents = async () => {
-      const response = await axios.get<Event[]>(
-        'https://localhost:5001/api/events'
-      );
-      const { data } = response;
-      setEvents(data);
-    };
-
-    fetchEvents();
-    return () => {};
-  }, []);
-
-  console.log(events);
-
   const handleSubmitForm = (event: Event) => {
     console.log(event.id);
     if (event.id) {
       // Update existing event
       console.log('Updating existing event');
-      setEvents((prevEvents) =>
-        prevEvents.map((e) => (e.id === event.id ? event : e))
-      );
+      // setEvents((prevEvents) =>
+      //   prevEvents.map((e) => (e.id === event.id ? event : e))
+      // );
     } else {
       console.log('Creating new event');
-      setEvents((prevEvents) => [
-        ...prevEvents,
-        { ...event, id: crypto.randomUUID() },
-      ]);
+      // setEvents((prevEvents) => [
+      //   ...prevEvents,
+      //   { ...event, id: crypto.randomUUID() },
+      // ]);
     }
   };
 
@@ -51,7 +32,8 @@ function App() {
           </p>
         </div>
 
-        <EventDashboard events={events} handleSubmitForm={handleSubmitForm} />
+        <EventDashboard handleSubmitForm={handleSubmitForm} />
+
         <CreateEventForm handleSubmitForm={handleSubmitForm} />
       </div>
     </main>
