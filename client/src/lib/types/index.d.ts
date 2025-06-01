@@ -1,12 +1,12 @@
 export type Event = {
-  id: string;
+  id?: string;
   title: string;
   date: string;
   description: string;
   category: string;
-  isCancelled: boolean;
+  isCancelled?: boolean;
   city: string;
   venue: string;
-  latitude: number;
-  longitude: number;
+  latitude?: number;
+  longitude?: number;
 };
