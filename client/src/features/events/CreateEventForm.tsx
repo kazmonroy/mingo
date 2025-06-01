@@ -63,7 +63,7 @@ export const CreateEventForm = () => {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
-        className='space-y-8 grid grid-cols-1 lg:grid-cols-2 gap-8 mt-4'
+        className='space-y-8 grid grid-cols-1 lg:grid-cols-2 gap-8 mt-4 items-start'
       >
         <div className='h-80 bg-zinc-100 rounded-md'></div>
 
