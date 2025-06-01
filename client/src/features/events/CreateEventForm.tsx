@@ -23,13 +23,23 @@ import {
 } from '@/components/ui/popover';
 
 const formSchema = z.object({
-  username: z.string().min(2).max(50),
+  title: z.string().min(2).max(100),
+  description: z.string().min(10).max(500).optional(),
+  category: z.string().min(2).max(50).optional(),
+  date: z.date().min(new Date('1900-01-01')).max(new Date()),
+  city: z.string().min(2).max(50).optional(),
+  venue: z.string().min(2).max(100).optional(),
 });
 export const CreateEventForm = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: '',
+      title: '',
+      description: '',
+      category: '',
+      date: new Date(),
+      city: '',
+      venue: '',
     },
   });
 
@@ -50,7 +60,7 @@ export const CreateEventForm = () => {
         <div className='grid grid-cols-1 gap-4'>
           <FormField
             control={form.control}
-            name='username'
+            name='title'
             render={({ field }) => (
               <FormItem>
                 <FormControl>
@@ -69,7 +79,7 @@ export const CreateEventForm = () => {
 
           <FormField
             control={form.control}
-            name='username'
+            name='description'
             render={({ field }) => (
               <FormItem>
                 <FormControl>
@@ -83,7 +93,7 @@ export const CreateEventForm = () => {
 
           <FormField
             control={form.control}
-            name='username'
+            name='category'
             render={({ field }) => (
               <FormItem>
                 <FormControl>
@@ -97,7 +107,7 @@ export const CreateEventForm = () => {
 
           <FormField
             control={form.control}
-            name='username'
+            name='date'
             render={({ field }) => (
               <FormItem className='flex flex-col w-full'>
                 <Popover>
@@ -122,9 +132,11 @@ export const CreateEventForm = () => {
                   <PopoverContent className='w-auto p-0' align='start'>
                     <Calendar
                       mode='single'
+                      selected={field.value}
                       onSelect={field.onChange}
-                      disabled={(date) =>
-                        date > new Date() || date < new Date('1900-01-01')
+                      disabled={() =>
+                        field.value > new Date() ||
+                        field.value < new Date('1900-01-01')
                       }
                       initialFocus
                     />
@@ -138,7 +150,7 @@ export const CreateEventForm = () => {
 
           <FormField
             control={form.control}
-            name='username'
+            name='city'
             render={({ field }) => (
               <FormItem>
                 <FormControl>
@@ -152,7 +164,7 @@ export const CreateEventForm = () => {
 
           <FormField
             control={form.control}
-            name='username'
+            name='venue'
             render={({ field }) => (
               <FormItem>
                 <FormControl>
