@@ -1,12 +1,14 @@
 import type { Event } from '@/lib/types';
 import { EventCard } from './EventCard';
+import { Skeleton } from '@/components/ui/skeleton';
+import { useEvents } from '@/api/EventApi';
 export const PopularEventsList = ({
-  events,
   handleSubmitForm,
 }: {
-  events: Event[];
   handleSubmitForm: (event: Event) => void;
 }) => {
+  const { events, isLoading } = useEvents();
+
   return (
     <>
       <div className='mt-4'>
@@ -18,14 +20,31 @@ export const PopularEventsList = ({
         </p>
       </div>
       <div className='grid grid-cols-2 gap-4 mt-4'>
-        {events.map((event) => (
-          <EventCard
-            key={event.id}
-            event={event}
-            handleSubmitForm={handleSubmitForm}
-          />
-        ))}
+        {isLoading
+          ? Array(6)
+              .fill(null)
+              .map((_, index) => PopularEventsList.Skeleton(index))
+          : events.map((event) => (
+              <EventCard
+                key={event.id}
+                event={event}
+                handleSubmitForm={handleSubmitForm}
+              />
+            ))}
       </div>
     </>
+  );
+};
+
+PopularEventsList.Skeleton = (id: number) => {
+  return (
+    <div key={id} className='flex gap-4'>
+      <Skeleton className='w-22 rounded-md' />
+      <div className='flex flex-col gap-2 w-full'>
+        <Skeleton className='h-5 w-3/4' />
+        <Skeleton className='h-4 w-1/4' />
+        <Skeleton className='h-4 w-1/2' />
+      </div>
+    </div>
   );
 };
