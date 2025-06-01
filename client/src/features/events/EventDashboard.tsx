@@ -1,14 +1,9 @@
-import type { Event } from '@/lib/types';
 import { PopularEventsList } from './PopularEventsList';
 
-export const EventDashboard = ({
-  handleSubmitForm,
-}: {
-  handleSubmitForm: (event: Event) => void;
-}) => {
+export const EventDashboard = () => {
   return (
     <div>
-      <PopularEventsList handleSubmitForm={handleSubmitForm} />
+      <PopularEventsList />
     </div>
   );
 };

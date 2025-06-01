@@ -15,7 +15,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Calendar } from '@/components/ui/calendar';
-import { CalendarIcon } from 'lucide-react';
+import { CalendarIcon, Loader2Icon } from 'lucide-react';
 import { format } from 'date-fns';
 import {
   Popover,
@@ -23,6 +23,7 @@ import {
   PopoverContent,
 } from '@/components/ui/popover';
 import type { Event } from '@/lib/types';
+import { useUpdateEvent } from '@/api/apiEvents';
 
 const editEventFormSchema = z.object({
   title: z.string().min(2).max(100),
@@ -32,13 +33,8 @@ const editEventFormSchema = z.object({
   city: z.string().min(2).max(50).optional(),
   venue: z.string().min(2).max(100).optional(),
 });
-export const EditEventForm = ({
-  event,
-  handleSubmitForm,
-}: {
-  event: Event;
-  handleSubmitForm: (event: Event) => void;
-}) => {
+export const EditEventForm = ({ event }: { event: Event }) => {
+  const { updateEvent, isPending } = useUpdateEvent();
   const form = useForm<z.infer<typeof editEventFormSchema>>({
     resolver: zodResolver(editEventFormSchema),
     defaultValues: {
@@ -57,15 +53,16 @@ export const EditEventForm = ({
     console.log(values);
 
     const updatedEvent: Event = {
-      ...values,
       id: event.id,
-      date: values.date.toString(),
+      title: values.title,
       description: values.description ?? '',
+      date: values.date.toISOString(),
       category: values.category ?? '',
       city: values.city ?? '',
       venue: values.venue ?? '',
     };
-    handleSubmitForm(updatedEvent);
+
+    updateEvent(updatedEvent);
   };
 
   return (
@@ -196,7 +193,14 @@ export const EditEventForm = ({
         />
 
         <Button type='submit' className='w-full'>
-          Update event
+          {isPending ? (
+            <>
+              <Loader2Icon className='animate-spin' />
+              Updating...
+            </>
+          ) : (
+            <span>Update event</span>
+          )}
         </Button>
       </form>
     </Form>

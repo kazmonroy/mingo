@@ -14,13 +14,7 @@ import { Button } from '@/components/ui/button';
 import { ChevronsRight } from 'lucide-react';
 
 import { EditEventForm } from './EditEventForm';
-export const EventCard = ({
-  event,
-  handleSubmitForm,
-}: {
-  event: Event;
-  handleSubmitForm: (event: Event) => void;
-}) => {
+export const EventCard = ({ event }: { event: Event }) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const handleOnEdit = () => setIsEditing((prev) => !prev);
@@ -58,10 +52,7 @@ export const EventCard = ({
         <div className='p-4 pt-0 max-h-[calc(100vh-80px)] overflow-y-auto'>
           {isEditing ? (
             <>
-              <EditEventForm
-                event={event}
-                handleSubmitForm={handleSubmitForm}
-              />
+              <EditEventForm event={event} />
             </>
           ) : (
             <>

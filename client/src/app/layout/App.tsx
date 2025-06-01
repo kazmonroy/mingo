@@ -32,7 +32,7 @@ function App() {
           </p>
         </div>
 
-        <EventDashboard handleSubmitForm={handleSubmitForm} />
+        <EventDashboard />
 
         <CreateEventForm handleSubmitForm={handleSubmitForm} />
       </div>
