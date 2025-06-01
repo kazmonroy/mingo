@@ -3,7 +3,7 @@ import { Compass, Ticket } from 'lucide-react';
 
 export const NavBar = () => {
   return (
-    <header className='sticky top-0 z-50 flex flex-none flex-wrap items-center justify-between bg-white pl-3 pr-4 py-1 shadow-md shadow-slate-900/5 transition duration-500 sm:px-6 lg:px-8 dark:shadow-none dark:bg-transparent'>
+    <header className='sticky top-0 z-50 flex flex-none flex-wrap items-center justify-between bg-white pl-3 pr-4 py-1 transition duration-500 sm:px-6 lg:px-8 dark:bg-transparent'>
       <div className='relative flex grow basis-0 items-center'>
         <img src='/mingo-logo.svg' alt='mingo logo' />
       </div>
