@@ -46,6 +46,27 @@ export const useCreateEvent = () => {
   };
 };
 
+export const useDeleteEvent = () => {
+  const queryClient = useQueryClient();
+  const { mutateAsync: deleteEvent, isPending } = useMutation({
+    mutationFn: deleteEventApi,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['events'] });
+    },
+  });
+
+  return {
+    deleteEvent,
+    isPending,
+  };
+};
+
+const deleteEventApi = async (id: string) => {
+  const response = await agent.delete(`/events/${id}`);
+  const { data } = response;
+  return data;
+};
+
 const createEventApi = async (event: Event) => {
   const response = await agent.post<Event>('/events', event);
   const { data } = response;

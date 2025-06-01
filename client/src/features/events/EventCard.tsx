@@ -12,13 +12,16 @@ import {
   SheetClose,
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
-import { ChevronsRight } from 'lucide-react';
+import { ChevronsRight, Loader2Icon } from 'lucide-react';
 
 import { UpdateEventForm } from './UpdateEventForm';
+import { useDeleteEvent } from '@/api/apiEvents';
 export const EventCard = ({ event }: { event: Event }) => {
   const [isEditing, setIsEditing] = useState(false);
 
   const handleOnEdit = () => setIsEditing((prev) => !prev);
+
+  const { deleteEvent, isPending } = useDeleteEvent();
   return (
     <Sheet key={event.id}>
       <SheetTrigger className='cursor-pointer'>
@@ -49,9 +52,26 @@ export const EventCard = ({ event }: { event: Event }) => {
                 <ChevronsRight />
               </Button>
             </SheetClose>
-            <Button variant='ghost' onClick={handleOnEdit}>
-              {isEditing ? 'Cancel' : 'Edit'}
-            </Button>
+
+            <div className='flex gap-2'>
+              <Button
+                variant='destructive'
+                size='sm'
+                onClick={() => deleteEvent(event.id ?? '')}
+              >
+                {isPending ? (
+                  <>
+                    <Loader2Icon className='animate-spin' />
+                    'Deleting...'
+                  </>
+                ) : (
+                  'Delete'
+                )}
+              </Button>
+              <Button variant='ghost' size='sm' onClick={handleOnEdit}>
+                {isEditing ? 'Cancel' : 'Edit'}
+              </Button>
+            </div>
           </div>
         </SheetHeader>
         <div className='p-4 pt-0 max-h-[calc(100vh-80px)] overflow-y-auto'>
