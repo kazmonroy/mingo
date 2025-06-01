@@ -47,9 +47,6 @@ export const CreateEventForm = () => {
   });
 
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-
     const newEvent: Event = {
       title: values.title,
       description: values.description ?? '',
@@ -59,9 +56,7 @@ export const CreateEventForm = () => {
       venue: values.venue ?? '',
     };
 
-    // handleSubmitForm(newEvent);
     createEvent(newEvent);
-    console.log('*** New Event Createed:', newEvent);
   };
 
   return (

@@ -48,10 +48,6 @@ export const UpdateEventForm = ({ event }: { event: Event }) => {
   });
 
   const onSubmit = (values: z.infer<typeof editEventFormSchema>) => {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
-    console.log(values);
-
     const updatedEvent: Event = {
       id: event.id,
       title: values.title,
