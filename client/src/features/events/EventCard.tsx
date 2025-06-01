@@ -12,10 +12,11 @@ import {
   SheetClose,
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
-import { ChevronsRight, Loader2Icon } from 'lucide-react';
+import { ChevronsRight, Loader2Icon, MoveUpRight } from 'lucide-react';
 
 import { UpdateEventForm } from './UpdateEventForm';
 import { useDeleteEvent } from '@/api/apiEvents';
+import { Link } from 'react-router';
 export const EventCard = ({ event }: { event: Event }) => {
   const [isEditing, setIsEditing] = useState(false);
 
@@ -47,11 +48,23 @@ export const EventCard = ({ event }: { event: Event }) => {
         <SheetTitle />
         <SheetHeader className='border-b'>
           <div className='flex items-center justify-between'>
-            <SheetClose asChild>
-              <Button variant='ghost' size='icon'>
-                <ChevronsRight />
+            <div className='flex items-center gap-2'>
+              <SheetClose asChild>
+                <Button variant='ghost' size='icon'>
+                  <ChevronsRight />
+                </Button>
+              </SheetClose>
+
+              <Button size='sm' asChild>
+                <Link
+                  to={`/${event.id}`}
+                  className='flex items-center gap-2 bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/90'
+                >
+                  Event page
+                  <MoveUpRight />
+                </Link>
               </Button>
-            </SheetClose>
+            </div>
 
             <div className='flex gap-2'>
               <Button

@@ -16,6 +16,19 @@ export const useEvents = () => {
   };
 };
 
+export const useEventDetails = (id: string) => {
+  const { data, isLoading } = useQuery({
+    queryKey: ['events', id],
+    queryFn: () => getEventById(id),
+  });
+
+  const event = data ?? null;
+  return {
+    event,
+    isLoading,
+  };
+};
+
 export const useUpdateEvent = () => {
   const queryClient = useQueryClient();
   const { mutateAsync: updateEvent, isPending } = useMutation({
@@ -82,6 +95,13 @@ const updateEventApi = async (event: Event) => {
 
 const getEvents = async () => {
   const response = await agent.get<Event[]>('/events');
+  const { data } = response;
+
+  return data;
+};
+
+const getEventById = async (id: string) => {
+  const response = await agent.get<Event>(`/events/${id}`);
   const { data } = response;
 
   return data;
