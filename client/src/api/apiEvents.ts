@@ -31,6 +31,27 @@ export const useUpdateEvent = () => {
   };
 };
 
+export const useCreateEvent = () => {
+  const queryClient = useQueryClient();
+  const { mutateAsync: createEvent, isPending } = useMutation({
+    mutationFn: createEventApi,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['events'] });
+    },
+  });
+
+  return {
+    createEvent,
+    isPending,
+  };
+};
+
+const createEventApi = async (event: Event) => {
+  const response = await agent.post<Event>('/events', event);
+  const { data } = response;
+  return data;
+};
+
 const updateEventApi = async (event: Event) => {
   const response = await agent.put<Event>(`/events`, event);
   const { data } = response;

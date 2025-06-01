@@ -15,13 +15,14 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Calendar } from '@/components/ui/calendar';
-import { CalendarIcon } from 'lucide-react';
+import { CalendarIcon, Loader2Icon } from 'lucide-react';
 import { format } from 'date-fns';
 import {
   Popover,
   PopoverTrigger,
   PopoverContent,
 } from '@/components/ui/popover';
+import { useCreateEvent } from '@/api/apiEvents';
 
 const formSchema = z.object({
   title: z.string().min(2).max(100),
@@ -31,11 +32,8 @@ const formSchema = z.object({
   city: z.string().min(2).max(50).optional(),
   venue: z.string().min(2).max(100).optional(),
 });
-export const CreateEventForm = ({
-  handleSubmitForm,
-}: {
-  handleSubmitForm: (event: Event) => void;
-}) => {
+export const CreateEventForm = () => {
+  const { createEvent, isPending } = useCreateEvent();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -54,15 +52,16 @@ export const CreateEventForm = ({
 
     const newEvent: Event = {
       title: values.title,
-      date: values.date.toString(),
       description: values.description ?? '',
+      date: values.date.toISOString(),
       category: values.category ?? '',
       city: values.city ?? '',
       venue: values.venue ?? '',
     };
 
-    console.log('*** New Event:', newEvent);
-    handleSubmitForm(newEvent);
+    // handleSubmitForm(newEvent);
+    createEvent(newEvent);
+    console.log('*** New Event Createed:', newEvent);
   };
 
   return (
@@ -193,7 +192,14 @@ export const CreateEventForm = ({
           />
 
           <Button type='submit' className='w-full'>
-            Create event
+            {isPending ? (
+              <>
+                <Loader2Icon className='animate-spin' />
+                Creating event
+              </>
+            ) : (
+              <span>Create event</span>
+            )}
           </Button>
         </div>
       </form>
