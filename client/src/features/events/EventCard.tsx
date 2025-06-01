@@ -16,7 +16,9 @@ export const EventCard = ({ event }: { event: Event }) => {
     <Drawer key={event.id} direction='right'>
       <DrawerTrigger className='cursor-pointer'>
         <div className='flex items-center gap-4'>
-          <div className='bg-zinc-100 size-18 rounded-md'></div>
+          <div className='bg-zinc-100 size-18 rounded-md overflow-hidden'>
+            <img src='./images/1.jpg' alt='' />
+          </div>
 
           <div className='flex flex-col items-start'>
             <h2 className='font-medium'>{event.title}</h2>
@@ -28,7 +30,7 @@ export const EventCard = ({ event }: { event: Event }) => {
         </div>
       </DrawerTrigger>
       <DrawerContent>
-        <DrawerHeader>
+        <DrawerHeader className='border-b'>
           <div>
             <DrawerClose asChild>
               <Button variant='ghost' size='icon'>
@@ -36,9 +38,17 @@ export const EventCard = ({ event }: { event: Event }) => {
               </Button>
             </DrawerClose>
           </div>
-          <DrawerTitle>{event.title}</DrawerTitle>
-          <DrawerDescription>{event.description}</DrawerDescription>
         </DrawerHeader>
+
+        <div className='mx-auto my-8'>
+          <div className='size-72 rounded-md overflow-hidden'>
+            <img src='./images/1.jpg' alt='' />
+          </div>
+        </div>
+        <div className='p-4 pt-0'>
+          <DrawerTitle className='text-2xl'>{event.title}</DrawerTitle>
+          <DrawerDescription>{event.description}</DrawerDescription>
+        </div>
       </DrawerContent>
     </Drawer>
   );
