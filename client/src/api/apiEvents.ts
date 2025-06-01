@@ -18,7 +18,7 @@ export const useEvents = () => {
 
 export const useUpdateEvent = () => {
   const queryClient = useQueryClient();
-  const { mutate: updateEvent, isPending } = useMutation({
+  const { mutateAsync: updateEvent, isPending } = useMutation({
     mutationFn: updateEventApi,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['events'] });
