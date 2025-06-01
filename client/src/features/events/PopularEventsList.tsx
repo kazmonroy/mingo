@@ -1,6 +1,12 @@
 import type { Event } from '@/lib/types';
 import { EventCard } from './EventCard';
-export const PopularEventsList = ({ events }: { events: Event[] }) => {
+export const PopularEventsList = ({
+  events,
+  handleSubmitForm,
+}: {
+  events: Event[];
+  handleSubmitForm: (event: Event) => void;
+}) => {
   return (
     <>
       <div className='mt-4'>
@@ -13,7 +19,11 @@ export const PopularEventsList = ({ events }: { events: Event[] }) => {
       </div>
       <div className='grid grid-cols-2 gap-4 mt-4'>
         {events.map((event) => (
-          <EventCard key={event.id} event={event} />
+          <EventCard
+            key={event.id}
+            event={event}
+            handleSubmitForm={handleSubmitForm}
+          />
         ))}
       </div>
     </>

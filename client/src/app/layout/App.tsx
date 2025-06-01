@@ -22,6 +22,23 @@ function App() {
 
   console.log(events);
 
+  const handleSubmitForm = (event: Event) => {
+    console.log(event.id);
+    if (event.id) {
+      // Update existing event
+      console.log('Updating existing event');
+      setEvents((prevEvents) =>
+        prevEvents.map((e) => (e.id === event.id ? event : e))
+      );
+    } else {
+      console.log('Creating new event');
+      setEvents((prevEvents) => [
+        ...prevEvents,
+        { ...event, id: crypto.randomUUID() },
+      ]);
+    }
+  };
+
   return (
     <div className='flex w-full flex-col min-h-screen'>
       <NavBar />
@@ -36,8 +53,8 @@ function App() {
             </p>
           </div>
 
-          <EventDashboard events={events} />
-          <CreateEventForm />
+          <EventDashboard events={events} handleSubmitForm={handleSubmitForm} />
+          <CreateEventForm handleSubmitForm={handleSubmitForm} />
         </div>
       </main>
     </div>

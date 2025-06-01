@@ -2,6 +2,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { cn } from '@/lib/utils';
+import type { Event } from '@/lib/types';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -24,13 +25,17 @@ import {
 
 const formSchema = z.object({
   title: z.string().min(2).max(100),
-  description: z.string().min(10).max(500).optional(),
+  description: z.string().min(5).max(500).optional(),
   category: z.string().min(2).max(50).optional(),
-  date: z.date().min(new Date('1900-01-01')).max(new Date()),
+  date: z.date(),
   city: z.string().min(2).max(50).optional(),
   venue: z.string().min(2).max(100).optional(),
 });
-export const CreateEventForm = () => {
+export const CreateEventForm = ({
+  handleSubmitForm,
+}: {
+  handleSubmitForm: (event: Event) => void;
+}) => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -46,7 +51,18 @@ export const CreateEventForm = () => {
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
+
+    const newEvent: Event = {
+      title: values.title,
+      date: values.date.toString(),
+      description: values.description ?? '',
+      category: values.category ?? '',
+      city: values.city ?? '',
+      venue: values.venue ?? '',
+    };
+
+    console.log('*** New Event:', newEvent);
+    handleSubmitForm(newEvent);
   };
 
   return (

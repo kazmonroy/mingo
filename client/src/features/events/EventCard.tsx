@@ -14,8 +14,14 @@ import { Button } from '@/components/ui/button';
 import { ChevronsRight } from 'lucide-react';
 
 import { EditEventForm } from './EditEventForm';
-export const EventCard = ({ event }: { event: Event }) => {
-  const [isEditing, setIsEditing] = useState(true);
+export const EventCard = ({
+  event,
+  handleSubmitForm,
+}: {
+  event: Event;
+  handleSubmitForm: (event: Event) => void;
+}) => {
+  const [isEditing, setIsEditing] = useState(false);
 
   const handleOnEdit = () => setIsEditing((prev) => !prev);
   return (
@@ -35,12 +41,13 @@ export const EventCard = ({ event }: { event: Event }) => {
           </div>
         </div>
       </DrawerTrigger>
-      <DrawerContent>
+      <DrawerContent aria-describedby={undefined}>
+        <DrawerTitle />
         <DrawerHeader className='border-b'>
           <div className='flex items-center justify-between'>
             <DrawerClose asChild>
               <Button variant='ghost' size='icon'>
-                <ChevronsRight size='w-5 h-5' />
+                <ChevronsRight />
               </Button>
             </DrawerClose>
             <Button variant='ghost' onClick={handleOnEdit}>
@@ -51,7 +58,10 @@ export const EventCard = ({ event }: { event: Event }) => {
         <div className='p-4 pt-0 max-h-[calc(100vh-80px)] overflow-y-auto'>
           {isEditing ? (
             <>
-              <EditEventForm event={event} />
+              <EditEventForm
+                event={event}
+                handleSubmitForm={handleSubmitForm}
+              />
             </>
           ) : (
             <>

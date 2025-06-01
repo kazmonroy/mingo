@@ -28,11 +28,17 @@ const editEventFormSchema = z.object({
   title: z.string().min(2).max(100),
   description: z.string().min(10).max(500).optional(),
   category: z.string().min(2).max(50).optional(),
-  date: z.date().min(new Date('1900-01-01')).max(new Date()),
+  date: z.date(),
   city: z.string().min(2).max(50).optional(),
   venue: z.string().min(2).max(100).optional(),
 });
-export const EditEventForm = ({ event }: { event: Event }) => {
+export const EditEventForm = ({
+  event,
+  handleSubmitForm,
+}: {
+  event: Event;
+  handleSubmitForm: (event: Event) => void;
+}) => {
   const form = useForm<z.infer<typeof editEventFormSchema>>({
     resolver: zodResolver(editEventFormSchema),
     defaultValues: {
@@ -49,6 +55,17 @@ export const EditEventForm = ({ event }: { event: Event }) => {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log(values);
+
+    const updatedEvent: Event = {
+      ...values,
+      id: event.id,
+      date: values.date.toString(),
+      description: values.description ?? '',
+      category: values.category ?? '',
+      city: values.city ?? '',
+      venue: values.venue ?? '',
+    };
+    handleSubmitForm(updatedEvent);
   };
 
   return (
