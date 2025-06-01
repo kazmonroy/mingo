@@ -15,10 +15,6 @@ public class CreateEventCommandValidator : AbstractValidator<CreateEventCommand>
             .MaximumLength(50)
             .WithMessage("{PropertyName} must not exceed 50 characters.");
 
-        RuleFor(p => p.Date)
-            .NotEmpty()
-            .WithMessage("{PropertyName} is required.")
-            .NotNull()
-            .GreaterThan(DateTime.Now);
+        RuleFor(p => p.Date).NotEmpty().WithMessage("{PropertyName} is required.").NotNull();
     }
 }
