@@ -1,7 +1,6 @@
-import axios from 'axios';
-
 import type { Event } from '@/lib/types';
 import { useQuery } from '@tanstack/react-query';
+import agent from './agent';
 
 export const useEvents = () => {
   const { data, isLoading } = useQuery({
@@ -17,9 +16,7 @@ export const useEvents = () => {
   };
 };
 const getEvents = async () => {
-  const response = await axios.get<Event[]>(
-    'https://localhost:5001/api/events'
-  );
+  const response = await agent.get<Event[]>('/events');
   const { data } = response;
 
   return data;
