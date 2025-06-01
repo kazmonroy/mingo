@@ -13,7 +13,7 @@ export const PopularEventsList = ({ events }: { events: Event[] }) => {
       </div>
       <div className='grid grid-cols-2 gap-4 mt-4'>
         {events.map((event) => (
-          <EventCard event={event} />
+          <EventCard key={event.id} event={event} />
         ))}
       </div>
     </>
