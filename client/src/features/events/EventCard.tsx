@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { format } from 'date-fns';
 import type { Event } from '@/lib/types';
 import {
@@ -11,7 +12,12 @@ import {
 } from '@/components/ui/drawer';
 import { Button } from '@/components/ui/button';
 import { ChevronsRight } from 'lucide-react';
+
+import { EditEventForm } from './EditEventForm';
 export const EventCard = ({ event }: { event: Event }) => {
+  const [isEditing, setIsEditing] = useState(true);
+
+  const handleOnEdit = () => setIsEditing((prev) => !prev);
   return (
     <Drawer key={event.id} direction='right'>
       <DrawerTrigger className='cursor-pointer'>
@@ -31,23 +37,34 @@ export const EventCard = ({ event }: { event: Event }) => {
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader className='border-b'>
-          <div>
+          <div className='flex items-center justify-between'>
             <DrawerClose asChild>
               <Button variant='ghost' size='icon'>
                 <ChevronsRight size='w-5 h-5' />
               </Button>
             </DrawerClose>
+            <Button variant='ghost' onClick={handleOnEdit}>
+              {isEditing ? 'Cancel' : 'Edit'}
+            </Button>
           </div>
         </DrawerHeader>
+        <div className='p-4 pt-0 max-h-[calc(100vh-80px)] overflow-y-auto'>
+          {isEditing ? (
+            <>
+              <EditEventForm event={event} />
+            </>
+          ) : (
+            <>
+              <div className='my-8'>
+                <div className='size-72 rounded-md overflow-hidden mx-auto'>
+                  <img src='./images/1.jpg' alt='' />
+                </div>
+              </div>
 
-        <div className='mx-auto my-8'>
-          <div className='size-72 rounded-md overflow-hidden'>
-            <img src='./images/1.jpg' alt='' />
-          </div>
-        </div>
-        <div className='p-4 pt-0'>
-          <DrawerTitle className='text-2xl'>{event.title}</DrawerTitle>
-          <DrawerDescription>{event.description}</DrawerDescription>
+              <DrawerTitle className='text-2xl'>{event.title}</DrawerTitle>
+              <DrawerDescription>{event.description}</DrawerDescription>
+            </>
+          )}
         </div>
       </DrawerContent>
     </Drawer>
