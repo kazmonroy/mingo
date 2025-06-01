@@ -1,7 +1,7 @@
 import type { Event } from '@/lib/types';
 import { EventCard } from './EventCard';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useEvents } from '@/api/EventApi';
+import { useEvents } from '@/api/apiEvents';
 export const PopularEventsList = ({
   handleSubmitForm,
 }: {
