@@ -17,7 +17,7 @@ export const Hero = () => {
             </p>
 
             <div className='mt-12 flex flex-col gap-x-6 gap-y-4 sm:flex-row'>
-              <Button className='w-full sm:w-auto' size='lg'>
+              <Button className='w-full sm:w-auto text-md' size='lg'>
                 Create your first event
               </Button>
             </div>
