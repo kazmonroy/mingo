@@ -33,7 +33,7 @@ const editEventFormSchema = z.object({
   city: z.string().min(2).max(50).optional(),
   venue: z.string().min(2).max(100).optional(),
 });
-export const EditEventForm = ({ event }: { event: Event }) => {
+export const UpdateEventForm = ({ event }: { event: Event }) => {
   const { updateEvent, isPending } = useUpdateEvent();
   const form = useForm<z.infer<typeof editEventFormSchema>>({
     resolver: zodResolver(editEventFormSchema),
