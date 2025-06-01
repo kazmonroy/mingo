@@ -1,15 +1,16 @@
 import { useState } from 'react';
 import { format } from 'date-fns';
 import type { Event } from '@/lib/types';
+
 import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from '@/components/ui/drawer';
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+  SheetClose,
+} from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { ChevronsRight } from 'lucide-react';
 
@@ -19,8 +20,8 @@ export const EventCard = ({ event }: { event: Event }) => {
 
   const handleOnEdit = () => setIsEditing((prev) => !prev);
   return (
-    <Drawer key={event.id} direction='right'>
-      <DrawerTrigger className='cursor-pointer'>
+    <Sheet key={event.id}>
+      <SheetTrigger className='cursor-pointer'>
         <div className='flex items-center gap-4'>
           <div className='bg-zinc-100 size-18 rounded-md overflow-hidden'>
             <img src='./images/1.jpg' alt='' />
@@ -34,21 +35,21 @@ export const EventCard = ({ event }: { event: Event }) => {
             <p className='text-muted-foreground'>{event.description}</p>
           </div>
         </div>
-      </DrawerTrigger>
-      <DrawerContent aria-describedby={undefined}>
-        <DrawerTitle />
-        <DrawerHeader className='border-b'>
+      </SheetTrigger>
+      <SheetContent aria-describedby={undefined}>
+        <SheetTitle />
+        <SheetHeader className='border-b'>
           <div className='flex items-center justify-between'>
-            <DrawerClose asChild>
+            <SheetClose asChild>
               <Button variant='ghost' size='icon'>
                 <ChevronsRight />
               </Button>
-            </DrawerClose>
+            </SheetClose>
             <Button variant='ghost' onClick={handleOnEdit}>
               {isEditing ? 'Cancel' : 'Edit'}
             </Button>
           </div>
-        </DrawerHeader>
+        </SheetHeader>
         <div className='p-4 pt-0 max-h-[calc(100vh-80px)] overflow-y-auto'>
           {isEditing ? (
             <>
@@ -62,12 +63,12 @@ export const EventCard = ({ event }: { event: Event }) => {
                 </div>
               </div>
 
-              <DrawerTitle className='text-2xl'>{event.title}</DrawerTitle>
-              <DrawerDescription>{event.description}</DrawerDescription>
+              <SheetTitle className='text-2xl'>{event.title}</SheetTitle>
+              <SheetDescription>{event.description}</SheetDescription>
             </>
           )}
         </div>
-      </DrawerContent>
-    </Drawer>
+      </SheetContent>
+    </Sheet>
   );
 };
