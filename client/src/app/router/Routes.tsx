@@ -2,15 +2,29 @@ import { createBrowserRouter } from 'react-router';
 import App from '@/app/layout/App';
 import { AppLayout } from '../layout/AppLayout';
 import { HomePage } from '@/features/home/HomePage';
+import { CreateEventForm } from '@/features/events/CreateEventForm';
+import { DiscoverEventsPage } from '@/features/events/DiscoverEventsPage';
 
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: <HomePage />,
-  },
-  {
-    path: '/app',
-    element: <AppLayout />,
-    children: [{ index: true, element: <App /> }],
+    element: <App />,
+    children: [
+      { index: true, element: <HomePage /> },
+      {
+        path: '',
+        element: <AppLayout />,
+        children: [
+          {
+            path: 'create',
+            element: <CreateEventForm />,
+          },
+          {
+            path: 'discover',
+            element: <DiscoverEventsPage />,
+          },
+        ],
+      },
+    ],
   },
 ]);
