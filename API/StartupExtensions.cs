@@ -1,5 +1,5 @@
+using API.Middleware;
 using Application;
-using Microsoft.EntityFrameworkCore;
 using Persistence;
 using Scalar.AspNetCore;
 
@@ -11,6 +11,7 @@ public static class StartupExtensions
     {
         builder.Services.AddApplicationServices();
         builder.Services.AddPersistenceServices(builder.Configuration);
+        builder.Services.AddTransient<ExceptionMiddleware>();
         builder.Services.AddCors();
         builder.Services.AddControllers();
         builder.Services.AddOpenApi();
@@ -26,6 +27,7 @@ public static class StartupExtensions
             app.MapScalarApiReference();
         }
 
+        app.UseMiddleware<ExceptionMiddleware>();
         app.UseCors(o =>
             o.AllowAnyHeader()
                 .AllowAnyMethod()
