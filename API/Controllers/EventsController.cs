@@ -19,13 +19,13 @@ public class EventsController : BaseApiController
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<EventListVm>> GetEventDetails(string id)
+    public async Task<ActionResult<EventDetailsVm>> GetEventDetails(string id)
     {
-        var eventDto = await Mediator.Send(new GetEventDetailsQuery() { Id = id });
 
-        return Ok(eventDto);
+
+        return HandleResult(await Mediator.Send(new GetEventDetailsQuery() { Id = id }));
     }
-    
+
     [HttpPost(Name = "AddEvent")]
     public async Task<ActionResult<CreateEventCommand>> CreateEvent(
         [FromBody] CreateEventCommand createEventCommand
@@ -34,7 +34,6 @@ public class EventsController : BaseApiController
         var newEvent = await Mediator.Send(createEventCommand);
         return Ok(newEvent);
     }
-
 
     [HttpDelete("{id}", Name = "DeleteEvent")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -46,7 +45,7 @@ public class EventsController : BaseApiController
         await Mediator.Send(deleteEventCommand);
         return NoContent();
     }
-    
+
     [HttpPut(Name = "UpdateEvent")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
