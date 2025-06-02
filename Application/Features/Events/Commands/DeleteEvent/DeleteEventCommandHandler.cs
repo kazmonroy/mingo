@@ -28,7 +28,7 @@ public class DeleteEventCommandHandler : IRequestHandler<DeleteEventCommand, Res
         var result = await _eventRepository.DeleteAsync(eventToBeDeleted) > 0;
         if (!result)
         {
-            return Result<Unit>.Failure("Failed to delete the event.", 404);
+            return Result<Unit>.Failure("Failed to delete the event.", 400);
         }
 
         return Result<Unit>.Success(Unit.Value);
