@@ -1,5 +1,6 @@
-using Microsoft.EntityFrameworkCore;
 using Application.Contracts.Persistence;
+using Microsoft.EntityFrameworkCore;
+
 namespace Persistence.Repositories;
 
 public class BaseRepository<T> : IAsyncRepository<T>
@@ -29,17 +30,17 @@ public class BaseRepository<T> : IAsyncRepository<T>
         return entity;
     }
 
-    public async Task UpdateAsync(T entity)
+    public async Task<int> UpdateAsync(T entity)
     {
         _dbContext.Entry(entity).State = EntityState.Modified;
-        await _dbContext.SaveChangesAsync();
+        var result = await _dbContext.SaveChangesAsync();
+        return result;
     }
 
     public async Task<int> DeleteAsync(T entity)
     {
         _dbContext.Set<T>().Remove(entity);
-      var result =  await _dbContext.SaveChangesAsync();
-      return result;
+        var result = await _dbContext.SaveChangesAsync();
+        return result;
     }
 }
-
