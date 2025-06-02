@@ -1,10 +1,11 @@
 using Application.Contracts.Persistence;
+using Application.Exceptions;
 using Domain;
 using MediatR;
 
 namespace Application.Features.Events.Commands.DeleteEvent;
 
-public class DeleteEventCommandHandler : IRequestHandler<DeleteEventCommand>
+public class DeleteEventCommandHandler : IRequestHandler<DeleteEventCommand, Result<Unit>>
 {
     private readonly IAsyncRepository<Event> _eventRepository;
 
@@ -13,14 +14,23 @@ public class DeleteEventCommandHandler : IRequestHandler<DeleteEventCommand>
         _eventRepository = eventRepository;
     }
 
-    public async Task Handle(DeleteEventCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Unit>> Handle(
+        DeleteEventCommand request,
+        CancellationToken cancellationToken
+    )
     {
         var eventToBeDeleted = await _eventRepository.GetByIdAsync(request.Id);
         if (eventToBeDeleted == null)
         {
-            throw new Exception("Event not found");
+            return Result<Unit>.Failure("Event not found.", 404);
         }
 
-        await _eventRepository.DeleteAsync(eventToBeDeleted);
+        var result = await _eventRepository.DeleteAsync(eventToBeDeleted) > 0;
+        if (!result)
+        {
+            return Result<Unit>.Failure("Failed to delete the event.", 404);
+        }
+
+        return Result<Unit>.Success(Unit.Value);
     }
 }
