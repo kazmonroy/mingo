@@ -1,11 +1,12 @@
 using Application.Contracts.Persistence;
+using Application.Exceptions;
 using AutoMapper;
 using Domain;
 using MediatR;
 
 namespace Application.Features.Events.Commands.UpdateEvent;
 
-public class UpdateEventCommandHandler : IRequestHandler<UpdateEventCommand>
+public class UpdateEventCommandHandler : IRequestHandler<UpdateEventCommand, Result<Unit>>
 {
     private readonly IMapper _mapper;
     private readonly IAsyncRepository<Event> _eventRepository;
@@ -16,22 +17,24 @@ public class UpdateEventCommandHandler : IRequestHandler<UpdateEventCommand>
         _eventRepository = eventRepository;
     }
 
-    public async Task Handle(UpdateEventCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Unit>> Handle(
+        UpdateEventCommand request,
+        CancellationToken cancellationToken
+    )
     {
         var eventToUpdate = await _eventRepository.GetByIdAsync(request.Id);
         if (eventToUpdate is null)
         {
-            throw new Exception($"Event with ID {request.Id} not found.");
+            return Result<Unit>.Failure("Event not found.", 404);
         }
 
-        var validator = new UpdateEventCommandValidator();
-        var validationResult = await validator.ValidateAsync(request);
-        if (validationResult.Errors.Count > 0)
-        {
-            throw new Exception("Validation failed: " + string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage)));
-        }
-        
         _mapper.Map(request, eventToUpdate, typeof(UpdateEventCommand), typeof(Event));
-        await _eventRepository.UpdateAsync(eventToUpdate); 
+        var result = await _eventRepository.UpdateAsync(eventToUpdate) > 0;
+        if (!result)
+        {
+            return Result<Unit>.Failure("Failed to update the event.", 400);
+        }
+
+        return Result<Unit>.Success(Unit.Value);
     }
 }
