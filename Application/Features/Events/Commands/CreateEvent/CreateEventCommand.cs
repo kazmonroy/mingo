@@ -1,9 +1,10 @@
+using Application.Exceptions;
 using Domain;
 using MediatR;
 
 namespace Application.Features.Events.Commands.CreateEvent;
 
-public class CreateEventCommand : IRequest<string>
+public class CreateEventCommand : IRequest<Result<string>>
 {
     public string Title { get; set; } = string.Empty;
     public DateTime Date { get; set; }

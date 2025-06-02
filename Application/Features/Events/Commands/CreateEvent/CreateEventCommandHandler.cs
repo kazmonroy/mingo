@@ -1,11 +1,12 @@
 using Application.Contracts.Persistence;
+using Application.Exceptions;
 using AutoMapper;
 using Domain;
 using MediatR;
 
 namespace Application.Features.Events.Commands.CreateEvent;
 
-public class CreateEventCommandHandler : IRequestHandler<CreateEventCommand, string>
+public class CreateEventCommandHandler : IRequestHandler<CreateEventCommand, Result<string>>
 {
     private readonly IMapper _mapper;
     private readonly IAsyncRepository<Event> _eventRepository;
@@ -16,15 +17,20 @@ public class CreateEventCommandHandler : IRequestHandler<CreateEventCommand, str
         _eventRepository = eventRepository;
     }
 
-    public async Task<string> Handle(
+    public async Task<Result<string>> Handle(
         CreateEventCommand request,
         CancellationToken cancellationToken
     )
     {
         var newEvent = _mapper.Map<Event>(request);
 
-        newEvent = await _eventRepository.AddAsync(newEvent);
+        var result = await _eventRepository.AddAsync(newEvent);
 
-        return newEvent.Id;
+        if (result == null)
+        {
+            return Result<string>.Failure("Failed to create the event.", 400);
+        }
+
+        return Result<string>.Success(result.Id);
     }
 }
