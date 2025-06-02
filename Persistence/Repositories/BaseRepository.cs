@@ -35,9 +35,11 @@ public class BaseRepository<T> : IAsyncRepository<T>
         await _dbContext.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(T entity)
+    public async Task<int> DeleteAsync(T entity)
     {
         _dbContext.Set<T>().Remove(entity);
-        await _dbContext.SaveChangesAsync();
+      var result =  await _dbContext.SaveChangesAsync();
+      return result;
     }
 }
+
