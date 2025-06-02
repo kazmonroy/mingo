@@ -22,16 +22,6 @@ public class CreateEventCommandHandler : IRequestHandler<CreateEventCommand, str
     )
     {
         var newEvent = _mapper.Map<Event>(request);
-        var validator = new CreateEventCommandValidator();
-        var validationResult = await validator.ValidateAsync(request);
-
-        if (validationResult.Errors.Count > 0)
-        {
-            throw new Exception(
-                "Validation failed: "
-                    + string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage))
-            );
-        }
 
         newEvent = await _eventRepository.AddAsync(newEvent);
 
