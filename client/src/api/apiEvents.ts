@@ -17,12 +17,12 @@ export const useEvents = () => {
 };
 
 export const useEventDetails = (id: string) => {
-  const { data, isLoading } = useQuery({
+  const { data: event, isLoading } = useQuery({
     queryKey: ['events', id],
     queryFn: () => getEventById(id),
+    enabled: !!id, // Only fetch if id is provided
   });
 
-  const event = data ?? null;
   return {
     event,
     isLoading,

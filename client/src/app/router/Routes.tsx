@@ -4,6 +4,7 @@ import { AppLayout } from '../layout/AppLayout';
 import { HomePage } from '@/features/home/HomePage';
 import { CreateEventForm } from '@/features/events/CreateEventForm';
 import { DiscoverEventsPage } from '@/features/events/DiscoverEventsPage';
+import { EventDetails } from '@/features/events/EventDetails';
 
 export const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ export const router = createBrowserRouter([
           {
             path: 'discover',
             element: <DiscoverEventsPage />,
+          },
+          {
+            path: '/:id',
+            element: <EventDetails />,
           },
         ],
       },
