@@ -1,9 +1,12 @@
+using System.Text.Json;
+using Application.Exceptions;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Middleware;
 
-public class ExceptionMiddleware : IMiddleware
+public class ExceptionMiddleware(ILogger<ExceptionMiddleware> logger, IHostEnvironment env)
+    : IMiddleware
 {
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
@@ -17,8 +20,26 @@ public class ExceptionMiddleware : IMiddleware
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex);
+            await HandleException(context, ex);
         }
+    }
+
+    private async Task HandleException(HttpContext context, Exception exception)
+    {
+        logger.LogError(exception, exception.Message);
+        context.Response.ContentType = "application/json";
+        context.Response.StatusCode = StatusCodes.Status500InternalServerError;
+        var response = env.IsDevelopment()
+            ? new AppException(context.Response.StatusCode, exception.Message, exception.StackTrace)
+            : new AppException(context.Response.StatusCode, exception.Message, null);
+
+        var options = new JsonSerializerOptions
+        {
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        };
+
+        var json = JsonSerializer.Serialize(response, options);
+        await context.Response.WriteAsync(json);
     }
 
     private static async Task HandleValidationException(
