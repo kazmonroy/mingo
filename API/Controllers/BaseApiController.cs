@@ -23,7 +23,7 @@ public class BaseApiController : ControllerBase
 
         if (result.IsSuccess && result.Value != null)
         {
-            return result.Value;
+            return Ok(result.Value);
         }
 
         return BadRequest(result.Error);
