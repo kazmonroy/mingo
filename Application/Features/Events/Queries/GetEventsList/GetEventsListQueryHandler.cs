@@ -1,11 +1,12 @@
 using Application.Contracts.Persistence;
+using Application.Exceptions;
 using AutoMapper;
 using Domain;
 using MediatR;
 
 namespace Application.Features.Events.Queries.GetEventsList;
 
-public class GetEventsListQueryHandler : IRequestHandler<GetEventsListQuery, List<EventListVm>>
+public class GetEventsListQueryHandler : IRequestHandler<GetEventsListQuery, Result<List<EventListVm>>>
 {
     private readonly IMapper _mapper;
     private readonly IAsyncRepository<Event> _eventRepository;
@@ -15,9 +16,11 @@ public class GetEventsListQueryHandler : IRequestHandler<GetEventsListQuery, Lis
         _mapper = mapper;
         _eventRepository = eventRepository;
     }
-    public async Task<List<EventListVm>> Handle(GetEventsListQuery request, CancellationToken cancellationToken)
+    public async Task<Result<List<EventListVm>>> Handle(GetEventsListQuery request, CancellationToken cancellationToken)
     {
        var allEvents = (await _eventRepository.ListAllAsync()).OrderBy(x => x.Date);
-       return _mapper.Map<List<EventListVm>>(allEvents);
+       var eventListVm =  _mapper.Map<List<EventListVm>>(allEvents);
+
+       return Result<List<EventListVm>>.Success(eventListVm);
     }
 }
