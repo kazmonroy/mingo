@@ -13,6 +13,8 @@ public class UpdateEventCommandValidator : AbstractValidator<UpdateEventCommand>
             .MaximumLength(50)
             .WithMessage("{PropertyName} must not exceed 50 characters.");
 
-        RuleFor(e => e.Date).NotEmpty().WithMessage("{PropertyName} is required.");
+        RuleFor(e => e.Date)
+            .GreaterThan(DateTime.UtcNow)
+            .WithMessage("{PropertyName} must be in the future.");
     }
 }
