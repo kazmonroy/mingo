@@ -18,23 +18,33 @@ agent.interceptors.response.use(
     await sleep(1000);
     console.log('Axios Error:', error);
 
-    const { status } = error.response || {};
+    const { status, data } = error.response || {};
 
     switch (status) {
       case 400:
-        console.error('Bad Request:', error.response?.data);
-        toast(error.response?.data?.title || 'Bad Request');
+        if (data?.errors) {
+          const modalStateErrors = [];
+          for (const key in data.errors) {
+            if (data.errors[key]) {
+              modalStateErrors.push(data.errors[key]);
+            }
+          }
+          throw modalStateErrors.flat();
+        } else {
+          toast(data?.title || 'Bad Request');
+        }
+
         break;
       case 401:
         console.error('Bad Request:', error.response?.data);
         toast(error.response?.data?.title || 'Unauthorized');
         break;
       case 404:
-        toast(error.response?.data?.title || 'Not Found');
+        toast(data?.title || 'Not Found');
         router.navigate('/not-found');
         break;
       case 500:
-        console.error('Server Error:', error.response?.data);
+        router.navigate('/server-error', { state: { error: data } });
         toast(error.response?.data?.title || 'Server Error');
         break;
       default:
