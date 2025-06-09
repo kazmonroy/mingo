@@ -5,7 +5,6 @@ import { HomePage } from '@/features/home/HomePage';
 import { CreateEventForm } from '@/features/events/CreateEventForm';
 import { DiscoverEventsPage } from '@/features/events/DiscoverEventsPage';
 import { EventDetails } from '@/features/events/EventDetails';
-import { TestErrors } from '@/features/errors/TestError';
 import { NotFound } from '@/features/errors/NotFound';
 import { ServerError } from '@/features/errors/ServerError';
 
@@ -27,11 +26,6 @@ export const router = createBrowserRouter([
             path: 'discover',
             element: <DiscoverEventsPage />,
           },
-          {
-            path: 'error',
-            element: <TestErrors />,
-          },
-
           {
             path: '/:id',
             element: <EventDetails />,
