@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router';
+import { createBrowserRouter, Navigate } from 'react-router';
 import App from '@/app/layout/App';
 import { AppLayout } from '../layout/AppLayout';
 import { HomePage } from '@/features/home/HomePage';
@@ -7,6 +7,7 @@ import { DiscoverEventsPage } from '@/features/events/DiscoverEventsPage';
 import { EventDetails } from '@/features/events/EventDetails';
 import { TestErrors } from '@/features/errors/TestError';
 import { NotFound } from '@/features/errors/NotFound';
+import { ServerError } from '@/features/errors/ServerError';
 
 export const router = createBrowserRouter([
   {
@@ -38,6 +39,14 @@ export const router = createBrowserRouter([
           {
             path: 'not-found',
             element: <NotFound />,
+          },
+          {
+            path: 'server-error',
+            element: <ServerError />,
+          },
+          {
+            path: '*',
+            element: <Navigate replace to='/not-found' />,
           },
         ],
       },
