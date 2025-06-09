@@ -5,6 +5,8 @@ import { HomePage } from '@/features/home/HomePage';
 import { CreateEventForm } from '@/features/events/CreateEventForm';
 import { DiscoverEventsPage } from '@/features/events/DiscoverEventsPage';
 import { EventDetails } from '@/features/events/EventDetails';
+import { TestErrors } from '@/features/errors/TestError';
+import { NotFound } from '@/features/errors/NotFound';
 
 export const router = createBrowserRouter([
   {
@@ -25,8 +27,17 @@ export const router = createBrowserRouter([
             element: <DiscoverEventsPage />,
           },
           {
+            path: 'error',
+            element: <TestErrors />,
+          },
+
+          {
             path: '/:id',
             element: <EventDetails />,
+          },
+          {
+            path: 'not-found',
+            element: <NotFound />,
           },
         ],
       },
