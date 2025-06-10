@@ -23,19 +23,12 @@ import {
   PopoverContent,
 } from '@/components/ui/popover';
 import { useCreateEvent } from '@/api/apiEvents';
+import { createEventFormSchema } from './schema';
 
-const formSchema = z.object({
-  title: z.string().min(2).max(100),
-  description: z.string().min(5).max(500).optional(),
-  category: z.string().min(2).max(50).optional(),
-  date: z.date(),
-  city: z.string().min(2).max(50).optional(),
-  venue: z.string().min(2).max(100).optional(),
-});
 export const CreateEventForm = () => {
   const { createEvent, isPending } = useCreateEvent();
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof createEventFormSchema>>({
+    resolver: zodResolver(createEventFormSchema),
     defaultValues: {
       title: '',
       description: '',
@@ -46,7 +39,7 @@ export const CreateEventForm = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
+  const onSubmit = (values: z.infer<typeof createEventFormSchema>) => {
     const newEvent: Event = {
       title: values.title,
       description: values.description ?? '',
@@ -55,8 +48,13 @@ export const CreateEventForm = () => {
       city: values.city ?? '',
       venue: values.venue ?? '',
     };
+    console.log('Creating event:', newEvent);
 
-    createEvent(newEvent);
+    createEvent(newEvent, {
+      onSuccess: () => {
+        form.reset();
+      },
+    });
   };
 
   return (
