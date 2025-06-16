@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { cn } from '@/lib/utils';
+import { capitalize, cn } from '@/lib/utils';
 import type { Event } from '@/lib/types';
 
 import { Button } from '@/components/ui/button';
@@ -23,7 +23,14 @@ import {
   PopoverContent,
 } from '@/components/ui/popover';
 import { useCreateEvent } from '@/api/apiEvents';
-import { createEventFormSchema } from './schema';
+import { categories, createEventFormSchema } from './schema';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 export const CreateEventForm = () => {
   const { createEvent, isPending } = useCreateEvent();
@@ -104,9 +111,23 @@ export const CreateEventForm = () => {
             name='category'
             render={({ field }) => (
               <FormItem>
-                <FormControl>
-                  <Input placeholder='Category' {...field} />
-                </FormControl>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <FormControl>
+                    <SelectTrigger className='w-full'>
+                      <SelectValue placeholder='Select a category' />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {categories.map((c) => (
+                      <SelectItem key={c} value={c}>
+                        {capitalize(c)}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
 
                 <FormMessage />
               </FormItem>
