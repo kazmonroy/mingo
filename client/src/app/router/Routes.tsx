@@ -2,7 +2,7 @@ import { createBrowserRouter, Navigate } from 'react-router';
 import App from '@/app/layout/App';
 import { AppLayout } from '../layout/AppLayout';
 import { HomePage } from '@/features/home/HomePage';
-import { CreateEventForm } from '@/features/events/CreateEventForm';
+import { CreateEventForm } from '@/features/events/createEvent/CreateEventForm';
 import { DiscoverEventsPage } from '@/features/events/DiscoverEventsPage';
 import { EventDetails } from '@/features/events/EventDetails';
 import { NotFound } from '@/features/errors/NotFound';

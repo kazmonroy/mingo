@@ -14,7 +14,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { ChevronsRight, Loader2Icon, MoveUpRight } from 'lucide-react';
 
-import { UpdateEventForm } from './UpdateEventForm';
+import { UpdateEventForm } from './updateEvent/UpdateEventForm';
 import { useDeleteEvent } from '@/api/apiEvents';
 import { Link } from 'react-router';
 export const EventCard = ({ event }: { event: Event }) => {
