@@ -1,5 +1,12 @@
 import { z } from 'zod';
-export const categories = ['music', 'art', 'food', 'drinks'] as const;
+export const categories = [
+  'music',
+  'art',
+  'food',
+  'drinks',
+  'travel',
+  'culture',
+] as const;
 
 const requiredString = (fieldName: string) =>
   z
