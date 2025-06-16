@@ -17,7 +17,7 @@ public class CreateEventCommandValidator : AbstractValidator<CreateEventCommand>
         RuleFor(e => e.Description).NotEmpty().WithMessage("{PropertyName} is required.");
 
         RuleFor(e => e.Date)
-            .GreaterThan(DateTime.UtcNow)
+            .GreaterThanOrEqualTo(DateTime.UtcNow.Date)
             .WithMessage("{PropertyName} must be in the future.");
         RuleFor(e => e.Category).NotEmpty().WithMessage("{PropertyName} is required.");
         RuleFor(e => e.City).NotEmpty().WithMessage("{PropertyName} is required.");
