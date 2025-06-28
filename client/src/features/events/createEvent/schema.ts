@@ -21,8 +21,11 @@ export const createEventFormSchema = z.object({
   description: requiredString('Description').max(500),
   category: z.enum(['', ...categories] as const).optional(),
   date: z.date(),
-  city: requiredString('City').max(50),
+  city: z.string().optional(),
   venue: requiredString('Venue').max(100),
+  location: requiredString('Location'),
+  latitude: z.coerce.number(),
+  longitude: z.coerce.number(),
 });
 
 export type Category = (typeof categories)[number];
