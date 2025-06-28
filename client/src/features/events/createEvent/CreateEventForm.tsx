@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { capitalize, cn } from '@/lib/utils';
-import type { Event } from '@/lib/types';
+import type { Event, LocationIQSuggestion } from '@/lib/types';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -10,12 +10,13 @@ import {
   FormControl,
   FormField,
   FormItem,
+  FormLabel,
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Calendar } from '@/components/ui/calendar';
-import { CalendarIcon, Loader2Icon } from 'lucide-react';
+import { CalendarIcon, Check, ChevronsUpDown, Loader2Icon } from 'lucide-react';
 import { format } from 'date-fns';
 import {
   Popover,
@@ -31,9 +32,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command';
+import { useState } from 'react';
 
 export const CreateEventForm = () => {
   const { createEvent, isPending } = useCreateEvent();
+  const [suggestions, setSuggestions] = useState<LocationIQSuggestion[] | null>(
+    null
+  );
   const form = useForm<z.infer<typeof createEventFormSchema>>({
     resolver: zodResolver(createEventFormSchema),
     defaultValues: {
@@ -43,6 +56,7 @@ export const CreateEventForm = () => {
       date: new Date(),
       city: '',
       venue: '',
+      location: '',
     },
   });
 
@@ -166,6 +180,73 @@ export const CreateEventForm = () => {
                       onSelect={field.onChange}
                       initialFocus
                     />
+                  </PopoverContent>
+                </Popover>
+
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name='location'
+            render={({ field }) => (
+              <FormItem className='flex flex-col'>
+                <Popover>
+                  <PopoverTrigger asChild>
+                    <FormControl>
+                      <Button
+                        variant='outline'
+                        role='combobox'
+                        className={cn(
+                          'justify-between',
+                          !field.value && 'text-muted-foreground'
+                        )}
+                      >
+                        {field.value
+                          ? suggestions?.find(
+                              (location) =>
+                                location.display_place === field.value
+                            )?.display_place
+                          : 'Add Event Location'}
+                        <ChevronsUpDown className='opacity-50' />
+                      </Button>
+                    </FormControl>
+                  </PopoverTrigger>
+                  <PopoverContent className='w-full p-0'>
+                    <Command className='w-[24rem]'>
+                      <CommandInput
+                        placeholder='Enter location'
+                        className='h-9'
+                      />
+                      <CommandList>
+                        <CommandEmpty>No location found.</CommandEmpty>
+                        {suggestions && suggestions?.length > 0 && (
+                          <CommandGroup>
+                            {suggestions?.map((location) => (
+                              <CommandItem
+                                value={location.label}
+                                key={location.value}
+                                onSelect={() => {
+                                  form.setValue('location', location.value);
+                                }}
+                              >
+                                {location.label}
+                                <Check
+                                  className={cn(
+                                    'ml-auto',
+                                    location.value === field.value
+                                      ? 'opacity-100'
+                                      : 'opacity-0'
+                                  )}
+                                />
+                              </CommandItem>
+                            ))}
+                          </CommandGroup>
+                        )}
+                      </CommandList>
+                    </Command>
                   </PopoverContent>
                 </Popover>
 
