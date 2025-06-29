@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { capitalize, cn } from '@/lib/utils';
-import type { Event, LocationIQSuggestion } from '@/lib/types';
+import type { Event } from '@/lib/types';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -10,7 +10,6 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
@@ -40,13 +39,14 @@ import {
   CommandItem,
   CommandList,
 } from '@/components/ui/command';
-import { useState } from 'react';
+
+import { useDebouncedLocationSuggestions } from './useDebouncedLocationSuggestions';
 
 export const CreateEventForm = () => {
   const { createEvent, isPending } = useCreateEvent();
-  const [suggestions, setSuggestions] = useState<LocationIQSuggestion[] | null>(
-    null
-  );
+  const { suggestions, debouncedFetch, locationSelected, setLocationSelected } =
+    useDebouncedLocationSuggestions(500);
+
   const form = useForm<z.infer<typeof createEventFormSchema>>({
     resolver: zodResolver(createEventFormSchema),
     defaultValues: {
@@ -201,10 +201,11 @@ export const CreateEventForm = () => {
                         role='combobox'
                         className={cn(
                           'justify-between',
-                          !field.value && 'text-muted-foreground'
+                          !field.value ||
+                            (!locationSelected && 'text-muted-foreground')
                         )}
                       >
-                        {field.value
+                        {locationSelected
                           ? suggestions?.find(
                               (location) =>
                                 location.display_place === field.value
@@ -219,6 +220,10 @@ export const CreateEventForm = () => {
                       <CommandInput
                         placeholder='Enter location'
                         className='h-9'
+                        onValueChange={async (value: string) => {
+                          field.onChange(value);
+                          debouncedFetch(value);
+                        }}
                       />
                       <CommandList>
                         <CommandEmpty>No location found.</CommandEmpty>
@@ -226,17 +231,21 @@ export const CreateEventForm = () => {
                           <CommandGroup>
                             {suggestions?.map((location) => (
                               <CommandItem
-                                value={location.label}
-                                key={location.value}
+                                value={location.display_place}
+                                key={location.place_id}
                                 onSelect={() => {
-                                  form.setValue('location', location.value);
+                                  form.setValue(
+                                    'location',
+                                    location.display_place
+                                  );
+                                  setLocationSelected(true);
                                 }}
                               >
-                                {location.label}
+                                {location.display_place}
                                 <Check
                                   className={cn(
                                     'ml-auto',
-                                    location.value === field.value
+                                    location.display_place === field.value
                                       ? 'opacity-100'
                                       : 'opacity-0'
                                   )}
