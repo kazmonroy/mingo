@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { cn } from '@/lib/utils';
+import { cn, getVenue } from '@/lib/utils';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -15,7 +15,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Calendar } from '@/components/ui/calendar';
-import { CalendarIcon, Loader2Icon } from 'lucide-react';
+import { CalendarIcon, Check, ChevronsUpDown, Loader2Icon } from 'lucide-react';
 import { format } from 'date-fns';
 import {
   Popover,
@@ -24,30 +24,38 @@ import {
 } from '@/components/ui/popover';
 import type { Event } from '@/lib/types';
 import { useUpdateEvent } from '@/api/apiEvents';
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from '@/components/ui/command';
+import { useDebouncedLocationSuggestions } from '../createEvent/useDebouncedLocationSuggestions';
+import { updateEventFormSchema } from './schema';
+import type { Category } from '@/features/events/createEvent/schema';
 
-const editEventFormSchema = z.object({
-  title: z.string().min(2).max(100),
-  description: z.string().min(10).max(500).optional(),
-  category: z.string().min(2).max(50).optional(),
-  date: z.date(),
-  city: z.string().min(2).max(50).optional(),
-  venue: z.string().min(2).max(100).optional(),
-});
 export const UpdateEventForm = ({ event }: { event: Event }) => {
   const { updateEvent, isPending } = useUpdateEvent();
-  const form = useForm<z.infer<typeof editEventFormSchema>>({
-    resolver: zodResolver(editEventFormSchema),
+  const { suggestions, debouncedFetch, locationSelected, setLocationSelected } =
+    useDebouncedLocationSuggestions(500);
+  const form = useForm<z.infer<typeof updateEventFormSchema>>({
+    resolver: zodResolver(updateEventFormSchema),
     defaultValues: {
       title: event.title,
       description: event.description,
-      category: event.category,
+      category: (event.category as Category) ?? '',
       date: new Date(event.date),
       city: event.city,
       venue: event.venue,
+      location: getVenue(event.venue),
+      latitude: event.latitude ?? 0,
+      longitude: event.longitude ?? 0,
     },
   });
 
-  const onSubmit = (values: z.infer<typeof editEventFormSchema>) => {
+  const onSubmit = (values: z.infer<typeof updateEventFormSchema>) => {
     const updatedEvent: Event = {
       id: event.id,
       title: values.title,
@@ -55,7 +63,9 @@ export const UpdateEventForm = ({ event }: { event: Event }) => {
       date: values.date.toISOString(),
       category: values.category ?? '',
       city: values.city ?? '',
-      venue: values.venue ?? '',
+      venue: event.venue ?? '',
+      latitude: event.latitude,
+      longitude: event.longitude,
     };
 
     updateEvent(updatedEvent);
@@ -150,6 +160,91 @@ export const UpdateEventForm = ({ event }: { event: Event }) => {
                     }
                     initialFocus
                   />
+                </PopoverContent>
+              </Popover>
+
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        <FormField
+          control={form.control}
+          name='location'
+          render={({ field }) => (
+            <FormItem className='flex flex-col'>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <FormControl>
+                    <Button
+                      variant='outline'
+                      role='combobox'
+                      className={cn(
+                        'justify-between',
+                        !field.value ||
+                          (!locationSelected && 'text-muted-foreground')
+                      )}
+                    >
+                      {locationSelected
+                        ? suggestions?.find(
+                            (location) => location.display_place === field.value
+                          )?.display_place
+                        : field.value || 'Enter location'}
+                      <ChevronsUpDown className='opacity-50' />
+                    </Button>
+                  </FormControl>
+                </PopoverTrigger>
+                <PopoverContent className='w-full p-0'>
+                  <Command className='w-[24rem]'>
+                    <CommandInput
+                      placeholder='Enter location'
+                      className='h-9'
+                      onValueChange={async (value: string) => {
+                        field.onChange(value);
+                        debouncedFetch(value);
+                      }}
+                    />
+                    <CommandList>
+                      <CommandEmpty>No location found.</CommandEmpty>
+                      {suggestions && suggestions?.length > 0 && (
+                        <CommandGroup>
+                          {suggestions?.map((location) => (
+                            <CommandItem
+                              value={location.display_place}
+                              key={location.place_id}
+                              onSelect={() => {
+                                const city =
+                                  location.address?.city ||
+                                  location.address?.town ||
+                                  location.address?.village;
+                                form.setValue(
+                                  'location',
+                                  location.display_place
+                                );
+
+                                form.setValue('city', city || '');
+                                form.setValue('venue', location.display_name);
+
+                                form.setValue('latitude', +location.lat);
+                                form.setValue('longitude', +location.lon);
+                                setLocationSelected(true);
+                              }}
+                            >
+                              {location.display_place}
+                              <Check
+                                className={cn(
+                                  'ml-auto',
+                                  location.display_place === field.value
+                                    ? 'opacity-100'
+                                    : 'opacity-0'
+                                )}
+                              />
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      )}
+                    </CommandList>
+                  </Command>
                 </PopoverContent>
               </Popover>
 
