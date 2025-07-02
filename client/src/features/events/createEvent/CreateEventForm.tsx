@@ -60,14 +60,17 @@ export const CreateEventForm = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof createEventFormSchema>) => {
+  const onSubmit = (event: z.infer<typeof createEventFormSchema>) => {
+    console.log('Form values:', event);
     const newEvent: Event = {
-      title: values.title,
-      description: values.description ?? '',
-      date: values.date.toISOString(),
-      category: values.category ?? '',
-      city: values.city ?? '',
-      venue: values.venue ?? '',
+      title: event.title,
+      description: event.description ?? '',
+      date: event.date.toISOString(),
+      category: event.category ?? '',
+      city: event.city ?? '',
+      venue: event.venue ?? '',
+      latitude: event.latitude,
+      longitude: event.longitude,
     };
     console.log('Creating event:', newEvent);
 
@@ -77,6 +80,8 @@ export const CreateEventForm = () => {
       },
     });
   };
+
+  console.log('Form state:', form.formState.errors);
 
   return (
     <Form {...form}>
@@ -234,10 +239,20 @@ export const CreateEventForm = () => {
                                 value={location.display_place}
                                 key={location.place_id}
                                 onSelect={() => {
+                                  const city =
+                                    location.address?.city ||
+                                    location.address?.town ||
+                                    location.address?.village;
                                   form.setValue(
                                     'location',
                                     location.display_place
                                   );
+
+                                  form.setValue('city', city || '');
+                                  form.setValue('venue', location.display_name);
+
+                                  form.setValue('latitude', +location.lat);
+                                  form.setValue('longitude', +location.lon);
                                   setLocationSelected(true);
                                 }}
                               >

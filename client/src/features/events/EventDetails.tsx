@@ -1,4 +1,5 @@
 import { useEventDetails } from '@/api/apiEvents';
+import { getVenue } from '@/lib/utils';
 import { format } from 'date-fns';
 import { MapPinCheckInside } from 'lucide-react';
 import { useParams } from 'react-router';
@@ -38,14 +39,14 @@ export const EventDetails = () => {
           </div>
         </div>
 
-        <div className='flex gap-2 items-center pb-2'>
-          <div className='border rounded-md flex items-center justify-center size-10 overflow-hidden'>
+        <div className='flex gap-2 items-center'>
+          <div className='rounded-md border flex flex-col items-center justify-center w-10 h-10 overflow-hidden'>
             <MapPinCheckInside className='size-5 text-zinc-400' />
           </div>
 
-          <div className='flex flex-col'>
+          <div className='flex flex-col flex-1'>
             <span className='font-semibold '>
-              {event?.venue ? event.venue : 'Venue not specified'}
+              {event?.venue ? getVenue(event.venue) : 'Venue not specified'}
             </span>
 
             <span className='text-sm'>
