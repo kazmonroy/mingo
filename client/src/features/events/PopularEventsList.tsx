@@ -19,9 +19,7 @@ export const PopularEventsList = () => {
           ? Array(6)
               .fill(null)
               .map((_, index) => PopularEventsList.Skeleton(index))
-          : events.map((event) => (
-              <EventCard key={event.id} eventId={event.id ?? ''} />
-            ))}
+          : events.map((event) => <EventCard key={event.id} event={event} />)}
       </div>
     </>
   );
