@@ -61,7 +61,6 @@ export const CreateEventForm = () => {
   });
 
   const onSubmit = (event: z.infer<typeof createEventFormSchema>) => {
-    console.log('Form values:', event);
     const newEvent: Event = {
       title: event.title,
       description: event.description ?? '',
@@ -72,7 +71,6 @@ export const CreateEventForm = () => {
       latitude: event.latitude,
       longitude: event.longitude,
     };
-    console.log('Creating event:', newEvent);
 
     createEvent(newEvent, {
       onSuccess: () => {

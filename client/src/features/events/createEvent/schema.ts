@@ -8,7 +8,7 @@ export const categories = [
   'culture',
 ] as const;
 
-const requiredString = (fieldName: string) =>
+export const requiredString = (fieldName: string) =>
   z
     .string({
       required_error: `${fieldName} is required.`,
