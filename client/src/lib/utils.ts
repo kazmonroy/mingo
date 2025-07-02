@@ -13,3 +13,8 @@ export const getVenue = (fullLocationAddress?: string) => {
   if (!fullLocationAddress) return '';
   return fullLocationAddress.split(',')[0];
 };
+
+export const getAddress = (fullLocationAddress?: string) => {
+  if (!fullLocationAddress) return '';
+  return fullLocationAddress.split(',').slice(1).join(',').trim();
+};

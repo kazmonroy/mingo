@@ -1,5 +1,6 @@
 import { useEventDetails } from '@/api/apiEvents';
-import { getVenue } from '@/lib/utils';
+import { MapComponent } from '@/components/MapComponent';
+import { getAddress, getVenue } from '@/lib/utils';
 import { format } from 'date-fns';
 import { MapPinCheckInside } from 'lucide-react';
 import { useParams } from 'react-router';
@@ -56,14 +57,35 @@ export const EventDetails = () => {
         </div>
 
         <section>
-          <div className='border-b pb-2 mb-2 flex items-center justify-between'>
-            <h2 className='text-md font-semibold'>About</h2>
+          <div className='border-b pb-2 mb-3 flex items-center justify-between'>
+            <h2 className='text-sm font-semibold'>About</h2>
           </div>
-          <p className='text-sm text-zinc-600'>
+          <p className='text-md text-zinc-600'>
             {event?.description
               ? event.description
               : 'No description available.'}
           </p>
+        </section>
+
+        <section>
+          <div className='border-b pb-2 mb-3 flex items-center justify-between'>
+            <h2 className='text-sm font-semibold'>Location</h2>
+          </div>
+          <p className='text-md font-semibold text-zinc-600'>
+            {event?.venue ? getVenue(event.venue) : 'Venue not specified'}
+          </p>
+          <p className='text-sm text-zinc-500'>
+            {event?.venue ? getAddress(event.venue) : 'Venue not specified'}
+          </p>
+
+          {event?.latitude && event?.longitude && (
+            <div className='rounded-md mt-4 overflow-hidden'>
+              <MapComponent
+                latitude={event?.latitude ?? 0}
+                longitude={event?.longitude ?? 0}
+              />
+            </div>
+          )}
         </section>
       </div>
     </div>
