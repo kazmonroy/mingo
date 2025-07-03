@@ -20,6 +20,7 @@ import type { Dispatch, SetStateAction } from 'react';
 import { useEventDetails } from '@/api/apiEvents';
 import { useEventStore } from '@/store/eventStore';
 import { format } from 'date-fns';
+import { Skeleton } from '@/components/ui/skeleton';
 
 interface EventSheetDetailsProps {
   isEditing: boolean;
@@ -39,7 +40,7 @@ export const EventSheetDetails = ({
   const { event, isLoading } = useEventDetails(eventId ?? '');
 
   if (isLoading || !event) {
-    return <p>Loading...</p>;
+    return EventSheetDetails.Skeleton();
   }
 
   return (
@@ -171,5 +172,65 @@ export const EventSheetDetails = ({
         )}
       </div>
     </>
+  );
+};
+
+EventSheetDetails.Skeleton = () => {
+  return (
+    <div className='p-4 pt-0 max-h-[calc(100vh-80px)] overflow-y-auto'>
+      {/* Header Section */}
+      <div className='border-b px-4 pt-2 pb-2'>
+        <div className='flex items-center justify-between'>
+          <div className='flex items-center gap-2'>
+            <Skeleton className='h-8 w-8 rounded' /> {/* SheetClose button */}
+            <Skeleton className='h-8 w-24 rounded' /> {/* Event page button */}
+          </div>
+          <div className='flex gap-2'>
+            <Skeleton className='h-8 w-20 rounded' /> {/* Delete button */}
+            <Skeleton className='h-8 w-16 rounded' /> {/* Edit/Cancel button */}
+          </div>
+        </div>
+      </div>
+      {/* Image Skeleton */}
+      <div className='my-8 flex justify-center'>
+        <Skeleton className='size-72 rounded-md' />
+      </div>
+
+      <div className='space-y-4'>
+        {/* Title Skeleton */}
+        <Skeleton className='h-8 w-2/3 mb-2' />
+        <Skeleton className='h-4 w-2/5 mb-2' />
+        {/* Date Skeleton */}
+        <div className='grid grid-cols-1 lg:grid-cols-2 gap-3 mb-4'>
+          <div className='flex gap-3'>
+            <Skeleton className='size-10' />
+            <div className='flex flex-col gap-2'>
+              <Skeleton className='h-5 w-40 mb-1' />
+              <Skeleton className='h-4 w-1/2' />
+            </div>
+          </div>
+          <div className='flex gap-3'>
+            <Skeleton className='size-10' />
+            <div className='flex flex-col gap-2'>
+              <Skeleton className='h-5 w-40 mb-1' />
+              <Skeleton className='h-4 w-1/2' />
+            </div>
+          </div>
+        </div>
+
+        {/* About me Skeleton */}
+        <Skeleton className='h-4 w-32 mb-2' />
+        <Skeleton className='h-4 w-3/4 mb-2' />
+        <Skeleton className='h-4 w-2/5 mb-4' />
+
+        {/* Location Section */}
+        <div className='mb-3'>
+          <Skeleton className='h-4 w-24 mb-2' /> {/* Section Title */}
+          <Skeleton className='h-5 w-1/3 mb-1' /> {/* Venue */}
+          <Skeleton className='h-4 w-1/4 mb-3' /> {/* Address */}
+          <Skeleton className='w-full h-48 rounded-md' /> {/* Map */}
+        </div>
+      </div>
+    </div>
   );
 };
