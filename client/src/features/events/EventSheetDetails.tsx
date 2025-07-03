@@ -5,7 +5,12 @@ import {
   SheetClose,
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
-import { ChevronsRight, Loader2Icon, MoveUpRight } from 'lucide-react';
+import {
+  ChevronsRight,
+  Loader2Icon,
+  MapPinCheckInside,
+  MoveUpRight,
+} from 'lucide-react';
 import { UpdateEventForm } from './updateEvent/UpdateEventForm';
 import { Link } from 'react-router';
 import { MapComponent } from '@/components/MapComponent';
@@ -14,6 +19,7 @@ import { getAddress, getVenue } from '@/lib/utils';
 import type { Dispatch, SetStateAction } from 'react';
 import { useEventDetails } from '@/api/apiEvents';
 import { useEventStore } from '@/store/eventStore';
+import { format } from 'date-fns';
 
 interface EventSheetDetailsProps {
   isEditing: boolean;
@@ -81,14 +87,67 @@ export const EventSheetDetails = ({
         {isEditing ? (
           <UpdateEventForm event={event} />
         ) : (
-          <>
+          <div className='space-y-4'>
             <div className='my-8'>
               <div className='size-72 rounded-md overflow-hidden mx-auto'>
                 <img src='./images/1.jpg' alt='' />
               </div>
             </div>
-            <SheetTitle className='text-2xl'>{event?.title}</SheetTitle>
-            <SheetDescription>{event?.description}</SheetDescription>
+
+            <section>
+              <SheetTitle className='text-3xl'>{event?.title}</SheetTitle>
+              <p>Hosted by XYZ </p>
+            </section>
+
+            <section className='grid grid-cols-1 lg:grid-cols-2 gap-3'>
+              <div className='flex gap-3 items-center'>
+                <div className='rounded-md border flex flex-col items-center justify-center size-10 overflow-hidden'>
+                  <span className='uppercase text-[8px] bg-muted inline-flex w-full h-full justify-center'>
+                    {event?.date ? format(new Date(event.date), 'MMM') : null}
+                  </span>
+                  <span>
+                    {event?.date ? format(new Date(event.date), 'd') : null}
+                  </span>
+                </div>
+
+                <div className='flex flex-col'>
+                  <span className='font-semibold '>
+                    {event?.date
+                      ? format(new Date(event.date), 'EEEE d MMMM')
+                      : null}
+                  </span>
+
+                  <span className='text-sm'>
+                    {event?.date ? format(new Date(event.date), 'HH:mm') : null}
+                  </span>
+                </div>
+              </div>
+
+              <div className='flex gap-3 items-center'>
+                <div className='rounded-md border flex flex-col items-center justify-center w-10 h-10 overflow-hidden'>
+                  <MapPinCheckInside className='size-5 text-zinc-400' />
+                </div>
+
+                <div className='flex flex-col flex-1'>
+                  <span className='font-semibold '>
+                    {event?.venue
+                      ? getVenue(event.venue)
+                      : 'Venue not specified'}
+                  </span>
+
+                  <span className='text-sm'>
+                    {event?.city ? event.city : 'City not specified'}
+                  </span>
+                </div>
+              </div>
+            </section>
+
+            <section>
+              <div className='border-b pb-2 mb-3 flex items-center justify-between'>
+                <h2 className='text-sm font-semibold'>About Event</h2>
+              </div>
+              <SheetDescription>{event?.description}</SheetDescription>
+            </section>
             <section>
               <div className='border-b pb-2 mb-3 flex items-center justify-between'>
                 <h2 className='text-sm font-semibold'>Location</h2>
@@ -108,7 +167,7 @@ export const EventSheetDetails = ({
                 </div>
               )}
             </section>
-          </>
+          </div>
         )}
       </div>
     </>
