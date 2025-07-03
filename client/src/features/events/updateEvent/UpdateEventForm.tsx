@@ -173,6 +173,7 @@ export const UpdateEventForm = ({ event }: { event: Event }) => {
           name='location'
           render={({ field }) => (
             <FormItem className='flex flex-col'>
+              <FormLabel>Location</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>
