@@ -154,10 +154,7 @@ export const UpdateEventForm = ({ event }: { event: Event }) => {
                     mode='single'
                     selected={field.value}
                     onSelect={field.onChange}
-                    disabled={() =>
-                      field.value > new Date() ||
-                      field.value < new Date('1900-01-01')
-                    }
+                    disabled={{ before: new Date() }}
                     initialFocus
                   />
                 </PopoverContent>
