@@ -1,7 +1,7 @@
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { cn, getVenue } from '@/lib/utils';
+import { capitalize, cn, getVenue } from '@/lib/utils';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -34,7 +34,17 @@ import {
 } from '@/components/ui/command';
 import { useDebouncedLocationSuggestions } from '../createEvent/useDebouncedLocationSuggestions';
 import { updateEventFormSchema } from './schema';
-import type { Category } from '@/features/events/createEvent/schema';
+import {
+  categories,
+  type Category,
+} from '@/features/events/createEvent/schema';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 export const UpdateEventForm = ({ event }: { event: Event }) => {
   const { updateEvent, isPending } = useUpdateEvent();
@@ -63,9 +73,9 @@ export const UpdateEventForm = ({ event }: { event: Event }) => {
       date: values.date.toISOString(),
       category: values.category ?? '',
       city: values.city ?? '',
-      venue: event.venue ?? '',
-      latitude: event.latitude,
-      longitude: event.longitude,
+      venue: values.venue ?? '',
+      latitude: values.latitude,
+      longitude: values.longitude,
     };
 
     updateEvent(updatedEvent);
@@ -115,9 +125,20 @@ export const UpdateEventForm = ({ event }: { event: Event }) => {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Category</FormLabel>
-              <FormControl>
-                <Input placeholder='Category' {...field} />
-              </FormControl>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger className='w-full'>
+                    <SelectValue placeholder='Select a category' />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  {categories.map((c) => (
+                    <SelectItem key={c} value={c}>
+                      {capitalize(c)}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
 
               <FormMessage />
             </FormItem>
