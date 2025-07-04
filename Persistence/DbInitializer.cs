@@ -1,11 +1,45 @@
 using Domain;
+using Microsoft.AspNetCore.Identity;
 
 namespace Persistence;
 
 public class DbInitializer
 {
-    public static async Task SeedData(MingoDbContext context)
+    public static async Task SeedData(MingoDbContext context, UserManager<User> userManager)
     {
+        if (!userManager.Users.Any())
+        {
+            var users = new List<User>
+            {
+                new User
+                {
+                    DisplayName = "Bob",
+                    UserName = "bob@test.com",
+                    Email = "bob@test.com",
+
+                },
+                new User
+                {
+                    DisplayName = "Tom",
+                    UserName = "tom@test.com",
+                    Email = "tom@test.com",
+
+                },
+                new User
+                {
+                    DisplayName = "Jane",
+                    UserName = "jane@test.com",
+                    Email = "jane@test.com",
+
+                }
+            };
+            
+            foreach (var user in users)
+            {
+                await userManager.CreateAsync(user, "Pa$$w0rd");
+            }
+        }
+        if (context.Users.Any()) return;
         if (context.Events.Any())
             return;
         var events = new List<Event>

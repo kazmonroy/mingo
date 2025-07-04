@@ -1,5 +1,7 @@
 using API.Middleware;
 using Application;
+using Domain;
+using Microsoft.AspNetCore.Identity;
 using Persistence;
 using Scalar.AspNetCore;
 
@@ -12,6 +14,13 @@ public static class StartupExtensions
         builder.Services.AddApplicationServices();
         builder.Services.AddPersistenceServices(builder.Configuration);
         builder.Services.AddTransient<ExceptionMiddleware>();
+        builder
+            .Services.AddIdentityApiEndpoints<User>(opt =>
+            {
+                opt.User.RequireUniqueEmail = true;
+            })
+            .AddRoles<IdentityRole>()
+            .AddEntityFrameworkStores<MingoDbContext>();
         builder.Services.AddCors();
         builder.Services.AddControllers();
         builder.Services.AddOpenApi();
@@ -34,7 +43,11 @@ public static class StartupExtensions
                 .WithOrigins("http://localhost:3000", "https://localhost:3000")
                 .AllowCredentials()
         );
+        
+        app.UseAuthentication();
+        app.UseAuthorization();
         app.MapControllers();
+        app.MapGroup("api").MapIdentityApi<User>();
 
         return app;
     }
