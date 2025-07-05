@@ -1,7 +1,9 @@
 using API.Middleware;
 using Application;
 using Domain;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Persistence;
 using Scalar.AspNetCore;
 
@@ -22,7 +24,11 @@ public static class StartupExtensions
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<MingoDbContext>();
         builder.Services.AddCors();
-        builder.Services.AddControllers();
+        builder.Services.AddControllers(opt =>
+        {
+            var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+            opt.Filters.Add(new AuthorizeFilter(policy));
+        });
         builder.Services.AddOpenApi();
 
         return builder.Build();
@@ -43,7 +49,7 @@ public static class StartupExtensions
                 .WithOrigins("http://localhost:3000", "https://localhost:3000")
                 .AllowCredentials()
         );
-        
+
         app.UseAuthentication();
         app.UseAuthorization();
         app.MapControllers();
