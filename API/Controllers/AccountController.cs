@@ -19,25 +19,12 @@ public class AccountController : BaseApiController
     [HttpPost("register")]
     public async Task<IActionResult> RegisterUser([FromBody] RegisterUserCommand registerCommand)
     {
-        var user = new User
-        {
-            UserName = registerCommand.Email,
-            Email = registerCommand.Email,
-            DisplayName = registerCommand.DisplayName,
-        };
-
-        var result = await _signInManager.UserManager.CreateAsync(user, registerCommand.Password);
-
-        if (result.Succeeded)
+        var result = await Mediator.Send(registerCommand);
+        if (result.IsSuccess)
         {
             return Ok();
         }
-
-        foreach (var error in result.Errors)
-        {
-            ModelState.AddModelError(error.Code, error.Description);
-        }
-
-        return ValidationProblem();
+          
+        return BadRequest(result.Error);
     }
 }
