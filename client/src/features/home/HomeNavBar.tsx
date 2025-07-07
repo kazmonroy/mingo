@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { Link } from 'react-router';
 
 export const HomeNavBar = () => {
   return (
@@ -11,7 +12,9 @@ export const HomeNavBar = () => {
         <Button size='sm' variant='ghost'>
           Explore events
         </Button>
-        <Button size='sm'>Sign in</Button>
+        <Button size='sm' asChild>
+          <Link to='login'>Login</Link>
+        </Button>
       </nav>
     </header>
   );

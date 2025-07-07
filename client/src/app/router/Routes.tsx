@@ -7,6 +7,7 @@ import { DiscoverEventsPage } from '@/features/events/DiscoverEventsPage';
 import { EventDetails } from '@/features/events/EventDetails';
 import { NotFound } from '@/features/errors/NotFound';
 import { ServerError } from '@/features/errors/ServerError';
+import { LoginPage } from '@/features/auth/Login/LoginPage';
 
 export const router = createBrowserRouter([
   {
@@ -14,6 +15,9 @@ export const router = createBrowserRouter([
     element: <App />,
     children: [
       { index: true, element: <HomePage /> },
+
+      { path: 'login', element: <LoginPage /> },
+
       {
         path: '',
         element: <AppLayout />,
