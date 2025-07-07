@@ -1,9 +1,12 @@
 import { EventCard } from './EventCard';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useEvents } from '@/api/apiEvents';
+import { useCurrentUser } from '@/api/apiAuth';
 export const PopularEventsList = () => {
   const { events, isLoading } = useEvents();
 
+  const { isAuthenticated } = useCurrentUser();
+  console.log('Is user authenticated:', isAuthenticated);
   return (
     <>
       <div className='mt-4'>

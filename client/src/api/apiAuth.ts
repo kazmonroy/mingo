@@ -9,6 +9,7 @@ export const useLogin = () => {
     mutationFn: loginApi,
     onSuccess: async (data) => {
       console.log('Login successful:', data);
+
       await queryClient.invalidateQueries({
         queryKey: ['currentUser'],
       });
@@ -30,9 +31,12 @@ export const useCurrentUser = () => {
     queryKey: ['currentUser'],
   });
 
+  const isAuthenticated = !!currentUser;
+
   return {
     currentUser,
     isLoading,
+    isAuthenticated,
   };
 };
 
