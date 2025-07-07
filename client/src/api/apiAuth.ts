@@ -1,16 +1,19 @@
 import type { LoginFormSchema } from '@/features/auth/Login/schema';
 import agent from './agent';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import type { CurrentUser } from '@/lib/types';
 
 export const useLogin = () => {
+  const queryClient = useQueryClient();
   const { mutateAsync: login, isPending } = useMutation({
     mutationFn: loginApi,
-    onSuccess: (data) => {
-      // Handle successful login, e.g., store user data, redirect, etc.
+    onSuccess: async (data) => {
       console.log('Login successful:', data);
+      await queryClient.invalidateQueries({
+        queryKey: ['currentUser'],
+      });
     },
     onError: (error) => {
-      // Handle login error, e.g., show error message
       console.error('Login failed:', error);
     },
   });
@@ -21,14 +24,24 @@ export const useLogin = () => {
   };
 };
 
+export const useCurrentUser = () => {
+  const { data: currentUser, isLoading } = useQuery({
+    queryFn: getCurrentUser,
+    queryKey: ['currentUser'],
+  });
+
+  return {
+    currentUser,
+    isLoading,
+  };
+};
+
 const loginApi = async (creds: LoginFormSchema) => {
-  const response = await agent.post<LoginFormSchema>(
-    '/login?useCookies=true',
-    creds
-  );
+  return await agent.post<LoginFormSchema>('/login?useCookies=true', creds);
+};
 
-  console.log('Login API response:', response);
-  const { data } = response;
-
-  return data;
+const getCurrentUser = async () => {
+  const response = await agent.get<CurrentUser>('/account/user-info');
+  console.log('Current user API response:', response);
+  return response.data;
 };

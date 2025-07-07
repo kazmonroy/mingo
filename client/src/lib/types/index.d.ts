@@ -42,3 +42,10 @@ export type LocationIQAddress = {
   neighbourhood?: string;
   state?: string;
 };
+
+export type CurrentUser = {
+  id: string;
+  email: string;
+  displayName: string;
+  imageUrl?: string;
+};
