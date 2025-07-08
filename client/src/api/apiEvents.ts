@@ -1,11 +1,14 @@
 import type { Event } from '@/lib/types';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import agent from './agent';
+import { useCurrentUser } from './apiAuth';
 
 export const useEvents = () => {
+  const { currentUser } = useCurrentUser();
   const { data, isLoading } = useQuery({
     queryKey: ['events'],
     queryFn: getEvents,
+    enabled: !!currentUser, // Only fetch if user is authenticated
   });
 
   const events = data ?? [];
@@ -17,10 +20,11 @@ export const useEvents = () => {
 };
 
 export const useEventDetails = (id: string) => {
+  const { currentUser } = useCurrentUser();
   const { data: event, isLoading } = useQuery({
     queryKey: ['events', id],
     queryFn: () => getEventById(id),
-    enabled: !!id, // Only fetch if id is provided
+    enabled: !!id && !!currentUser, // Only fetch if id is provided
   });
 
   return {
