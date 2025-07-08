@@ -1,9 +1,9 @@
-import { Link, Navigate } from 'react-router';
+import { Link } from 'react-router';
 import { useCurrentUser } from '@/api/apiAuth';
 import { LoginForm } from '@/components/login-form';
 
 export const LoginPage = () => {
-  const { isAuthenticated, isLoading } = useCurrentUser();
+  const { isLoading } = useCurrentUser();
 
   if (isLoading) {
     return (
@@ -14,10 +14,6 @@ export const LoginPage = () => {
     );
   }
 
-  if (isAuthenticated) {
-    return <Navigate to='/discover' replace />;
-  }
-  console.log('Is user authenticated:', isAuthenticated);
   return (
     <div className='bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10'>
       <div className='flex w-full max-w-sm flex-col gap-6'>

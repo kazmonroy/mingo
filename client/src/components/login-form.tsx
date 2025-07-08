@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import { Loader2Icon } from 'lucide-react';
-import { useNavigate } from 'react-router';
+import { useLocation, useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -32,6 +32,7 @@ export function LoginForm({
   ...props
 }: React.ComponentProps<'div'>) {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login, isPending } = useLogin();
   const form = useForm<LoginFormSchema>({
     resolver: zodResolver(loginFormSchema),
@@ -42,8 +43,11 @@ export function LoginForm({
   });
 
   const onSubmit = async (creds: LoginFormSchema) => {
-    await login(creds);
-    navigate('/discover');
+    await login(creds, {
+      onSuccess: () => {
+        navigate(location.state?.from || '/discover');
+      },
+    });
   };
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>
