@@ -11,10 +11,10 @@ export const categories = [
 export const requiredString = (fieldName: string) =>
   z
     .string({
-      required_error: `${fieldName} is required.`,
+      required_error: `${fieldName} is required`,
     })
     .min(1, {
-      message: `${fieldName} is required.`,
+      message: `${fieldName} is required`,
     });
 export const createEventFormSchema = z.object({
   title: requiredString('Title').max(100),
