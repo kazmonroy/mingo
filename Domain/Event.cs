@@ -14,4 +14,8 @@ public class Event
     public string Venue { get; set; }
     public double Latitude { get; set; }
     public double Longitude { get; set; }
+    
+    // navigation props
+    public ICollection<EventAttendee> Attendees { get; set; }  = [];
+    
 }
