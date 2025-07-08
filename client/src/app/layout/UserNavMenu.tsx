@@ -9,11 +9,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { useNavigate } from 'react-router';
 
 export const UserNavMenu = () => {
+  const navigate = useNavigate();
+
   const { currentUser } = useCurrentUser();
   const { logout } = useLogout();
   const userInitials = currentUser?.displayName?.charAt(0) || '';
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/login');
+  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -47,7 +55,7 @@ export const UserNavMenu = () => {
           <DropdownMenuItem>View profile</DropdownMenuItem>
 
           <DropdownMenuItem>Settings</DropdownMenuItem>
-          <DropdownMenuItem onClick={() => logout()}>Log out</DropdownMenuItem>
+          <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>

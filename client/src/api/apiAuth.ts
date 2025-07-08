@@ -30,8 +30,7 @@ export const useLogout = () => {
   const { mutateAsync: logout, isPending } = useMutation({
     mutationFn: logoutApi,
     onSuccess: async () => {
-      console.log('Logout successful');
-      await queryClient.invalidateQueries({
+      queryClient.removeQueries({
         queryKey: ['currentUser'],
       });
     },
@@ -45,9 +44,11 @@ export const useLogout = () => {
   };
 };
 export const useCurrentUser = () => {
+  const queryClient = useQueryClient();
   const { data: currentUser, isLoading } = useQuery({
     queryFn: getCurrentUser,
     queryKey: ['currentUser'],
+    enabled: !queryClient.getQueryData(['currentUser']),
   });
 
   const isAuthenticated = !!currentUser;
