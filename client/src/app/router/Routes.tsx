@@ -8,45 +8,50 @@ import { EventDetails } from '@/features/events/EventDetails';
 import { NotFound } from '@/features/errors/NotFound';
 import { ServerError } from '@/features/errors/ServerError';
 import { LoginPage } from '@/features/auth/Login/LoginPage';
+import { AuthGuard } from './AuthGuard';
 
 export const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
     children: [
+      {
+        element: <AuthGuard />,
+        children: [
+          {
+            path: '',
+            element: <AppLayout />,
+            children: [
+              {
+                path: 'create',
+                element: <CreateEventForm />,
+              },
+              {
+                path: 'discover',
+                element: <DiscoverEventsPage />,
+              },
+              {
+                path: '/:id',
+                element: <EventDetails />,
+              },
+            ],
+          },
+        ],
+      },
       { index: true, element: <HomePage /> },
 
       { path: 'login', element: <LoginPage /> },
-
       {
-        path: '',
-        element: <AppLayout />,
-        children: [
-          {
-            path: 'create',
-            element: <CreateEventForm />,
-          },
-          {
-            path: 'discover',
-            element: <DiscoverEventsPage />,
-          },
-          {
-            path: '/:id',
-            element: <EventDetails />,
-          },
-          {
-            path: 'not-found',
-            element: <NotFound />,
-          },
-          {
-            path: 'server-error',
-            element: <ServerError />,
-          },
-          {
-            path: '*',
-            element: <Navigate replace to='/not-found' />,
-          },
-        ],
+        path: 'not-found',
+        element: <NotFound />,
+      },
+      {
+        path: 'server-error',
+        element: <ServerError />,
+      },
+      {
+        path: '*',
+        element: <Navigate replace to='/not-found' />,
       },
     ],
   },
