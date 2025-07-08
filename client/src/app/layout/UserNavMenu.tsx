@@ -1,4 +1,4 @@
-import { useCurrentUser } from '@/api/apiAuth';
+import { useCurrentUser, useLogout } from '@/api/apiAuth';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -12,6 +12,7 @@ import {
 
 export const UserNavMenu = () => {
   const { currentUser } = useCurrentUser();
+  const { logout } = useLogout();
   const userInitials = currentUser?.displayName?.charAt(0) || '';
   return (
     <DropdownMenu>
@@ -46,7 +47,7 @@ export const UserNavMenu = () => {
           <DropdownMenuItem>View profile</DropdownMenuItem>
 
           <DropdownMenuItem>Settings</DropdownMenuItem>
-          <DropdownMenuItem>Log out</DropdownMenuItem>
+          <DropdownMenuItem onClick={() => logout()}>Log out</DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -25,6 +25,25 @@ export const useLogin = () => {
   };
 };
 
+export const useLogout = () => {
+  const queryClient = useQueryClient();
+  const { mutateAsync: logout, isPending } = useMutation({
+    mutationFn: logoutApi,
+    onSuccess: async () => {
+      console.log('Logout successful');
+      await queryClient.invalidateQueries({
+        queryKey: ['currentUser'],
+      });
+    },
+    onError: (error) => {
+      console.error('Logout failed:', error);
+    },
+  });
+  return {
+    logout,
+    isPending,
+  };
+};
 export const useCurrentUser = () => {
   const { data: currentUser, isLoading } = useQuery({
     queryFn: getCurrentUser,
@@ -42,6 +61,10 @@ export const useCurrentUser = () => {
 
 const loginApi = async (creds: LoginFormSchema) => {
   return await agent.post<LoginFormSchema>('/login?useCookies=true', creds);
+};
+
+const logoutApi = async () => {
+  return await agent.post('/account/logout');
 };
 
 const getCurrentUser = async () => {
