@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import { Loader2Icon } from 'lucide-react';
-import { useLocation, useNavigate } from 'react-router';
+import { Link, useLocation, useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -134,9 +134,9 @@ export function LoginForm({
                 </div>
                 <div className='text-center text-sm'>
                   Don&apos;t have an account?{' '}
-                  <a href='#' className='underline underline-offset-4'>
+                  <Link to='/sign-up' className='underline underline-offset-4'>
                     Sign up
-                  </a>
+                  </Link>
                 </div>
               </div>
             </form>
