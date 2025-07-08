@@ -1,11 +1,8 @@
-import { useCurrentUser } from '@/api/apiAuth';
 import { Compass, Ticket } from 'lucide-react';
 import { Link } from 'react-router';
+import { UserNavMenu } from './UserNavMenu';
 
 export const NavBar = () => {
-  const { currentUser } = useCurrentUser();
-  const userInitials = currentUser?.displayName?.charAt(0) || '';
-
   return (
     <header className='sticky top-0 z-50 flex flex-none flex-wrap items-center justify-between bg-white pl-3 pr-4 py-1 transition duration-500 sm:px-6 lg:px-8 dark:bg-transparent'>
       <div className='relative flex grow basis-0 items-center'>
@@ -28,9 +25,8 @@ export const NavBar = () => {
         <Link to='/create' className='text-sm font-semibold'>
           Create event
         </Link>
-        <div className='size-8 bg-muted flex items-center justify-center rounded-full text-sm font-semibold text-muted-foreground'>
-          <p>{userInitials}</p>
-        </div>
+
+        <UserNavMenu />
       </div>
     </header>
   );
