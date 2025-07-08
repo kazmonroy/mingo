@@ -62,10 +62,6 @@ export const useCurrentUser = () => {
 export const useSignUp = () => {
   const { mutateAsync: signUp, isPending } = useMutation({
     mutationFn: signUpApi,
-
-    onError: (error) => {
-      console.error('Sign up failed:', error);
-    },
   });
   return {
     signUp,

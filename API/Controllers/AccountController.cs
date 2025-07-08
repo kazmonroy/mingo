@@ -20,13 +20,24 @@ public class AccountController : BaseApiController
     [HttpPost("sign-up")]
     public async Task<IActionResult> RegisterUser([FromBody] RegisterUserCommand registerCommand)
     {
-        var result = await Mediator.Send(registerCommand);
-        if (result.IsSuccess)
+        var user = new User
+        {
+            DisplayName = registerCommand.DisplayName,
+            Email = registerCommand.Email,
+            UserName = registerCommand.Email,
+        };
+        var result = await _signInManager.UserManager.CreateAsync(user, registerCommand.Password);
+        if (result.Succeeded)
         {
             return Ok();
         }
 
-        return BadRequest(result.Error);
+        foreach (var error in result.Errors)
+        {
+            ModelState.AddModelError(error.Code, error.Description);
+        }
+
+        return ValidationProblem();
     }
 
     [AllowAnonymous]
@@ -50,18 +61,15 @@ public class AccountController : BaseApiController
                 DisplayName = user.DisplayName,
                 Email = user.Email,
                 Id = user.Id,
-                ImageUrl = user.ImageUrl
+                ImageUrl = user.ImageUrl,
             }
         );
-
-       
     }
-    
+
     [HttpPost("logout")]
     public async Task<ActionResult> Logout()
     {
         await _signInManager.SignOutAsync();
         return NoContent();
     }
-
 }

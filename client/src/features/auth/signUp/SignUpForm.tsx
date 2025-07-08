@@ -44,9 +44,26 @@ export function SignUpForm({
   });
 
   const onSubmit = async (creds: SignUpFormSchema) => {
-    await signUp(creds);
-    console.log('SignUpForm onSubmit', creds);
-    // Automatically login after successful sign up
+    await signUp(creds, {
+      onError: (error) => {
+        if (Array.isArray(error)) {
+          error.forEach((err) => {
+            console.error(err);
+            if (err.includes('Email')) {
+              form.setError('email', {
+                message: err,
+              });
+            }
+            if (err.includes('Password')) {
+              form.setError('password', {
+                message: err,
+              });
+            }
+          });
+        }
+      },
+    });
+
     await login(
       { email: creds.email, password: creds.password },
       {
@@ -55,7 +72,6 @@ export function SignUpForm({
         },
       }
     );
-    console.log('loging in...');
   };
 
   const isSignUpButtonDisabled = !form.formState.isValid || isPending;
