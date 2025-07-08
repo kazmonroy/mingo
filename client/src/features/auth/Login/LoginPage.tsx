@@ -1,16 +1,13 @@
+import { Link, Navigate } from 'react-router';
 import { useCurrentUser } from '@/api/apiAuth';
 import { LoginForm } from '@/components/login-form';
-import { Link, useNavigate } from 'react-router';
 
 export const LoginPage = () => {
-  const navigate = useNavigate();
   const { isAuthenticated } = useCurrentUser();
 
   if (isAuthenticated) {
-    navigate('/discover');
-    return null;
+    return <Navigate to='/discover' replace />;
   }
-
   console.log('Is user authenticated:', isAuthenticated);
   return (
     <div className='bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10'>
