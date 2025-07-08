@@ -1,9 +1,9 @@
 import { useCurrentUser } from '@/api/apiAuth';
-import { Link } from 'react-router';
+import { Link, Navigate } from 'react-router';
 import { SignUpForm } from './SignUpForm';
 
 export const SignUpPage = () => {
-  const { isLoading } = useCurrentUser();
+  const { isAuthenticated, isLoading } = useCurrentUser();
 
   if (isLoading) {
     return (
@@ -12,6 +12,10 @@ export const SignUpPage = () => {
         Loading...
       </div>
     );
+  }
+
+  if (isAuthenticated) {
+    return <Navigate to='/discover' replace />;
   }
 
   return (
