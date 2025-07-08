@@ -17,7 +17,7 @@ public class AccountController : BaseApiController
     }
 
     [AllowAnonymous]
-    [HttpPost("register")]
+    [HttpPost("sign-up")]
     public async Task<IActionResult> RegisterUser([FromBody] RegisterUserCommand registerCommand)
     {
         var result = await Mediator.Send(registerCommand);

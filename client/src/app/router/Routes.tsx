@@ -7,8 +7,9 @@ import { DiscoverEventsPage } from '@/features/events/DiscoverEventsPage';
 import { EventDetails } from '@/features/events/EventDetails';
 import { NotFound } from '@/features/errors/NotFound';
 import { ServerError } from '@/features/errors/ServerError';
-import { LoginPage } from '@/features/auth/Login/LoginPage';
+import { LoginPage } from '@/features/auth/login/LoginPage';
 import { AuthGuard } from './AuthGuard';
+import { SignUpPage } from '@/features/auth/signUp/SignUpPage';
 
 export const router = createBrowserRouter([
   {
@@ -41,6 +42,7 @@ export const router = createBrowserRouter([
       { index: true, element: <HomePage /> },
 
       { path: 'login', element: <LoginPage /> },
+      { path: 'sign-up', element: <SignUpPage /> },
       {
         path: 'not-found',
         element: <NotFound />,

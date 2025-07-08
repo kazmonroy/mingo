@@ -1,7 +1,8 @@
-import type { LoginFormSchema } from '@/features/auth/Login/schema';
+import type { LoginFormSchema } from '@/features/auth/login/schema';
 import agent from './agent';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { CurrentUser } from '@/lib/types';
+import type { SignUpFormSchema } from '@/features/auth/signUp/schema';
 
 export const useLogin = () => {
   const queryClient = useQueryClient();
@@ -58,6 +59,20 @@ export const useCurrentUser = () => {
   };
 };
 
+export const useSignUp = () => {
+  const { mutateAsync: signUp, isPending } = useMutation({
+    mutationFn: signUpApi,
+
+    onError: (error) => {
+      console.error('Sign up failed:', error);
+    },
+  });
+  return {
+    signUp,
+    isPending,
+  };
+};
+
 const loginApi = async (creds: LoginFormSchema) => {
   return await agent.post<LoginFormSchema>('/login?useCookies=true', creds);
 };
@@ -70,4 +85,8 @@ const getCurrentUser = async () => {
   const response = await agent.get<CurrentUser>('/account/user-info');
   console.log('Current user API response:', response);
   return response.data;
+};
+
+const signUpApi = async (creds: SignUpFormSchema) => {
+  return await agent.post<SignUpFormSchema>('/account/sign-up', creds);
 };

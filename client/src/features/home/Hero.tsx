@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { Link } from 'react-router';
 
 export const Hero = () => {
   return (
@@ -17,8 +18,8 @@ export const Hero = () => {
             </p>
 
             <div className='mt-12 flex flex-col gap-x-6 gap-y-4 sm:flex-row'>
-              <Button className='w-full sm:w-auto text-md' size='lg'>
-                Create your first event
+              <Button className='w-full sm:w-auto text-md' size='lg' asChild>
+                <Link to='sign-up'> Sign up</Link>
               </Button>
             </div>
           </div>

@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 import { Loader2Icon } from 'lucide-react';
-import { useLocation, useNavigate } from 'react-router';
+
 import { useForm } from 'react-hook-form';
 import { Button } from '@/components/ui/button';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -13,10 +13,6 @@ import {
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import {
-  loginFormSchema,
-  type LoginFormSchema,
-} from '@/features/auth/login/schema';
 
 import {
   Form,
@@ -25,38 +21,35 @@ import {
   FormControl,
   FormMessage,
 } from '@/components/ui/form';
-import { useLogin } from '@/api/apiAuth';
 
-export function LoginForm({
+import { signUpFormSchema, type SignUpFormSchema } from './schema';
+import { useSignUp } from '@/api/apiAuth';
+import { Link } from 'react-router';
+
+export function SignUpForm({
   className,
   ...props
 }: React.ComponentProps<'div'>) {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { login, isPending } = useLogin();
-  const form = useForm<LoginFormSchema>({
-    resolver: zodResolver(loginFormSchema),
+  const { signUp, isPending } = useSignUp();
+  const form = useForm<SignUpFormSchema>({
+    resolver: zodResolver(signUpFormSchema),
     defaultValues: {
       email: '',
       password: '',
+      displayName: '',
     },
   });
 
-  const onSubmit = async (creds: LoginFormSchema) => {
-    await login(creds, {
-      onSuccess: () => {
-        navigate(location.state?.from || '/discover');
-      },
-    });
+  const onSubmit = async (creds: SignUpFormSchema) => {
+    await signUp(creds);
+    console.log('SignUpForm onSubmit', creds);
   };
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>
       <Card>
         <CardHeader className='text-center'>
-          <CardTitle className='text-xl'>Welcome back</CardTitle>
-          <CardDescription>
-            Login with your Apple or Google account
-          </CardDescription>
+          <CardTitle className='text-xl'>Get started</CardTitle>
+          <CardDescription>Create a new account</CardDescription>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -70,7 +63,7 @@ export function LoginForm({
                         fill='currentColor'
                       />
                     </svg>
-                    Login with Apple
+                    Continue with Apple
                   </Button>
                   <Button variant='outline' className='w-full'>
                     <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'>
@@ -79,15 +72,28 @@ export function LoginForm({
                         fill='currentColor'
                       />
                     </svg>
-                    Login with Google
+                    Continue with Google
                   </Button>
                 </div>
                 <div className='after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t'>
                   <span className='bg-card text-muted-foreground relative z-10 px-2'>
-                    Or continue with
+                    Or sign up with
                   </span>
                 </div>
                 <div className='grid gap-6'>
+                  <FormField
+                    control={form.control}
+                    name='displayName'
+                    render={({ field }) => (
+                      <FormItem>
+                        <Label htmlFor='displayName'>Name</Label>
+                        <FormControl>
+                          <Input id='displayName' type='text' {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                   <FormField
                     control={form.control}
                     name='email'
@@ -113,12 +119,6 @@ export function LoginForm({
                       <FormItem>
                         <div className='flex items-center'>
                           <Label htmlFor='password'>Password</Label>
-                          <a
-                            href='#'
-                            className='ml-auto text-sm underline-offset-4 hover:underline'
-                          >
-                            Forgot your password?
-                          </a>
                         </div>
                         <FormControl>
                           <Input id='password' type='password' {...field} />
@@ -129,14 +129,14 @@ export function LoginForm({
                   />
                   <Button type='submit' className='w-full' disabled={isPending}>
                     {isPending && <Loader2Icon className='animate-spin' />}
-                    Login
+                    Sign up
                   </Button>
                 </div>
                 <div className='text-center text-sm'>
-                  Don&apos;t have an account?{' '}
-                  <a href='#' className='underline underline-offset-4'>
-                    Sign up
-                  </a>
+                  Have an account?{' '}
+                  <Link to='/login' className='underline underline-offset-4'>
+                    Login now
+                  </Link>
                 </div>
               </div>
             </form>
