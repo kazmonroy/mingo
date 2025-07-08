@@ -1,7 +1,8 @@
 import { cn } from '@/lib/utils';
 import { Loader2Icon } from 'lucide-react';
-
+import { Link, useLocation, useNavigate } from 'react-router';
 import { useForm } from 'react-hook-form';
+
 import { Button } from '@/components/ui/button';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
@@ -23,14 +24,16 @@ import {
 } from '@/components/ui/form';
 
 import { signUpFormSchema, type SignUpFormSchema } from './schema';
-import { useSignUp } from '@/api/apiAuth';
-import { Link } from 'react-router';
+import { useLogin, useSignUp } from '@/api/apiAuth';
 
 export function SignUpForm({
   className,
   ...props
 }: React.ComponentProps<'div'>) {
+  const navigate = useNavigate();
+  const location = useLocation();
   const { signUp, isPending } = useSignUp();
+  const { login } = useLogin();
   const form = useForm<SignUpFormSchema>({
     resolver: zodResolver(signUpFormSchema),
     defaultValues: {
@@ -43,6 +46,16 @@ export function SignUpForm({
   const onSubmit = async (creds: SignUpFormSchema) => {
     await signUp(creds);
     console.log('SignUpForm onSubmit', creds);
+    // Automatically login after successful sign up
+    await login(
+      { email: creds.email, password: creds.password },
+      {
+        onSuccess: () => {
+          navigate(location.state?.from || '/discover');
+        },
+      }
+    );
+    console.log('loging in...');
   };
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>
