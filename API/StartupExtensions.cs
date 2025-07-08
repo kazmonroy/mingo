@@ -1,6 +1,7 @@
 using API.Middleware;
 using Application;
 using Domain;
+using Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -15,6 +16,7 @@ public static class StartupExtensions
     {
         builder.Services.AddApplicationServices();
         builder.Services.AddPersistenceServices(builder.Configuration);
+        builder.Services.AddInfrastructureServices();
         builder.Services.AddTransient<ExceptionMiddleware>();
         builder
             .Services.AddIdentityApiEndpoints<User>(opt =>
