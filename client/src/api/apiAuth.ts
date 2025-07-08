@@ -30,9 +30,7 @@ export const useLogout = () => {
   const { mutateAsync: logout, isPending } = useMutation({
     mutationFn: logoutApi,
     onSuccess: async () => {
-      queryClient.removeQueries({
-        queryKey: ['currentUser'],
-      });
+      await queryClient.clear();
     },
     onError: (error) => {
       console.error('Logout failed:', error);
