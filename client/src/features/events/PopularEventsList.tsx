@@ -2,11 +2,17 @@ import { EventCard } from './EventCard';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useEvents } from '@/api/apiEvents';
 import { useCurrentUser } from '@/api/apiAuth';
+import { Navigate } from 'react-router';
 export const PopularEventsList = () => {
-  const { events, isLoading } = useEvents();
+  const { events, isLoading: isLoadingEvents } = useEvents();
 
-  const { isAuthenticated } = useCurrentUser();
+  const { isAuthenticated, isLoading: isLoadingUser } = useCurrentUser();
   console.log('Is user authenticated:', isAuthenticated);
+  if (!isAuthenticated) {
+    return <Navigate to='/login' replace />;
+  }
+
+  const isLoading = isLoadingEvents || isLoadingUser;
   return (
     <>
       <div className='mt-4'>
