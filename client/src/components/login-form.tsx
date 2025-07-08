@@ -49,6 +49,8 @@ export function LoginForm({
       },
     });
   };
+
+  const isLoginButtonDisabled = !form.formState.isValid || isPending;
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>
       <Card>
@@ -127,7 +129,11 @@ export function LoginForm({
                       </FormItem>
                     )}
                   />
-                  <Button type='submit' className='w-full' disabled={isPending}>
+                  <Button
+                    type='submit'
+                    className='w-full'
+                    disabled={isLoginButtonDisabled}
+                  >
                     {isPending && <Loader2Icon className='animate-spin' />}
                     Login
                   </Button>
