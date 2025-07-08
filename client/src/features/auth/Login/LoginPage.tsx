@@ -3,7 +3,16 @@ import { useCurrentUser } from '@/api/apiAuth';
 import { LoginForm } from '@/components/login-form';
 
 export const LoginPage = () => {
-  const { isAuthenticated } = useCurrentUser();
+  const { isAuthenticated, isLoading } = useCurrentUser();
+
+  if (isLoading) {
+    return (
+      <div className='flex min-h-svh items-center justify-center gap-2'>
+        <img src='/mingo-logo.svg' alt='mingo logo' />
+        Loading...
+      </div>
+    );
+  }
 
   if (isAuthenticated) {
     return <Navigate to='/discover' replace />;
