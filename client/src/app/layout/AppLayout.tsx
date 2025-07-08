@@ -1,7 +1,16 @@
+import { useCurrentUser } from '@/api/apiAuth';
 import { NavBar } from '@/app/layout/NavBar';
-import { Outlet } from 'react-router';
+import { Outlet, useNavigate } from 'react-router';
 
 export const AppLayout = () => {
+  const navigate = useNavigate();
+  const { isAuthenticated } = useCurrentUser();
+
+  if (!isAuthenticated) {
+    navigate('/login', { replace: true });
+    return null; // Prevent rendering the layout if not isAuthenticated
+  }
+
   return (
     <>
       <div className='flex w-full flex-col min-h-screen'>
