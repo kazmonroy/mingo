@@ -44,34 +44,29 @@ export function SignUpForm({
   });
 
   const onSubmit = async (creds: SignUpFormSchema) => {
-    await signUp(creds, {
-      onError: (error) => {
-        if (Array.isArray(error)) {
-          error.forEach((err) => {
-            console.error(err);
-            if (err.includes('Email')) {
-              form.setError('email', {
-                message: err,
-              });
-            }
-            if (err.includes('Password')) {
-              form.setError('password', {
-                message: err,
-              });
-            }
-          });
-        }
-      },
-    });
+    try {
+      await signUp(creds);
 
-    await login(
-      { email: creds.email, password: creds.password },
-      {
-        onSuccess: () => {
-          navigate(location.state?.from || '/discover');
-        },
+      await login(
+        { email: creds.email, password: creds.password },
+        {
+          onSuccess: () => {
+            navigate(location.state?.from || '/discover');
+          },
+        }
+      );
+    } catch (error) {
+      if (Array.isArray(error)) {
+        error.forEach((err) => {
+          if (err.includes('Email')) {
+            form.setError('email', { message: err });
+          }
+          if (err.includes('Password')) {
+            form.setError('password', { message: err });
+          }
+        });
       }
-    );
+    }
   };
 
   const isSignUpButtonDisabled = !form.formState.isValid || isPending;
