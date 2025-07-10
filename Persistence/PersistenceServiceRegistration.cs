@@ -1,8 +1,9 @@
+using Application.Contracts.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Persistence.Repositories;
-using Application.Contracts.Persistence;
+
 namespace Persistence;
 
 public static class PersistenceServiceRegistration
@@ -15,12 +16,10 @@ public static class PersistenceServiceRegistration
         services.AddDbContext<MingoDbContext>(opt =>
             opt.UseSqlServer(configuration.GetConnectionString("MingoDbConnection"))
         );
-        
+
         services.AddScoped(typeof(IAsyncRepository<>), typeof(BaseRepository<>));
-        
+        services.AddScoped<IEventRepository, EventRepository>();
 
         return services;
     }
 }
-
-
