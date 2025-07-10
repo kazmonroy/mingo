@@ -1,8 +1,9 @@
+using Application.Features.Events.Queries.GetEventDetails;
 using Domain;
 
 namespace Application.Contracts.Persistence;
 
 public interface IEventRepository : IAsyncRepository<Event>
 {
-    Task<Event> ListEventWithAttendees(string eventId);
+    Task<EventDetailsVm> ListEventWithAttendees(string eventId);
 }

@@ -12,7 +12,6 @@ public class GetEventDetailsQueryHandler
     private readonly IMapper _mapper;
     private readonly IEventRepository _eventRepository;
 
-
     public GetEventDetailsQueryHandler(IMapper mapper, IEventRepository eventRepository)
     {
         _mapper = mapper;
@@ -31,8 +30,6 @@ public class GetEventDetailsQueryHandler
             return Result<EventDetailsVm>.Failure("Event not found.", 404);
         }
 
-        var eventDetails = _mapper.Map<EventDetailsVm>(currentEvent);
-
-        return Result<EventDetailsVm>.Success(eventDetails);
+        return Result<EventDetailsVm>.Success(currentEvent);
     }
 }
