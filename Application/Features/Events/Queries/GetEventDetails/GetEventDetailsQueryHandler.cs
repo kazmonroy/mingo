@@ -10,9 +10,10 @@ public class GetEventDetailsQueryHandler
     : IRequestHandler<GetEventDetailsQuery, Result<EventDetailsVm>>
 {
     private readonly IMapper _mapper;
-    private readonly IAsyncRepository<Event> _eventRepository;
+    private readonly IEventRepository _eventRepository;
 
-    public GetEventDetailsQueryHandler(IMapper mapper, IAsyncRepository<Event> eventRepository)
+
+    public GetEventDetailsQueryHandler(IMapper mapper, IEventRepository eventRepository)
     {
         _mapper = mapper;
         _eventRepository = eventRepository;
@@ -23,7 +24,7 @@ public class GetEventDetailsQueryHandler
         CancellationToken cancellationToken
     )
     {
-        var currentEvent = await _eventRepository.GetByIdAsync(request.Id);
+        var currentEvent = await _eventRepository.ListEventWithAttendees(request.Id);
 
         if (currentEvent == null)
         {

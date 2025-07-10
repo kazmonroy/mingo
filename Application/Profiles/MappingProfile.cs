@@ -12,8 +12,22 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<Event, EventListVm>().ReverseMap();
-        CreateMap<Event, EventDetailsVm>().ReverseMap();
         CreateMap<Event, CreateEventCommand>().ReverseMap();
         CreateMap<Event, UpdateEventCommand>().ReverseMap();
+        CreateMap<Event, EventDetailsVm>()
+            .ForMember(
+                d => d.HostDisplayName,
+                o => o.MapFrom(s => s.Attendees.FirstOrDefault(x => x.IsHost)!.User.DisplayName)
+            )
+            .ForMember(
+                d => d.HostId,
+                o => o.MapFrom(s => s.Attendees.FirstOrDefault(x => x.IsHost)!.User.Id)
+            );
+
+        CreateMap<EventAttendee, AttendeeDto>()
+            .ForMember(d => d.Id, o => o.MapFrom(s => s.User.Id))
+            .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.User.DisplayName))
+            .ForMember(d => d.Bio, o => o.MapFrom(s => s.User.Bio))
+            .ForMember(d => d.ImageUrl, o => o.MapFrom(s => s.User.ImageUrl));
     }
 }
