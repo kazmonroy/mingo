@@ -100,8 +100,7 @@ export const useUpdateAttendance = () => {
     useMutation({
       mutationFn: (eventId: string) => updateAttendanceApi(eventId),
       onSuccess: async (_data, eventId) => {
-        console.log('Event updated:', eventId);
-        queryClient.invalidateQueries({ queryKey: ['events', eventId] });
+        await queryClient.invalidateQueries({ queryKey: ['events', eventId] });
       },
     });
 
