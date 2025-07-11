@@ -8,6 +8,7 @@ public class MingoDbContext(DbContextOptions options) : IdentityDbContext<User>(
 {
     public DbSet<Event> Events => Set<Event>();
     public DbSet<EventAttendee> EventAttendees => Set<EventAttendee>();
+    public DbSet<Photo> Photos => Set<Photo>();
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

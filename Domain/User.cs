@@ -10,4 +10,5 @@ public class User : IdentityUser
     
     // navigation props
     public ICollection<EventAttendee> Events { get; set; } = [];
+    public ICollection<Photo> Photos { get; set; } = [];
 }
