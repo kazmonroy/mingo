@@ -196,18 +196,28 @@ export const EventSheetDetails = ({
                       </AvatarFallback>
                     </Avatar>
 
-                    <p>{event?.hostDisplayName}</p>
+                    <h3>{hostDetails?.displayName}</h3>
                   </div>
                 </TooltipTrigger>
-                <TooltipContent side='top' align='start' className='p-4'>
-                  <div className='flex items-center flex-col gap-2'>
-                    <Avatar className='size-10'>
+                <TooltipContent
+                  side='top'
+                  align='start'
+                  className='p-4 max-w-2/4'
+                >
+                  <div className='flex items-start flex-col gap-2'>
+                    <Avatar className='size-12'>
                       <AvatarImage
                         src={hostDetails?.imageUrl ?? './avatar_fallback.avif'}
                         alt={hostDetails?.displayName}
                       />
                     </Avatar>
-                    <p className='text-lg'>{hostDetails?.displayName}</p>
+                    <h3 className='text-lg font-bold'>
+                      {hostDetails?.displayName}
+                    </h3>
+                    <p className='text-sm line-clamp-2'>
+                      Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                      Eligendi est ullam nam!
+                    </p>
                   </div>
                 </TooltipContent>
               </Tooltip>
