@@ -32,7 +32,7 @@ agent.interceptors.response.use(
           }
           throw modalStateErrors.flat();
         } else {
-          toast(data?.title || 'Bad Request');
+          toast(data?.title || data?.error || 'Bad Request');
         }
 
         break;
