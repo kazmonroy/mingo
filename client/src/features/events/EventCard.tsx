@@ -30,9 +30,7 @@ export const EventCard = ({ event }: { event: Event }) => {
             <p className='text-muted-foreground text-sm'>
               {formatDate(event.date)}
             </p>
-            <p className='text-muted-foreground text-sm'>
-              {event.hostDisplayName}
-            </p>
+            <p className='text-muted-foreground text-sm'>{event.venue}</p>
           </div>
         </div>
       </SheetTrigger>
