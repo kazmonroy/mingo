@@ -2,6 +2,7 @@ using API.Middleware;
 using Application;
 using Domain;
 using Infrastructure;
+using Infrastructure.Photos;
 using Infrastructure.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -45,7 +46,9 @@ public static class StartupExtensions
             );
         });
         builder.Services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
-
+        builder.Services.Configure<CloudinarySettings>(
+            builder.Configuration.GetSection("CloudinarySettings")
+        );
         builder.Services.AddOpenApi();
 
         return builder.Build();
