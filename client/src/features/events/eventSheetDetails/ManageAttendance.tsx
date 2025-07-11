@@ -13,6 +13,13 @@ export const ManageAttendance = () => {
     }
   };
 
+  const getButtonText = () => {
+    if (!isPendingAttendance) {
+      return event?.isGoing ? 'Cancel attendance' : 'Join event';
+    }
+    return 'Updating...';
+  };
+
   return (
     <section>
       <Card className='p-0 overflow-hidden gap-4'>
@@ -25,14 +32,14 @@ export const ManageAttendance = () => {
               <p> Woho! You are going to this event!</p>
 
               <Button className='w-full' onClick={handleAttendance}>
-                {isPendingAttendance ? 'Canceling...' : 'Cancel attendace'}
+                {getButtonText()}
               </Button>
             </>
           ) : (
             <>
               <p> Welcome! To join the event, please register below.</p>
               <Button className='w-full' onClick={handleAttendance}>
-                {isPendingAttendance ? 'Joining...' : 'Join event'}
+                {getButtonText()}
               </Button>
             </>
           )}
