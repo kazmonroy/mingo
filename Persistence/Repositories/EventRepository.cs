@@ -30,7 +30,7 @@ public class EventRepository : BaseRepository<Event>, IEventRepository
         return allEventsWithAttendees;
     }
 
-    public async Task<Event> GetFullEventInfoWithAttendees(string eventId)
+    public async Task<Event> GetFullEventInfo(string eventId)
     {
         var fullEventDetails = await _dbContext
             .Events.Include(x => x.Attendees)

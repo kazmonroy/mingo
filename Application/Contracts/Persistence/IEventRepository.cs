@@ -9,7 +9,7 @@ namespace Application.Contracts.Persistence;
 public interface IEventRepository : IAsyncRepository<Event>
 {
     Task<EventDetailsVm> ListEventWithAttendees(string eventId);
-    Task<Event> GetFullEventInfoWithAttendees(string eventId);
+    Task<Event> GetFullEventInfo(string eventId);
     Task<List<EventListVm>> GetEventsWithHost();
 
 }

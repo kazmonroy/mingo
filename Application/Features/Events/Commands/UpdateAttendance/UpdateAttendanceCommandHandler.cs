@@ -25,7 +25,7 @@ public class UpdateAttendanceCommandHandler : IRequestHandler<UpdateAttendanceCo
         CancellationToken cancellationToken
     )
     {
-        var currentEvent = await _eventRepository.GetFullEventInfoWithAttendees(request.Id);
+        var currentEvent = await _eventRepository.GetFullEventInfo(request.Id);
         if (currentEvent == null)
         {
             return Result<Unit>.Failure("Event not found.", 404);
