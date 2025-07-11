@@ -94,6 +94,23 @@ export const useDeleteEvent = () => {
   };
 };
 
+export const useUpdateAttendance = () => {
+  const queryClient = useQueryClient();
+  const { mutateAsync: updateAttendance, isPending: isPendingAttendance } =
+    useMutation({
+      mutationFn: (eventId: string) => updateAttendanceApi(eventId),
+      onSuccess: async (_data, eventId) => {
+        console.log('Event updated:', eventId);
+        queryClient.invalidateQueries({ queryKey: ['events', eventId] });
+      },
+    });
+
+  return {
+    updateAttendance,
+    isPendingAttendance,
+  };
+};
+
 const deleteEventApi = async (id: string) => {
   const response = await agent.delete(`/events/${id}`);
   const { data } = response;
@@ -125,4 +142,8 @@ const getEventById = async (id: string) => {
   const { data } = response;
 
   return data;
+};
+
+const updateAttendanceApi = async (id: string) => {
+  return await agent.post(`/events/${id}/attend`);
 };

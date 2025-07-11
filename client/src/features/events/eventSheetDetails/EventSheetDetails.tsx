@@ -11,7 +11,7 @@ import { Link } from 'react-router';
 import { MapComponent } from '@/components/MapComponent';
 import { getAddress, getVenue } from '@/lib/utils';
 
-import { useEventDetails } from '@/api/apiEvents';
+import { useEventDetails, useUpdateAttendance } from '@/api/apiEvents';
 import { useEventStore } from '@/store/eventStore';
 import { format } from 'date-fns';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -28,12 +28,19 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 export const EventSheetDetails = () => {
   const eventId = useEventStore((state) => state.eventId);
   const { event, isLoading } = useEventDetails(eventId ?? '');
+  const { updateAttendance, isPendingAttendance } = useUpdateAttendance();
 
   const hostDetails = event?.attendees?.find(
     (attendee) => attendee.id === event?.hostId
   );
 
   const attendees = event?.attendees ?? [];
+
+  const handleAttendance = async () => {
+    if (event?.id) {
+      await updateAttendance(event.id);
+    }
+  };
 
   if (isLoading || !event) {
     return EventSheetDetails.Skeleton();
@@ -141,12 +148,18 @@ export const EventSheetDetails = () => {
                   <>
                     <p> Woho! You are going to this event!</p>
 
-                    <Button className='w-full'>Cancel attendace</Button>
+                    <Button className='w-full' onClick={handleAttendance}>
+                      {isPendingAttendance
+                        ? 'Canceling...'
+                        : 'Cancel attendace'}
+                    </Button>
                   </>
                 ) : (
                   <>
                     <p> Welcome! To join the event, please register below.</p>
-                    <Button className='w-full'>Join event</Button>
+                    <Button className='w-full' onClick={handleAttendance}>
+                      {isPendingAttendance ? 'Joining...' : 'Join event'}
+                    </Button>
                   </>
                 )}
               </CardContent>
