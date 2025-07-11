@@ -5,6 +5,6 @@ namespace Application.Contracts.Infrastructure;
 
 public interface IPhotoService
 {
-    Task<PhotoUploadResult> UploadPhotoAsync(IFormFile file);
+    Task<PhotoUploadResult?> UploadPhotoAsync(IFormFile file);
     Task<string> DeletePhotoAsync(string publicId);
 }
