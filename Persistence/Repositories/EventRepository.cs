@@ -46,15 +46,8 @@ public class EventRepository : BaseRepository<Event>, IEventRepository
             .Events.Include(e => e.Attendees)
             .ThenInclude(a => a.User)
             .Where(e => e.Attendees.Any(a => a.IsHost))
-            .Select(e => new EventListVm
-            {
-                Id = e.Id,
-                Title = e.Title,
-                Date = e.Date,
-                Description = e.Description,
-                Category = e.Category,
-                HostDisplayName = e.Attendees.FirstOrDefault(a => a.IsHost)!.User.DisplayName,
-            }).OrderBy(x=> x.Date)
+            .ProjectTo<EventListVm>(_mapper.ConfigurationProvider)
+            .OrderBy(x => x.Date)
             .ToListAsync();
     }
 }
