@@ -1,5 +1,6 @@
 using Application.Features.Events.Commands.CreateEvent;
 using Application.Features.Events.Commands.DeleteEvent;
+using Application.Features.Events.Commands.UpdateAttendance;
 using Application.Features.Events.Commands.UpdateEvent;
 using Application.Features.Events.Queries.GetEventDetails;
 using Application.Features.Events.Queries.GetEventsList;
@@ -53,5 +54,11 @@ public class EventsController : BaseApiController
     {
         return HandleResult(await Mediator.Send(updateEventCommand));
 
+    }
+    [HttpPost("{id}/attend")]
+    public async Task<ActionResult<Unit>> AttendEvent(string id)
+    {
+        var attendEventCommand = new UpdateAttendanceCommand() { Id = id };
+        return HandleResult(await Mediator.Send(attendEventCommand));
     }
 }

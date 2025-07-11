@@ -3,6 +3,7 @@ using Application.Features.Events.Queries.GetEventDetails;
 using AutoMapper;
 using AutoMapper.QueryableExtensions;
 using Domain;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Persistence.Repositories;
@@ -26,5 +27,15 @@ public class EventRepository : BaseRepository<Event>, IEventRepository
             .FirstOrDefaultAsync(x => x.Id == eventId);
 
         return allEventsWithAttendees;
+    }
+
+    public async Task<Event> GetFullEventInfoWithAttendees(string eventId)
+    {
+        var fullEventDetails = await _dbContext
+            .Events.Include(x => x.Attendees)
+            .ThenInclude(x => x.User)
+            .SingleOrDefaultAsync(x => x.Id == eventId);
+
+        return fullEventDetails;
     }
 }
