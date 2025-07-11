@@ -5,6 +5,7 @@ using Application.Features.Events.Commands.UpdateEvent;
 using Application.Features.Events.Queries.GetEventDetails;
 using Application.Features.Events.Queries.GetEventsList;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -46,12 +47,14 @@ public class EventsController : BaseApiController
         return HandleResult(await Mediator.Send(deleteEventCommand));
     }
 
-    [HttpPut(Name = "UpdateEvent")]
+    [HttpPut("{id}",Name = "UpdateEvent")]
+    [Authorize(Policy = "IsEventHost")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesDefaultResponseType]
-    public async Task<ActionResult<Unit>> UpdateEvent([FromBody] UpdateEventCommand updateEventCommand)
+    public async Task<ActionResult<Unit>> UpdateEvent([FromBody] UpdateEventCommand updateEventCommand, string id)
     {
+        updateEventCommand.Id = id;
         return HandleResult(await Mediator.Send(updateEventCommand));
 
     }

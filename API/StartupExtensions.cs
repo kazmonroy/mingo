@@ -2,6 +2,7 @@ using API.Middleware;
 using Application;
 using Domain;
 using Infrastructure;
+using Infrastructure.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -25,12 +26,26 @@ public static class StartupExtensions
             })
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<MingoDbContext>();
+
         builder.Services.AddCors();
         builder.Services.AddControllers(opt =>
         {
             var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
             opt.Filters.Add(new AuthorizeFilter(policy));
         });
+
+        builder.Services.AddAuthorization(opt =>
+        {
+            opt.AddPolicy(
+                "IsEventHost",
+                policy =>
+                {
+                    policy.Requirements.Add(new IsHostRequirement());
+                }
+            );
+        });
+        builder.Services.AddTransient<IAuthorizationHandler, IsHostRequirementHandler>();
+
         builder.Services.AddOpenApi();
 
         return builder.Build();
