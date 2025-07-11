@@ -43,10 +43,7 @@ public class EventRepository : BaseRepository<Event>, IEventRepository
     public async Task<List<EventListVm>> GetEventsWithHost()
     {
         return await _dbContext
-            .Events.Include(e => e.Attendees)
-            .ThenInclude(a => a.User)
-            .Where(e => e.Attendees.Any(a => a.IsHost))
-            .ProjectTo<EventListVm>(_mapper.ConfigurationProvider)
+            .Events.ProjectTo<EventListVm>(_mapper.ConfigurationProvider)
             .OrderBy(x => x.Date)
             .ToListAsync();
     }
