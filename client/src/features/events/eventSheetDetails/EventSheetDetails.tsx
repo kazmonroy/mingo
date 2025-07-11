@@ -21,7 +21,7 @@ import { useEventDetails } from '@/api/apiEvents';
 import { useEventStore } from '@/store/eventStore';
 import { format } from 'date-fns';
 import { Skeleton } from '@/components/ui/skeleton';
-import { AttendeesList } from '../AttendeesList';
+import { AttendeesList } from './AttendeesList';
 import {
   Tooltip,
   TooltipContent,
