@@ -19,6 +19,7 @@ public static class PersistenceServiceRegistration
 
         services.AddScoped(typeof(IAsyncRepository<>), typeof(BaseRepository<>));
         services.AddScoped<IEventRepository, EventRepository>();
+        services.AddScoped<IEventAttendeeRepository, EventAttendeeRepository>();
 
         return services;
     }
