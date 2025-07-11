@@ -5,18 +5,12 @@ import {
   SheetClose,
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
-import {
-  ChevronsRight,
-  Loader2Icon,
-  MapPinCheckInside,
-  MoveUpRight,
-} from 'lucide-react';
-import { UpdateEventForm } from '../updateEvent/UpdateEventForm';
+import { ChevronsRight, MapPinCheckInside, MoveUpRight } from 'lucide-react';
+
 import { Link } from 'react-router';
 import { MapComponent } from '@/components/MapComponent';
 import { getAddress, getVenue } from '@/lib/utils';
 
-import type { Dispatch, SetStateAction } from 'react';
 import { useEventDetails } from '@/api/apiEvents';
 import { useEventStore } from '@/store/eventStore';
 import { format } from 'date-fns';
@@ -29,21 +23,9 @@ import {
 } from '@/components/ui/tooltip';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { EventSheetHeader } from './EventSheetHeader';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-interface EventSheetDetailsProps {
-  isEditing: boolean;
-  setIsEditing: Dispatch<SetStateAction<boolean>>;
-  deleteEvent: (id: string) => void;
-  isPending: boolean;
-}
-
-export const EventSheetDetails = ({
-  isEditing,
-  setIsEditing,
-  deleteEvent,
-  isPending,
-}: EventSheetDetailsProps) => {
-  const handleOnEdit = () => setIsEditing((prev) => !prev);
+export const EventSheetDetails = () => {
   const eventId = useEventStore((state) => state.eventId);
   const { event, isLoading } = useEventDetails(eventId ?? '');
 
@@ -77,110 +59,110 @@ export const EventSheetDetails = ({
               </Link>
             </Button>
           </div>
-          <div className='flex gap-2'>
-            <Button
-              variant='destructive'
-              size='sm'
-              onClick={() => deleteEvent(event?.id ?? '')}
-            >
-              {isPending ? (
-                <>
-                  <Loader2Icon className='animate-spin' />
-                  'Deleting...'
-                </>
-              ) : (
-                'Delete'
-              )}
-            </Button>
-            <Button variant='ghost' size='sm' onClick={handleOnEdit}>
-              {isEditing ? 'Cancel' : 'Edit'}
-            </Button>
-          </div>
         </div>
       </SheetHeader>
+
       <div className='p-4 pt-0 max-h-[calc(100vh-80px)] overflow-y-auto'>
-        {isEditing ? (
-          <UpdateEventForm event={event} />
-        ) : (
-          <div className='space-y-4'>
-            <div className='my-8'>
-              <div className='size-72 rounded-md overflow-hidden mx-auto'>
-                <img src='./images/1.jpg' alt='' />
+        <div className='space-y-4'>
+          <div className='my-8'>
+            <div className='size-72 rounded-md overflow-hidden mx-auto'>
+              <img src='./images/1.jpg' alt='' />
+            </div>
+          </div>
+
+          <section>
+            <SheetTitle className='text-3xl'>{event?.title}</SheetTitle>
+            <p className='text-sm'>Hosted by {event.hostDisplayName} </p>
+          </section>
+
+          <section className='grid grid-cols-1 lg:grid-cols-2 gap-3'>
+            <div className='flex gap-3 items-center'>
+              <div className='rounded-md border flex flex-col items-center justify-center size-10 overflow-hidden'>
+                <span className='uppercase text-[8px] bg-muted inline-flex w-full h-full justify-center'>
+                  {event?.date ? format(new Date(event.date), 'MMM') : null}
+                </span>
+                <span>
+                  {event?.date ? format(new Date(event.date), 'd') : null}
+                </span>
+              </div>
+
+              <div className='flex flex-col'>
+                <span className='font-semibold '>
+                  {event?.date
+                    ? format(new Date(event.date), 'EEEE d MMMM')
+                    : null}
+                </span>
+
+                <span className='text-sm'>
+                  {event?.date ? format(new Date(event.date), 'HH:mm') : null}
+                </span>
               </div>
             </div>
 
-            <section>
-              <SheetTitle className='text-3xl'>{event?.title}</SheetTitle>
-              <p className='text-sm'>Hosted by {event.hostDisplayName} </p>
-            </section>
-
-            <section className='grid grid-cols-1 lg:grid-cols-2 gap-3'>
-              <div className='flex gap-3 items-center'>
-                <div className='rounded-md border flex flex-col items-center justify-center size-10 overflow-hidden'>
-                  <span className='uppercase text-[8px] bg-muted inline-flex w-full h-full justify-center'>
-                    {event?.date ? format(new Date(event.date), 'MMM') : null}
-                  </span>
-                  <span>
-                    {event?.date ? format(new Date(event.date), 'd') : null}
-                  </span>
-                </div>
-
-                <div className='flex flex-col'>
-                  <span className='font-semibold '>
-                    {event?.date
-                      ? format(new Date(event.date), 'EEEE d MMMM')
-                      : null}
-                  </span>
-
-                  <span className='text-sm'>
-                    {event?.date ? format(new Date(event.date), 'HH:mm') : null}
-                  </span>
-                </div>
+            <div className='flex gap-3 items-center'>
+              <div className='rounded-md border flex flex-col items-center justify-center w-10 h-10 overflow-hidden'>
+                <MapPinCheckInside className='size-5 text-zinc-400' />
               </div>
 
-              <div className='flex gap-3 items-center'>
-                <div className='rounded-md border flex flex-col items-center justify-center w-10 h-10 overflow-hidden'>
-                  <MapPinCheckInside className='size-5 text-zinc-400' />
-                </div>
+              <div className='flex flex-col flex-1'>
+                <span className='font-semibold '>
+                  {event?.venue ? getVenue(event.venue) : 'Venue not specified'}
+                </span>
 
-                <div className='flex flex-col flex-1'>
-                  <span className='font-semibold '>
-                    {event?.venue
-                      ? getVenue(event.venue)
-                      : 'Venue not specified'}
-                  </span>
-
-                  <span className='text-sm'>
-                    {event?.city ? event.city : 'City not specified'}
-                  </span>
-                </div>
+                <span className='text-sm'>
+                  {event?.city ? event.city : 'City not specified'}
+                </span>
               </div>
-            </section>
+            </div>
+          </section>
 
-            <EventSheetHeader title='About Event'>
-              <SheetDescription>{event?.description}</SheetDescription>
-            </EventSheetHeader>
+          <section>
+            <Card className='p-0 overflow-hidden gap-4'>
+              <CardHeader className='py-2 px-4 bg-muted items-center gap-0'>
+                <CardTitle className='text-sm'>Registration</CardTitle>
+              </CardHeader>
+              <CardContent className='px-4 space-y-4 pb-4'>
+                {event.isGoing ? (
+                  <>
+                    <p> Woho! You are going to this event!</p>
 
-            <EventSheetHeader title='Location'>
-              <p className='text-md font-semibold text-zinc-600'>
-                {event?.venue ? getVenue(event.venue) : 'Venue not specified'}
-              </p>
-              <p className='text-sm text-zinc-500'>
-                {event?.venue ? getAddress(event.venue) : 'Venue not specified'}
-              </p>
-              {event?.latitude && event?.longitude && (
-                <div className='rounded-md mt-4 overflow-hidden'>
-                  <MapComponent
-                    latitude={event?.latitude ?? 0}
-                    longitude={event?.longitude ?? 0}
-                  />
-                </div>
-              )}
-            </EventSheetHeader>
+                    <Button className='w-full'>Cancel attendace</Button>
+                  </>
+                ) : (
+                  <>
+                    <p> Welcome! To join the event, please register below.</p>
+                    <Button className='w-full'>Join event</Button>
+                  </>
+                )}
+              </CardContent>
+            </Card>
+          </section>
 
-            <EventSheetHeader title='Hosted by'>
-              <Tooltip>
-                <TooltipTrigger asChild>
+          <EventSheetHeader title='About Event'>
+            <SheetDescription>{event?.description}</SheetDescription>
+          </EventSheetHeader>
+
+          <EventSheetHeader title='Location'>
+            <p className='text-md font-semibold text-zinc-600'>
+              {event?.venue ? getVenue(event.venue) : 'Venue not specified'}
+            </p>
+            <p className='text-sm text-zinc-500'>
+              {event?.venue ? getAddress(event.venue) : 'Venue not specified'}
+            </p>
+            {event?.latitude && event?.longitude && (
+              <div className='rounded-md mt-4 overflow-hidden'>
+                <MapComponent
+                  latitude={event?.latitude ?? 0}
+                  longitude={event?.longitude ?? 0}
+                />
+              </div>
+            )}
+          </EventSheetHeader>
+
+          <EventSheetHeader title='Hosted by'>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link to={`/user/${hostDetails?.id}`}>
                   <div className='flex items-center gap-2'>
                     <Avatar className='size-6 border'>
                       <AvatarImage
@@ -196,47 +178,49 @@ export const EventSheetDetails = ({
                       </AvatarFallback>
                     </Avatar>
 
-                    <h3>{hostDetails?.displayName}</h3>
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent
-                  side='top'
-                  align='start'
-                  className='p-4 max-w-2/4'
-                >
-                  <div className='flex items-start flex-col gap-2'>
-                    <Avatar className='size-12'>
-                      <AvatarImage
-                        src={hostDetails?.imageUrl ?? './avatar_fallback.avif'}
-                        alt={hostDetails?.displayName}
-                      />
-                    </Avatar>
-                    <h3 className='text-lg font-bold'>
+                    <h3 className='font-medium hover:text-pink-700'>
                       {hostDetails?.displayName}
                     </h3>
-                    <p className='text-sm line-clamp-2'>
-                      Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-                      Eligendi est ullam nam!
-                    </p>
                   </div>
-                </TooltipContent>
-              </Tooltip>
-            </EventSheetHeader>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent
+                side='top'
+                align='start'
+                className='p-4 max-w-2/4'
+              >
+                <div className='flex items-start flex-col gap-2'>
+                  <Avatar className='size-12'>
+                    <AvatarImage
+                      src={hostDetails?.imageUrl ?? './avatar_fallback.avif'}
+                      alt={hostDetails?.displayName}
+                    />
+                  </Avatar>
+                  <h3 className='text-lg font-bold'>
+                    {hostDetails?.displayName}
+                  </h3>
+                  <p className='text-sm line-clamp-2'>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+                    Eligendi est ullam nam!
+                  </p>
+                </div>
+              </TooltipContent>
+            </Tooltip>
+          </EventSheetHeader>
 
-            <EventSheetHeader title={`${attendees.length} Going`}>
-              <ul>
-                {attendees.length > 0 ? (
-                  <AttendeesList
-                    attendees={attendees}
-                    totalAttendees={attendees.length}
-                  />
-                ) : (
-                  <li className='text-sm text-zinc-500'>No attendees yet</li>
-                )}
-              </ul>
-            </EventSheetHeader>
-          </div>
-        )}
+          <EventSheetHeader title={`${attendees.length} Going`}>
+            <ul>
+              {attendees.length > 0 ? (
+                <AttendeesList
+                  attendees={attendees}
+                  totalAttendees={attendees.length}
+                />
+              ) : (
+                <li className='text-sm text-zinc-500'>No attendees yet</li>
+              )}
+            </ul>
+          </EventSheetHeader>
+        </div>
       </div>
     </>
   );

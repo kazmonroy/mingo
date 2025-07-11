@@ -1,15 +1,10 @@
-import { useState } from 'react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { useDeleteEvent } from '@/api/apiEvents';
 import type { Event } from '@/lib/types/index';
 import { EventSheetDetails } from './eventSheetDetails/EventSheetDetails';
 import { useEventStore } from '@/store/eventStore';
 import { formatDate } from '@/lib/utils';
 export const EventCard = ({ event }: { event: Event }) => {
-  const [isEditing, setIsEditing] = useState(false);
   const setEventId = useEventStore((state) => state.setEventId);
-
-  const { deleteEvent, isPending } = useDeleteEvent();
 
   return (
     <Sheet key={event.id}>
@@ -35,12 +30,7 @@ export const EventCard = ({ event }: { event: Event }) => {
         </div>
       </SheetTrigger>
       <SheetContent aria-describedby={undefined}>
-        <EventSheetDetails
-          isEditing={isEditing}
-          setIsEditing={setIsEditing}
-          deleteEvent={deleteEvent}
-          isPending={isPending}
-        />
+        <EventSheetDetails />
       </SheetContent>
     </Sheet>
   );
