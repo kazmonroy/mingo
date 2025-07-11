@@ -96,11 +96,53 @@ export const useDeleteEvent = () => {
 
 export const useUpdateAttendance = () => {
   const queryClient = useQueryClient();
+  const { currentUser } = useCurrentUser();
+
   const { mutateAsync: updateAttendance, isPending: isPendingAttendance } =
     useMutation({
       mutationFn: (eventId: string) => updateAttendanceApi(eventId),
-      onSuccess: async (_data, eventId) => {
-        await queryClient.invalidateQueries({ queryKey: ['events', eventId] });
+      onMutate: async (eventId: string) => {
+        const queries = ['events', eventId];
+        await queryClient.cancelQueries({ queryKey: queries });
+        const preEvent = queryClient.getQueryData<Event | undefined>(queries);
+        queryClient.setQueryData<Event | undefined>(queries, (oldEvent) => {
+          if (!oldEvent || !currentUser) {
+            return oldEvent;
+          }
+
+          const isHost = oldEvent.hostId === currentUser.id;
+          const isGoing = oldEvent.attendees?.some(
+            (x) => x.id === currentUser.id
+          );
+
+          return {
+            ...oldEvent,
+            isCancelled: isHost ? !oldEvent.isCancelled : oldEvent.isCancelled,
+            attendees: isGoing
+              ? isHost
+                ? oldEvent.attendees
+                : oldEvent.attendees?.filter((x) => x.id !== currentUser.id)
+              : [
+                  ...(oldEvent.attendees || []),
+                  {
+                    id: currentUser.id,
+                    displayName: currentUser.displayName,
+                    imageUrl: currentUser.imageUrl,
+                  },
+                ],
+          };
+        });
+
+        return { preEvent };
+      },
+      onError: (error, eventId, context) => {
+        console.error('Error updating attendance:', error);
+        if (context?.preEvent) {
+          queryClient.setQueryData<Event | undefined>(
+            ['events', eventId],
+            context.preEvent
+          );
+        }
       },
     });
 
