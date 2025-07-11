@@ -62,6 +62,21 @@ export const EventSheetDetails = () => {
         </div>
       </SheetHeader>
 
+      {event.isHost && (
+        <section>
+          <div className='flex items-center justify-between px-4 py-3 mb-2 border-t border-b border-pink-200 bg-pink-50 text-pink-700'>
+            You have manage access to this event.
+            <Button
+              size='sm'
+              className='rounded-3xl bg-pink-500 text-white hover:bg-pink-600'
+            >
+              Manage
+              <MoveUpRight />
+            </Button>
+          </div>
+        </section>
+      )}
+
       <div className='p-4 pt-0 max-h-[calc(100vh-80px)] overflow-y-auto'>
         <div className='space-y-4'>
           <div className='my-8'>
