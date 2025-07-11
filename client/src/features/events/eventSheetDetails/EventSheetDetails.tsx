@@ -11,7 +11,7 @@ import { Link } from 'react-router';
 import { MapComponent } from '@/components/MapComponent';
 import { getAddress, getVenue } from '@/lib/utils';
 
-import { useEventDetails, useUpdateAttendance } from '@/api/apiEvents';
+import { useEventDetails } from '@/api/apiEvents';
 import { useEventStore } from '@/store/eventStore';
 import { format } from 'date-fns';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -23,24 +23,18 @@ import {
 } from '@/components/ui/tooltip';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { EventSheetHeader } from './EventSheetHeader';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+
+import { ManageAttendance } from './ManageAttendance';
 
 export const EventSheetDetails = () => {
   const eventId = useEventStore((state) => state.eventId);
   const { event, isLoading } = useEventDetails(eventId ?? '');
-  const { updateAttendance, isPendingAttendance } = useUpdateAttendance();
 
   const hostDetails = event?.attendees?.find(
     (attendee) => attendee.id === event?.hostId
   );
 
   const attendees = event?.attendees ?? [];
-
-  const handleAttendance = async () => {
-    if (event?.id) {
-      await updateAttendance(event.id);
-    }
-  };
 
   if (isLoading || !event) {
     return EventSheetDetails.Skeleton();
@@ -138,7 +132,7 @@ export const EventSheetDetails = () => {
             </div>
           </section>
 
-          <section>
+          {/* <section>
             <Card className='p-0 overflow-hidden gap-4'>
               <CardHeader className='py-2 px-4 bg-muted items-center gap-0'>
                 <CardTitle className='text-sm'>Registration</CardTitle>
@@ -164,7 +158,9 @@ export const EventSheetDetails = () => {
                 )}
               </CardContent>
             </Card>
-          </section>
+          </section> */}
+
+          <ManageAttendance />
 
           <EventSheetHeader title='About Event'>
             <SheetDescription>{event?.description}</SheetDescription>
