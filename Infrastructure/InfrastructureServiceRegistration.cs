@@ -1,4 +1,5 @@
 using Application.Contracts.Infrastructure;
+using Infrastructure.Security;
 using Microsoft.Extensions.DependencyInjection;
 namespace Infrastructure;
 
