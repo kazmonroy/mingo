@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import { format } from 'date-fns';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useDeleteEvent } from '@/api/apiEvents';
 import type { Event } from '@/lib/types/index';
 import { EventSheetDetails } from './EventSheetDetails';
 import { useEventStore } from '@/store/eventStore';
+import { formatDate } from '@/lib/utils';
 export const EventCard = ({ event }: { event: Event }) => {
   const [isEditing, setIsEditing] = useState(false);
   const setEventId = useEventStore((state) => state.setEventId);
@@ -27,10 +27,12 @@ export const EventCard = ({ event }: { event: Event }) => {
           </div>
           <div className='flex flex-col items-start'>
             <h2 className='font-medium'>{event.title}</h2>
-            <p className='font-mono text-muted-foreground text-sm'>
-              {format(event.date, 'EEE, d MMM, yyyy')}
+            <p className='text-muted-foreground text-sm'>
+              {formatDate(event.date)}
             </p>
-            <p className='text-muted-foreground'>{event.description}</p>
+            <p className='text-muted-foreground text-sm'>
+              {event.hostDisplayName}
+            </p>
           </div>
         </div>
       </SheetTrigger>
