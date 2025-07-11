@@ -34,33 +34,68 @@ public class UpdateAttendanceCommandHandler : IRequestHandler<UpdateAttendanceCo
         var user = await _userAccessor.GetUserAsync();
         var attendance = currentEvent.Attendees.FirstOrDefault(x => x.UserId == user.Id);
         var isHost = currentEvent.Attendees.Any(x => x.IsHost && x.UserId == user.Id);
-        if (attendance != null)
-        {
-            if (isHost)
-            {
-                currentEvent.IsCancelled = !currentEvent.IsCancelled;
-            }
-            else
-            {
-                currentEvent.Attendees.Remove(attendance);
-            }
-        }
-        else
-        {
-            currentEvent.Attendees.Add(
-                new EventAttendee
-                {
-                    UserId = user.Id,
-                    EventId = currentEvent.Id,
-                    IsHost = false,
-                }
-            );
-        }
+        
+        UpdateAttendance(currentEvent, attendance, user, isHost);
 
         var result = await _eventRepository.UpdateAsync(currentEvent) > 0;
 
         return result
             ? Result<Unit>.Success(Unit.Value)
             : Result<Unit>.Failure("Problem updating the attendance.", 400);
+    }
+
+    private void UpdateAttendance(
+        Event currentEvent,
+        EventAttendee attendance,
+        User user,
+        bool isHost
+    )
+    {
+        if (attendance != null)
+        {
+            HandleExistingAttendance(currentEvent, attendance, isHost);
+        }
+        else
+        {
+            AddNewAttendance(currentEvent, user);
+        }
+    }
+
+    private void HandleExistingAttendance(Event currentEvent, EventAttendee attendance, bool isHost)
+    {
+        if (isHost)
+        {
+            ToggleEventCancellation(currentEvent);
+        }
+        else
+        {
+            RemoveAttendance(currentEvent, attendance);
+        }
+    }
+
+    private void ToggleEventCancellation(Event currentEvent)
+    {
+        currentEvent.IsCancelled = !currentEvent.IsCancelled;
+    }
+
+    private void RemoveAttendance(Event currentEvent, EventAttendee attendance)
+    {
+        currentEvent.Attendees.Remove(attendance);
+    }
+
+    private void AddNewAttendance(Event currentEvent, User user)
+    {
+        var newAttendance = CreateAttendance(currentEvent.Id, user.Id);
+        currentEvent.Attendees.Add(newAttendance);
+    }
+
+    private EventAttendee CreateAttendance(string eventId, string userId)
+    {
+        return new EventAttendee
+        {
+            UserId = userId,
+            EventId = eventId,
+            IsHost = false,
+        };
     }
 }
