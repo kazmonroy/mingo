@@ -12,8 +12,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(MingoDbContext))]
-    [Migration("20250704222305_IdentityAdded")]
-    partial class IdentityAdded
+    [Migration("20250711111526_InitialData")]
+    partial class InitialData
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -65,6 +65,27 @@ namespace Persistence.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Events");
+                });
+
+            modelBuilder.Entity("Domain.EventAttendee", b =>
+                {
+                    b.Property<string>("EventId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("DateJoined")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsHost")
+                        .HasColumnType("bit");
+
+                    b.HasKey("EventId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("EventAttendees");
                 });
 
             modelBuilder.Entity("Domain.User", b =>
@@ -274,6 +295,25 @@ namespace Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Domain.EventAttendee", b =>
+                {
+                    b.HasOne("Domain.Event", "Event")
+                        .WithMany("Attendees")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.User", "User")
+                        .WithMany("Events")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -323,6 +363,16 @@ namespace Persistence.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Domain.Event", b =>
+                {
+                    b.Navigation("Attendees");
+                });
+
+            modelBuilder.Entity("Domain.User", b =>
+                {
+                    b.Navigation("Events");
                 });
 #pragma warning restore 612, 618
         }
