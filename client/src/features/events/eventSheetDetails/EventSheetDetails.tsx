@@ -11,7 +11,7 @@ import {
   MapPinCheckInside,
   MoveUpRight,
 } from 'lucide-react';
-import { UpdateEventForm } from './updateEvent/UpdateEventForm';
+import { UpdateEventForm } from '../updateEvent/UpdateEventForm';
 import { Link } from 'react-router';
 import { MapComponent } from '@/components/MapComponent';
 import { getAddress, getVenue } from '@/lib/utils';
@@ -21,7 +21,14 @@ import { useEventDetails } from '@/api/apiEvents';
 import { useEventStore } from '@/store/eventStore';
 import { format } from 'date-fns';
 import { Skeleton } from '@/components/ui/skeleton';
-import { AttendeesList } from './AttendeesList';
+import { AttendeesList } from '../AttendeesList';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { EventSheetHeader } from './EventSheetHeader';
 
 interface EventSheetDetailsProps {
   isEditing: boolean;
@@ -39,6 +46,10 @@ export const EventSheetDetails = ({
   const handleOnEdit = () => setIsEditing((prev) => !prev);
   const eventId = useEventStore((state) => state.eventId);
   const { event, isLoading } = useEventDetails(eventId ?? '');
+
+  const hostDetails = event?.attendees?.find(
+    (attendee) => attendee.id === event?.hostId
+  );
 
   const attendees = event?.attendees ?? [];
 
@@ -146,16 +157,11 @@ export const EventSheetDetails = ({
               </div>
             </section>
 
-            <section>
-              <div className='border-b pb-2 mb-3 flex items-center justify-between'>
-                <h2 className='text-sm font-semibold'>About Event</h2>
-              </div>
+            <EventSheetHeader title='About Event'>
               <SheetDescription>{event?.description}</SheetDescription>
-            </section>
-            <section>
-              <div className='border-b pb-2 mb-3 flex items-center justify-between'>
-                <h2 className='text-sm font-semibold'>Location</h2>
-              </div>
+            </EventSheetHeader>
+
+            <EventSheetHeader title='Location'>
               <p className='text-md font-semibold text-zinc-600'>
                 {event?.venue ? getVenue(event.venue) : 'Venue not specified'}
               </p>
@@ -170,26 +176,44 @@ export const EventSheetDetails = ({
                   />
                 </div>
               )}
-            </section>
+            </EventSheetHeader>
 
-            <section>
-              <div className='border-b pb-2 mb-3 flex items-center justify-between'>
-                <h2 className='text-sm font-semibold'>Hosted By</h2>
-              </div>
+            <EventSheetHeader title='Hosted by'>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className='flex items-center gap-2'>
+                    <Avatar className='size-6 border'>
+                      <AvatarImage
+                        src={hostDetails?.imageUrl ?? './avatar_fallback.avif'}
+                        alt={hostDetails?.displayName}
+                      />
+                      <AvatarFallback className='text-sm'>
+                        {hostDetails?.displayName
+                          .split(' ')
+                          .map((n) => n[0])
+                          .join('')
+                          .toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
 
-              <div className='flex items-center gap-2'>
-                <div className='size-6 bg-muted rounded-full'></div>
-                <p>{event?.hostDisplayName}</p>
-              </div>
-            </section>
+                    <p>{event?.hostDisplayName}</p>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent side='top' align='start' className='p-4'>
+                  <div className='flex items-center flex-col gap-2'>
+                    <Avatar className='size-10'>
+                      <AvatarImage
+                        src={hostDetails?.imageUrl ?? './avatar_fallback.avif'}
+                        alt={hostDetails?.displayName}
+                      />
+                    </Avatar>
+                    <p className='text-lg'>{hostDetails?.displayName}</p>
+                  </div>
+                </TooltipContent>
+              </Tooltip>
+            </EventSheetHeader>
 
-            <section>
-              <div className='border-b pb-2 mb-3 flex items-center justify-between'>
-                <h2 className='text-sm font-semibold'>
-                  {attendees.length} Going
-                </h2>
-              </div>
-
+            <EventSheetHeader title={`${attendees.length} Going`}>
               <ul>
                 {attendees.length > 0 ? (
                   <AttendeesList
@@ -200,7 +224,7 @@ export const EventSheetDetails = ({
                   <li className='text-sm text-zinc-500'>No attendees yet</li>
                 )}
               </ul>
-            </section>
+            </EventSheetHeader>
           </div>
         )}
       </div>

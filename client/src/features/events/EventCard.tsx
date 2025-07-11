@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { useDeleteEvent } from '@/api/apiEvents';
 import type { Event } from '@/lib/types/index';
-import { EventSheetDetails } from './EventSheetDetails';
+import { EventSheetDetails } from './eventSheetDetails/EventSheetDetails';
 import { useEventStore } from '@/store/eventStore';
 import { formatDate } from '@/lib/utils';
 export const EventCard = ({ event }: { event: Event }) => {
