@@ -37,6 +37,7 @@ public class EventsController : BaseApiController
     }
 
     [HttpDelete("{id}", Name = "DeleteEvent")]
+    [Authorize(Policy = "IsEventHost")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesDefaultResponseType]
