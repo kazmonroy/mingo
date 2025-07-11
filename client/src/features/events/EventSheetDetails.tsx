@@ -21,6 +21,7 @@ import { useEventDetails } from '@/api/apiEvents';
 import { useEventStore } from '@/store/eventStore';
 import { format } from 'date-fns';
 import { Skeleton } from '@/components/ui/skeleton';
+import { AttendeesList } from './AttendeesList';
 
 interface EventSheetDetailsProps {
   isEditing: boolean;
@@ -38,6 +39,8 @@ export const EventSheetDetails = ({
   const handleOnEdit = () => setIsEditing((prev) => !prev);
   const eventId = useEventStore((state) => state.eventId);
   const { event, isLoading } = useEventDetails(eventId ?? '');
+
+  const attendees = event?.attendees ?? [];
 
   if (isLoading || !event) {
     return EventSheetDetails.Skeleton();
@@ -97,7 +100,7 @@ export const EventSheetDetails = ({
 
             <section>
               <SheetTitle className='text-3xl'>{event?.title}</SheetTitle>
-              <p>Hosted by XYZ </p>
+              <p className='text-sm'>Hosted by {event.hostDisplayName} </p>
             </section>
 
             <section className='grid grid-cols-1 lg:grid-cols-2 gap-3'>
@@ -167,6 +170,36 @@ export const EventSheetDetails = ({
                   />
                 </div>
               )}
+            </section>
+
+            <section>
+              <div className='border-b pb-2 mb-3 flex items-center justify-between'>
+                <h2 className='text-sm font-semibold'>Hosted By</h2>
+              </div>
+
+              <div className='flex items-center gap-2'>
+                <div className='size-6 bg-muted rounded-full'></div>
+                <p>{event?.hostDisplayName}</p>
+              </div>
+            </section>
+
+            <section>
+              <div className='border-b pb-2 mb-3 flex items-center justify-between'>
+                <h2 className='text-sm font-semibold'>
+                  {attendees.length} Going
+                </h2>
+              </div>
+
+              <ul>
+                {attendees.length > 0 ? (
+                  <AttendeesList
+                    attendees={attendees}
+                    totalAttendees={attendees.length}
+                  />
+                ) : (
+                  <li className='text-sm text-zinc-500'>No attendees yet</li>
+                )}
+              </ul>
             </section>
           </div>
         )}
