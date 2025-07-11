@@ -8,7 +8,16 @@ export const useEvents = () => {
   const { data, isLoading } = useQuery({
     queryKey: ['events'],
     queryFn: getEvents,
-    enabled: !!currentUser, // Only fetch if user is authenticated
+    enabled: !!currentUser,
+    select: (data) => {
+      return data.map((e) => {
+        return {
+          ...e,
+          isHost: currentUser?.id === e.hostId,
+          isGoing: e.attendees?.some((x) => x.id === currentUser?.id),
+        };
+      });
+    },
   });
 
   const events = data ?? [];
@@ -24,7 +33,14 @@ export const useEventDetails = (id: string) => {
   const { data: event, isLoading } = useQuery({
     queryKey: ['events', id],
     queryFn: () => getEventById(id),
-    enabled: !!id && !!currentUser, // Only fetch if id is provided
+    enabled: !!id && !!currentUser,
+    select: (data) => {
+      return {
+        ...data,
+        isHost: currentUser?.id === data.hostId,
+        isGoing: data.attendees?.some((x) => x.id === currentUser?.id),
+      };
+    },
   });
 
   return {

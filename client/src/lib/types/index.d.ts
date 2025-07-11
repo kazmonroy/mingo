@@ -9,6 +9,18 @@ export type Event = {
   venue: string;
   latitude?: number;
   longitude?: number;
+  attendees?: AttendeeProfile[];
+  isGoing?: boolean;
+  isHost?: boolean;
+  hostId?: string;
+  hostDisplayName?: string;
+};
+
+export type AttendeeProfile = {
+  id: string;
+  displayName: string;
+  bio?: string;
+  imageUrl?: string;
 };
 
 export type LocationIQSuggestion = {
