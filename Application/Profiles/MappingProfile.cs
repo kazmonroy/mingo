@@ -2,6 +2,7 @@ using Application.Features.Events.Commands.CreateEvent;
 using Application.Features.Events.Commands.UpdateEvent;
 using Application.Features.Events.Queries.GetEventDetails;
 using Application.Features.Events.Queries.GetEventsList;
+using Application.Features.Profiles.Commands;
 using AutoMapper;
 using Domain;
 
@@ -33,5 +34,7 @@ public class MappingProfile : Profile
             .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.User.DisplayName))
             .ForMember(d => d.Bio, o => o.MapFrom(s => s.User.Bio))
             .ForMember(d => d.ImageUrl, o => o.MapFrom(s => s.User.ImageUrl));
+
+        CreateMap<Photo, UploadPhotoVm>().ReverseMap();
     }
 }
