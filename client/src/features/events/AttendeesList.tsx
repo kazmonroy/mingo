@@ -1,4 +1,9 @@
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import type { AttendeeProfile } from '@/lib/types';
 
 interface AttendeesListProps {
@@ -22,24 +27,28 @@ export const AttendeesList = ({
     <>
       <div className='flex items-center mb-3'>
         {attendees.slice(0, maxAvatarsToShow).map((attendee) => (
-          <div
-            key={attendee.id}
-            className='*:data-[slot=avatar]:ring-background flex -space-x-2 *:data-[slot=avatar]:ring-1 *:data-[slot=avatar]:grayscale'
-          >
-            <Avatar className='size-6 border shadow-md'>
-              <AvatarImage
-                src={attendee.imageUrl ?? './avatar_fallback.avif'}
-                alt={attendee.displayName}
-              />
-              <AvatarFallback className='text-sm'>
-                {attendee.displayName
-                  .split(' ')
-                  .map((n) => n[0])
-                  .join('')
-                  .toUpperCase()}
-              </AvatarFallback>
-            </Avatar>
-          </div>
+          <Tooltip key={attendee.id}>
+            <div className='*:data-[slot=avatar]:ring-background flex -space-x-2 *:data-[slot=avatar]:ring-1 *:data-[slot=avatar]:grayscale'>
+              <TooltipTrigger asChild>
+                <Avatar className='size-6 border shadow-md'>
+                  <AvatarImage
+                    src={attendee.imageUrl ?? './avatar_fallback.avif'}
+                    alt={attendee.displayName}
+                  />
+                  <AvatarFallback className='text-sm'>
+                    {attendee.displayName
+                      .split(' ')
+                      .map((n) => n[0])
+                      .join('')
+                      .toUpperCase()}
+                  </AvatarFallback>
+                </Avatar>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>{attendee.displayName}</p>
+              </TooltipContent>
+            </div>
+          </Tooltip>
         ))}
       </div>
       <div className='text-sm font-medium text-muted-foreground'>
