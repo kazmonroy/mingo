@@ -7,4 +7,6 @@ public class EventListVm
     public DateTime Date { get; set; }
     public string Description { get; set; } = string.Empty;
     public string Category { get; set; } = string.Empty;
+    public string HostDisplayName { get; set; } = string.Empty;
+    
 }
