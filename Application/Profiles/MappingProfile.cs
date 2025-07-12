@@ -3,6 +3,7 @@ using Application.Features.Events.Commands.UpdateEvent;
 using Application.Features.Events.Queries.GetEventDetails;
 using Application.Features.Events.Queries.GetEventsList;
 using Application.Features.Profiles.Commands;
+using Application.Features.Profiles.Queries.GetProfileDetails;
 using Application.Features.Profiles.Queries.GetProfilePhotosList;
 using AutoMapper;
 using Domain;
@@ -17,7 +18,8 @@ public class MappingProfile : Profile
             .ForMember(
                 d => d.HostDisplayName,
                 o => o.MapFrom(s => s.Attendees.FirstOrDefault(a => a.IsHost)!.User.DisplayName)
-            ).ReverseMap();
+            )
+            .ReverseMap();
         CreateMap<Event, CreateEventCommand>().ReverseMap();
         CreateMap<Event, UpdateEventCommand>().ReverseMap();
         CreateMap<Event, EventDetailsVm>()
@@ -35,6 +37,8 @@ public class MappingProfile : Profile
             .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.User.DisplayName))
             .ForMember(d => d.Bio, o => o.MapFrom(s => s.User.Bio))
             .ForMember(d => d.ImageUrl, o => o.MapFrom(s => s.User.ImageUrl));
+
+        CreateMap<User, ProfileDetailsVm>().ReverseMap();
 
         CreateMap<Photo, UploadPhotoVm>().ReverseMap();
         CreateMap<Photo, ProfilePhotosListVm>().ReverseMap();
