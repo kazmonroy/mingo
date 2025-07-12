@@ -9,12 +9,9 @@ namespace Infrastructure.Security;
 public class UserAccessor : IUserAccessor
 {
     private readonly IHttpContextAccessor _httpContextAccessor;
-    private readonly IAsyncRepository<User> _userRepository;
+    private readonly IUserRepository _userRepository;
 
-    public UserAccessor(
-        IHttpContextAccessor httpContextAccessor,
-        IAsyncRepository<User> userRepository
-    )
+    public UserAccessor(IHttpContextAccessor httpContextAccessor, IUserRepository userRepository)
     {
         _httpContextAccessor = httpContextAccessor;
         _userRepository = userRepository;
@@ -29,6 +26,13 @@ public class UserAccessor : IUserAccessor
     public async Task<User> GetUserAsync()
     {
         return await _userRepository.GetByIdAsync(GetUserId())
+            ?? throw new UnauthorizedAccessException("No user is logged in");
+    }
+
+    public async Task<User> GetUserWithPhotosAsync()
+    {
+        var userId = GetUserId();
+        return await _userRepository.GetUserWithPhotos(userId)
             ?? throw new UnauthorizedAccessException("No user is logged in");
     }
 }
