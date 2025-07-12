@@ -1,5 +1,6 @@
 using Application.Features.Profiles.Commands;
 using Application.Features.Profiles.Commands.DeletePhoto;
+using Application.Features.Profiles.Commands.SetMainPhoto;
 using Application.Features.Profiles.Queries.GetProfilePhotosList;
 using Domain;
 using MediatR;
@@ -29,6 +30,13 @@ public class ProfilesController : BaseApiController
     public async Task<ActionResult<Unit>> DeletePhoto(string photoId)
     {
         var result = await Mediator.Send(new DeletePhotoCommand { PhotoId = photoId });
+        return HandleResult(result);
+    }
+
+    [HttpPut("{photoId}/set-main")]
+    public async Task<ActionResult<Unit>> SetMainPhoto(string photoId)
+    {
+        var result = await Mediator.Send(new SetMainPhotoCommand { PhotoId = photoId });
         return HandleResult(result);
     }
 }
