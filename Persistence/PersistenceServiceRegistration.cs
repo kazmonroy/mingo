@@ -21,6 +21,7 @@ public static class PersistenceServiceRegistration
         services.AddScoped<IEventRepository, EventRepository>();
         services.AddScoped<IEventAttendeeRepository, EventAttendeeRepository>();
         services.AddScoped<IPhotoRepository, PhotoRepository>();
+        services.AddScoped<IUserRepository, UserRepository>();
 
         return services;
     }
