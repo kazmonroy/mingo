@@ -1,6 +1,7 @@
 using Application.Features.Profiles.Commands;
 using Application.Features.Profiles.Commands.DeletePhoto;
 using Application.Features.Profiles.Commands.SetMainPhoto;
+using Application.Features.Profiles.Queries.GetProfileDetails;
 using Application.Features.Profiles.Queries.GetProfilePhotosList;
 using Domain;
 using MediatR;
@@ -10,6 +11,13 @@ namespace API.Controllers;
 
 public class ProfilesController : BaseApiController
 {
+    [HttpGet("{userId}")]
+    public async Task<ActionResult<ProfileDetailsVm>> GetProfileDetails(string userId)
+    {
+        var result = await Mediator.Send(new GetProfileDetailsQuery { UserId = userId });
+        return HandleResult(result);
+    }
+
     [HttpPost("upload-photo")]
     public async Task<ActionResult<UploadPhotoVm>> UploadPhoto([FromForm] IFormFile file)
     {
