@@ -1,6 +1,8 @@
 using Application.Features.Profiles.Commands;
+using Application.Features.Profiles.Commands.DeletePhoto;
 using Application.Features.Profiles.Queries.GetProfilePhotosList;
 using Domain;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
@@ -13,11 +15,20 @@ public class ProfilesController : BaseApiController
         var result = await Mediator.Send(new UploadPhotoCommand { File = file });
         return HandleResult(result);
     }
-    
+
     [HttpGet("{userId}/photos")]
-    public async Task<ActionResult<List<ProfilePhotosListVm>>> GetUserProfilePhotosList(string userId)
+    public async Task<ActionResult<List<ProfilePhotosListVm>>> GetUserProfilePhotosList(
+        string userId
+    )
     {
         var result = await Mediator.Send(new GetProfilePhotosListQuery { UserId = userId });
+        return HandleResult(result);
+    }
+
+    [HttpDelete("{photoId}/photos")]
+    public async Task<ActionResult<Unit>> DeletePhoto(string photoId)
+    {
+        var result = await Mediator.Send(new DeletePhotoCommand { PhotoId = photoId });
         return HandleResult(result);
     }
 }
