@@ -2,6 +2,7 @@ using Application.Features.Events.Commands.CreateEvent;
 using Application.Features.Events.Commands.UpdateEvent;
 using Application.Features.Events.Queries.GetEventDetails;
 using Application.Features.Events.Queries.GetEventsList;
+using Application.Features.Identity.Queries.GetCurrentUser;
 using Application.Features.Profiles.Commands;
 using Application.Features.Profiles.Queries.GetProfileDetails;
 using Application.Features.Profiles.Queries.GetProfilePhotosList;
@@ -39,6 +40,7 @@ public class MappingProfile : Profile
             .ForMember(d => d.ImageUrl, o => o.MapFrom(s => s.User.ImageUrl));
 
         CreateMap<User, ProfileDetailsVm>().ReverseMap();
+        CreateMap<User, UserInfoVm>().ReverseMap();
 
         CreateMap<Photo, UploadPhotoVm>().ReverseMap();
         CreateMap<Photo, ProfilePhotosListVm>().ReverseMap();
