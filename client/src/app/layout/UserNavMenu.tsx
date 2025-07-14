@@ -43,26 +43,30 @@ export const UserNavMenu = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent className='w-56' align='start'>
         <DropdownMenuLabel>
-          <div className='flex gap-3 items-center'>
-            {currentUser?.imageUrl ? (
-              <div className='size-10 rounded-full overflow-hidden'>
-                <img
-                  src={currentUser.imageUrl}
-                  alt={`Profile picture of ${currentUser.displayName}`}
-                />
+          <Link to={`/user/${currentUser?.id}`}>
+            <div className='flex gap-3 items-center'>
+              {currentUser?.imageUrl ? (
+                <div className='size-10 rounded-full overflow-hidden'>
+                  <img
+                    src={currentUser.imageUrl}
+                    alt={`Profile picture of ${currentUser.displayName}`}
+                  />
+                </div>
+              ) : (
+                <div className='size-10 bg-muted rounded-full'></div>
+              )}
+              <div>
+                <p className='font-semibold'>{currentUser?.displayName}</p>
+                <p className='text-muted-foreground'>{currentUser?.email}</p>
               </div>
-            ) : (
-              <div className='size-10 bg-muted rounded-full'></div>
-            )}
-            <div>
-              <p className='font-semibold'>{currentUser?.displayName}</p>
-              <p className='text-muted-foreground'>{currentUser?.email}</p>
             </div>
-          </div>
+          </Link>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>View profile</DropdownMenuItem>
+          <DropdownMenuItem>
+            <Link to={`/user/${currentUser?.id}`}>View profile</Link>
+          </DropdownMenuItem>
 
           <DropdownMenuItem>
             <Link to='/settings'>Settings</Link>
