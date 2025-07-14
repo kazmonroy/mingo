@@ -2,6 +2,7 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { CalendarDays } from 'lucide-react';
 import { useProfileDetails } from './useProfileDetails';
 import { Skeleton } from '@/components/ui/skeleton';
+import { capitalize } from '@/lib/utils';
 
 export const ProfileInfoCard = () => {
   const { userProfile, isLoading } = useProfileDetails();
@@ -19,11 +20,7 @@ export const ProfileInfoCard = () => {
             alt={`Profile picture of user ${userProfile?.displayName}`}
           />
           <AvatarFallback className='text-lg'>
-            {userProfile
-              ?.displayName!.split(' ')
-              .map((n) => n[0])
-              .join('')
-              .toUpperCase()}
+            {capitalize(userProfile?.displayName ?? 'User')}
           </AvatarFallback>
         </Avatar>
       </div>

@@ -5,6 +5,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import type { AttendeeProfile } from '@/lib/types';
+import { capitalize } from '@/lib/utils';
 import { Link } from 'react-router';
 
 interface AttendeesListProps {
@@ -38,11 +39,7 @@ export const AttendeesList = ({
                       alt={attendee.displayName}
                     />
                     <AvatarFallback className='text-sm'>
-                      {attendee.displayName
-                        .split(' ')
-                        .map((n) => n[0])
-                        .join('')
-                        .toUpperCase()}
+                      {capitalize(attendee.displayName)}
                     </AvatarFallback>
                   </Avatar>
                 </Link>
