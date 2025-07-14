@@ -62,3 +62,10 @@ export type CurrentUser = {
   imageUrl?: string;
   bio?: string;
 };
+
+export type UserProfile = {
+  id: string;
+  displayName: string;
+  imageUrl?: string;
+  bio?: string;
+};

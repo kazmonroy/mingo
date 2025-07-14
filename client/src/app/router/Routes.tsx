@@ -11,6 +11,7 @@ import { LoginPage } from '@/features/auth/login/LoginPage';
 import { AuthGuard } from './AuthGuard';
 import { SignUpPage } from '@/features/auth/signUp/SignUpPage';
 import { ProfileSettings } from '@/features/profiles/ProfileSettings';
+import { ProfilePage } from '@/features/profiles/ProfilePage';
 
 export const router = createBrowserRouter([
   {
@@ -39,6 +40,10 @@ export const router = createBrowserRouter([
               {
                 path: 'settings',
                 element: <ProfileSettings />,
+              },
+              {
+                path: 'user/:userId',
+                element: <ProfilePage />,
               },
             ],
           },
