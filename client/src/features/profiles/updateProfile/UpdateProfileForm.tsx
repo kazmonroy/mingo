@@ -14,13 +14,13 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-
-import { ProfilePhotoUpload } from '../ProfilePhotoUpload';
+import { ProfilePhotoUpload } from './ProfilePhotoUpload';
 import {
   profileUpdateFormSchema,
   type ProfileUpdateFormSchema,
 } from './schema';
 import { Button } from '@/components/ui/button';
+
 export const UpdateProfileForm = () => {
   const { currentUser } = useCurrentUser();
   const { updateUserProfile, isPending } = useUpdateUserProfile();
