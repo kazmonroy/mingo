@@ -35,7 +35,7 @@ public class UpdateProfileCommandHandler : IRequestHandler<UpdateProfileCommand,
         }
 
         user.DisplayName = request.DisplayName;
-        user.Bio = request.Bio;
+        user.Bio = string.IsNullOrWhiteSpace(request.Bio) ? null : request.Bio;
 
         var result = await _userRepository.UpdateAsync(user) > 0;
 
