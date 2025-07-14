@@ -1,4 +1,5 @@
 import { useCurrentUser, useLogout } from '@/api/apiAuth';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -22,12 +23,22 @@ export const UserNavMenu = () => {
     await logout();
     navigate('/login');
   };
+
+  console.log('currentUser', currentUser);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant='ghost' size='icon'>
           <div className='size-8 bg-muted flex items-center justify-center rounded-full text-sm font-semibold text-muted-foreground'>
-            <p>{userInitials}</p>
+            <Avatar className='size-8'>
+              <AvatarImage
+                src={currentUser?.imageUrl ?? './avatar_fallback.avif'}
+                alt={currentUser?.displayName}
+              />
+              <AvatarFallback className='text-sm'>
+                {userInitials}
+              </AvatarFallback>
+            </Avatar>
           </div>
         </Button>
       </DropdownMenuTrigger>
@@ -35,7 +46,7 @@ export const UserNavMenu = () => {
         <DropdownMenuLabel>
           <div className='flex gap-3 items-center'>
             {currentUser?.imageUrl ? (
-              <div>
+              <div className='size-10 rounded-full overflow-hidden'>
                 <img
                   src={currentUser.imageUrl}
                   alt={`Profile picture of ${currentUser.displayName}`}
