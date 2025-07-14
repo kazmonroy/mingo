@@ -45,6 +45,7 @@ export const ProfileSettings = () => {
       displayName: currentUser?.displayName || '',
       email: currentUser?.email || '',
       imageUrl: currentUser?.imageUrl || null,
+      bio: currentUser?.bio || '',
     },
   });
 

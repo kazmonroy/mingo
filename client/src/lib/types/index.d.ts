@@ -60,4 +60,5 @@ export type CurrentUser = {
   email: string;
   displayName: string;
   imageUrl?: string;
+  bio?: string;
 };

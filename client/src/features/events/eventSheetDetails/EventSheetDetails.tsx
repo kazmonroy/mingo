@@ -88,7 +88,35 @@ export const EventSheetDetails = () => {
 
           <section>
             <SheetTitle className='text-3xl'>{event?.title}</SheetTitle>
-            <p className='text-sm'>Hosted by {event.hostDisplayName} </p>
+            {/* <p className='text-sm'>Hosted by {event.hostDisplayName} </p> */}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Link to={`/user/${hostDetails?.id}`}>
+                  <div className='flex items-center gap-2'>
+                    <Avatar className='size-6 border'>
+                      <AvatarImage
+                        src={hostDetails?.imageUrl ?? './avatar_fallback.avif'}
+                        alt={hostDetails?.displayName}
+                      />
+                      <AvatarFallback className='text-sm'>
+                        {hostDetails?.displayName
+                          .split(' ')
+                          .map((n) => n[0])
+                          .join('')
+                          .toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+
+                    <p className='text-muted-foreground font-medium'>
+                      Hosted by {hostDetails?.displayName}
+                    </p>
+                  </div>
+                </Link>
+              </TooltipTrigger>
+              <TooltipContent side='top' align='start'>
+                <p>{hostDetails?.displayName}</p>
+              </TooltipContent>
+            </Tooltip>
           </section>
 
           <section className='grid grid-cols-1 lg:grid-cols-2 gap-3'>
