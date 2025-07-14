@@ -1,6 +1,7 @@
 using Application.Features.Profiles.Commands;
 using Application.Features.Profiles.Commands.DeletePhoto;
 using Application.Features.Profiles.Commands.SetMainPhoto;
+using Application.Features.Profiles.Commands.UpdateProfile;
 using Application.Features.Profiles.Queries.GetProfileDetails;
 using Application.Features.Profiles.Queries.GetProfilePhotosList;
 using Domain;
@@ -11,6 +12,15 @@ namespace API.Controllers;
 
 public class ProfilesController : BaseApiController
 {
+    [HttpPut]
+    public async Task<ActionResult<Unit>> UpdateProfile(
+        [FromBody] UpdateProfileCommand command
+    )
+    {
+        var result = await Mediator.Send(command);
+        return HandleResult(result);
+    }
+    
     [HttpGet("{userId}")]
     public async Task<ActionResult<ProfileDetailsVm>> GetProfileDetails(string userId)
     {
