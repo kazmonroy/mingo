@@ -48,22 +48,10 @@ public class AccountController : BaseApiController
         {
             return NoContent();
         }
-        var user = await _signInManager.UserManager.GetUserAsync(User);
 
-        if (user == null)
-        {
-            return Unauthorized();
-        }
+        var result = await Mediator.Send(new GetCurrentUserQuery());
 
-        return Ok(
-            new UserInfoVm
-            {
-                DisplayName = user.DisplayName,
-                Email = user.Email,
-                Id = user.Id,
-                ImageUrl = user.ImageUrl,
-            }
-        );
+        return HandleResult(result);
     }
 
     [HttpPost("logout")]
