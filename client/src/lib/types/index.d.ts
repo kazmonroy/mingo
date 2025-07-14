@@ -64,7 +64,7 @@ export type CurrentUser = {
 };
 
 export type UserProfile = {
-  id: string;
+  id?: string;
   displayName: string;
   imageUrl?: string;
   bio?: string;

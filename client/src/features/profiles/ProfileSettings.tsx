@@ -16,6 +16,10 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { useCurrentUser } from '@/api/apiAuth';
 import { ProfilePhotoUpload } from './ProfilePhotoUpload';
+import { useUpdateUserProfile } from '@/api/apiProfiles';
+import { toast } from 'sonner';
+import { useQueryClient } from '@tanstack/react-query';
+import { Loader2Icon } from 'lucide-react';
 
 const profileUpdateFormSchema = z.object({
   displayName: z.string().min(2, {
@@ -34,7 +38,9 @@ const profileUpdateFormSchema = z.object({
 });
 
 export const ProfileSettings = () => {
+  const queryClient = useQueryClient();
   const { currentUser } = useCurrentUser();
+  const { updateUserProfile, isPending } = useUpdateUserProfile();
 
   const form = useForm<z.infer<typeof profileUpdateFormSchema>>({
     resolver: zodResolver(profileUpdateFormSchema),
@@ -46,8 +52,21 @@ export const ProfileSettings = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof profileUpdateFormSchema>) => {
-    console.log('FORM UPDATED!', values);
+  const onSubmit = async (data: z.infer<typeof profileUpdateFormSchema>) => {
+    console.log('FORM UPDATED!', data);
+    console.log(
+      'Current user before update:',
+      queryClient.getQueryData(['currentUser'])
+    );
+
+    if (data) {
+      try {
+        await updateUserProfile(data);
+        toast.success('Profile updated successfully');
+      } catch (error) {
+        console.error('Failed to update profile:', error);
+      }
+    }
   };
 
   return (
@@ -141,7 +160,10 @@ export const ProfileSettings = () => {
                   />
                 </div>
               </div>
-              <Button type='submit'>Submit</Button>
+              <Button type='submit'>
+                {isPending && <Loader2Icon className='animate-spin' />}
+                Submit
+              </Button>
             </form>
           </Form>
         </section>
