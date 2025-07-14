@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { ArrowUp, Loader2Icon } from 'lucide-react';
+import { toast } from 'sonner';
 import { useCurrentUser } from '@/api/apiAuth';
 import { useUploadProfilePhoto } from '@/api/apiProfiles';
 import { Avatar, AvatarImage } from '@/components/ui/avatar';
@@ -25,7 +26,11 @@ export const ProfilePhotoUpload = ({
     const file = event.target.files?.[0];
     if (file) {
       try {
-        const photo = await uploadProfilePhoto(file);
+        const photo = await uploadProfilePhoto(file, {
+          onSuccess: () => {
+            toast.success('Profile photo uploaded successfully');
+          },
+        });
         onChange(photo.url);
       } catch (error) {
         console.error('Failed to upload photo:', error);
