@@ -4,7 +4,7 @@ import { AppLayout } from '../layout/AppLayout';
 import { HomePage } from '@/features/home/HomePage';
 import { CreateEventForm } from '@/features/events/createEvent/CreateEventForm';
 import { DiscoverEventsPage } from '@/features/events/DiscoverEventsPage';
-import { EventDetails } from '@/features/events/EventDetails';
+import { EventPage } from '@/features/events/EventPage';
 import { NotFound } from '@/features/errors/NotFound';
 import { ServerError } from '@/features/errors/ServerError';
 import { LoginPage } from '@/features/auth/login/LoginPage';
@@ -34,7 +34,7 @@ export const router = createBrowserRouter([
               },
               {
                 path: '/:id',
-                element: <EventDetails />,
+                element: <EventPage />,
               },
               {
                 path: 'settings',

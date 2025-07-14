@@ -5,15 +5,13 @@ import { format } from 'date-fns';
 import { MapPinCheckInside } from 'lucide-react';
 import { useParams } from 'react-router';
 
-export const EventDetails = () => {
+export const EventPage = () => {
   const { id } = useParams<{ id: string }>();
   const { event } = useEventDetails(id ?? '');
   return (
     <div className='w-full space-y-8 grid grid-cols-1 lg:grid-cols-2 mt-4 items-start'>
-      <div className=''>
-        <div className='size-80 rounded-md overflow-hidden mx-auto'>
-          <img src='./images/1.jpg' alt='' />
-        </div>
+      <div className='size-80 rounded-md overflow-hidden mx-auto'>
+        <img src='./images/1.jpg' alt='' />
       </div>
 
       <div className='space-y-4'>
