@@ -69,3 +69,8 @@ export type UserProfile = {
   imageUrl?: string;
   bio?: string;
 };
+
+export type Photo = {
+  id: string;
+  url: string;
+};

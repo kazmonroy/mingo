@@ -12,11 +12,10 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { ArrowUp } from 'lucide-react';
-import { useRef } from 'react';
+
 import { Textarea } from '@/components/ui/textarea';
 import { useCurrentUser } from '@/api/apiAuth';
+import { ProfilePhotoUpload } from './ProfilePhotoUpload';
 
 const profileUpdateFormSchema = z.object({
   displayName: z.string().min(2, {
@@ -37,37 +36,20 @@ const profileUpdateFormSchema = z.object({
 export const ProfileSettings = () => {
   const { currentUser } = useCurrentUser();
 
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
   const form = useForm<z.infer<typeof profileUpdateFormSchema>>({
     resolver: zodResolver(profileUpdateFormSchema),
     defaultValues: {
       displayName: currentUser?.displayName || '',
       email: currentUser?.email || '',
-      imageUrl: currentUser?.imageUrl || null,
+      imageUrl: currentUser?.imageUrl || '',
       bio: currentUser?.bio || '',
     },
   });
 
   const onSubmit = (values: z.infer<typeof profileUpdateFormSchema>) => {
-    console.log(values);
+    console.log('FORM UPDATED!', values);
   };
 
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    console.log('Selected file:', file);
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        form.setValue('imageUrl', reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleAvatarClick = () => {
-    fileInputRef.current?.click();
-  };
   return (
     <div className='w-full'>
       <div className='mt-4'>
@@ -143,37 +125,15 @@ export const ProfileSettings = () => {
                   <FormField
                     control={form.control}
                     name='imageUrl'
-                    render={() => (
+                    render={({ field }) => (
                       <FormItem>
                         <FormLabel>Profile Picture</FormLabel>
                         <div className='flex'>
-                          <div
-                            className='relative cursor-pointer'
-                            onClick={handleAvatarClick}
-                          >
-                            <Avatar className='size-28'>
-                              <AvatarImage
-                                src={
-                                  currentUser?.imageUrl ||
-                                  './avatar_fallback.avif'
-                                }
-                                alt='Profile'
-                              />
-                              <AvatarFallback className='bg-muted'>
-                                {form.watch('displayName')?.[0]}
-                              </AvatarFallback>
-                            </Avatar>
-                            <div className='absolute bottom-0 right-0 border-2 bg-black hover:bg-pink-700 rounded-full p-1.5 transition-colors duration-200'>
-                              <ArrowUp size={22} className='text-white' />
-                            </div>
-                            <input
-                              type='file'
-                              ref={fileInputRef}
-                              className='hidden'
-                              accept='image/*'
-                              onChange={handleImageUpload}
-                            />
-                          </div>
+                          <ProfilePhotoUpload
+                            value={field.value}
+                            onChange={field.onChange}
+                            displayName={form.watch('displayName')}
+                          />
                         </div>
                         <FormMessage />
                       </FormItem>

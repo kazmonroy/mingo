@@ -79,7 +79,6 @@ const logoutApi = async () => {
 
 const getCurrentUser = async () => {
   const response = await agent.get<CurrentUser>('/account/user-info');
-  console.log('Current user API response:', response);
   return response.data;
 };
 
