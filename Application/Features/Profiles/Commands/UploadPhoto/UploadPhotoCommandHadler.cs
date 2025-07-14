@@ -42,7 +42,7 @@ public class UploadPhotoCommandHadler : IRequestHandler<UploadPhotoCommand, Resu
              UserId = user.Id
          };
          
-         user.ImageUrl ??= photo.Url;
+         user.ImageUrl = photo.Url;
          var result = await _photoRepository.AddAsync(photo);
          
          if(result == null)
