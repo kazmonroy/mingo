@@ -5,6 +5,7 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import type { AttendeeProfile } from '@/lib/types';
+import { Link } from 'react-router';
 
 interface AttendeesListProps {
   attendees: AttendeeProfile[];
@@ -30,19 +31,21 @@ export const AttendeesList = ({
           <Tooltip key={attendee.id}>
             <div className='*:data-[slot=avatar]:ring-background flex -space-x-2 *:data-[slot=avatar]:ring-1 *:data-[slot=avatar]:grayscale'>
               <TooltipTrigger asChild>
-                <Avatar className='size-6 border shadow-md'>
-                  <AvatarImage
-                    src={attendee.imageUrl ?? './avatar_fallback.avif'}
-                    alt={attendee.displayName}
-                  />
-                  <AvatarFallback className='text-sm'>
-                    {attendee.displayName
-                      .split(' ')
-                      .map((n) => n[0])
-                      .join('')
-                      .toUpperCase()}
-                  </AvatarFallback>
-                </Avatar>
+                <Link to={`/user/${attendee.id}`}>
+                  <Avatar className='size-6 border shadow-md'>
+                    <AvatarImage
+                      src={attendee.imageUrl ?? './avatar_fallback.avif'}
+                      alt={attendee.displayName}
+                    />
+                    <AvatarFallback className='text-sm'>
+                      {attendee.displayName
+                        .split(' ')
+                        .map((n) => n[0])
+                        .join('')
+                        .toUpperCase()}
+                    </AvatarFallback>
+                  </Avatar>
+                </Link>
               </TooltipTrigger>
               <TooltipContent>
                 <p>{attendee.displayName}</p>
