@@ -10,7 +10,7 @@ import { ServerError } from '@/features/errors/ServerError';
 import { LoginPage } from '@/features/auth/login/LoginPage';
 import { AuthGuard } from './AuthGuard';
 import { SignUpPage } from '@/features/auth/signUp/SignUpPage';
-import { ProfileSettings } from '@/features/profiles/ProfileSettings';
+import { ProfileSettingsPage } from '@/features/profiles/ProfileSettingsPage';
 import { ProfilePage } from '@/features/profiles/ProfilePage';
 
 export const router = createBrowserRouter([
@@ -39,7 +39,7 @@ export const router = createBrowserRouter([
               },
               {
                 path: 'settings',
-                element: <ProfileSettings />,
+                element: <ProfileSettingsPage />,
               },
               {
                 path: 'user/:userId',
