@@ -31,6 +31,8 @@ export const ProfileInfoCard = () => {
         <div className='flex items-center gap-2 text-sm text-muted-foreground'>
           <CalendarDays size={16} /> Joined November 2024
         </div>
+
+        <div className='text-sm text-muted-foreground'>3 Hosted 1 Attended</div>
       </div>
     </div>
   );
