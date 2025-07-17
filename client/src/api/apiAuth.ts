@@ -8,9 +8,7 @@ export const useLogin = () => {
   const queryClient = useQueryClient();
   const { mutateAsync: login, isPending } = useMutation({
     mutationFn: loginApi,
-    onSuccess: async (data) => {
-      console.log('Login successful:', data);
-
+    onSuccess: async () => {
       await queryClient.invalidateQueries({
         queryKey: ['currentUser'],
       });
