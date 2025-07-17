@@ -11,7 +11,7 @@ export const AppLayout = () => {
 
   return (
     <>
-      <div className='flex w-full flex-col min-h-screen'>
+      <div className='flex w-full flex-col min-h-screen bg-zinc-50'>
         <NavBar />
 
         <main className='relative mx-auto flex w-full max-w-4xl flex-auto justify-center px-4 lg:px-8 xl:px-12'>
