@@ -1,30 +1,49 @@
-import type { Event } from '@/lib/types';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import type { Event, PagedList } from '@/lib/types';
+import {
+  useInfiniteQuery,
+  useMutation,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
 import agent from './agent';
 import { useCurrentUser } from './apiAuth';
 
 export const useEvents = () => {
   const { currentUser } = useCurrentUser();
-  const { data, isLoading } = useQuery({
+  const {
+    data: eventsGroup,
+    isLoading,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
+  } = useInfiniteQuery<PagedList<Event, string>>({
     queryKey: ['events'],
-    queryFn: getEvents,
+    queryFn: async ({ pageParam = null }: { pageParam?: unknown }) =>
+      getEvents(pageParam as string | null),
+    initialPageParam: null,
+    getNextPageParam: (lastPage) => lastPage.nextCursor ?? null,
     enabled: !!currentUser,
-    select: (data) => {
-      return data.map((e) => {
-        return {
-          ...e,
-          isHost: currentUser?.id === e.hostId,
-          isGoing: e.attendees?.some((x) => x.id === currentUser?.id),
-        };
-      });
-    },
+    select: (data) => ({
+      ...data,
+      pages: data.pages.map((page) => ({
+        ...page,
+        items: page.items.map((event) => {
+          return {
+            ...event,
+            isHost: currentUser?.id === event.hostId,
+            isGoing: event.attendees?.some((x) => x.id === currentUser?.id),
+          };
+        }),
+      })),
+    }),
   });
 
-  const events = data ?? [];
-
   return {
-    events,
+    eventsGroup,
     isLoading,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
   };
 };
 
@@ -171,8 +190,13 @@ const updateEventApi = async (event: Event) => {
   return data;
 };
 
-const getEvents = async () => {
-  const response = await agent.get<Event[]>('/events');
+const getEvents = async (pageParam: string | null) => {
+  const response = await agent.get<PagedList<Event, string>>('/events', {
+    params: {
+      cursor: pageParam,
+      pageSize: 3,
+    },
+  });
   const { data } = response;
 
   return data;

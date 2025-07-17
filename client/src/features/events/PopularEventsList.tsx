@@ -4,7 +4,7 @@ import { useEvents } from '@/api/apiEvents';
 import { useCurrentUser } from '@/api/apiAuth';
 import { Navigate } from 'react-router';
 export const PopularEventsList = () => {
-  const { events, isLoading: isLoadingEvents } = useEvents();
+  const { eventsGroup, isLoading: isLoadingEvents } = useEvents();
 
   const { isAuthenticated, isLoading: isLoadingUser } = useCurrentUser();
   console.log('Is user authenticated:', isAuthenticated);
@@ -28,7 +28,11 @@ export const PopularEventsList = () => {
           ? Array(6)
               .fill(null)
               .map((_, index) => PopularEventsList.Skeleton(index))
-          : events.map((event) => <EventCard key={event.id} event={event} />)}
+          : eventsGroup?.pages.map((events) =>
+              events.items.map((event) => (
+                <EventCard key={event.id} event={event} />
+              ))
+            )}
       </div>
     </>
   );
