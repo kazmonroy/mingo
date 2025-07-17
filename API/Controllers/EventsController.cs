@@ -1,3 +1,4 @@
+using Application.Exceptions;
 using Application.Features.Events.Commands.CreateEvent;
 using Application.Features.Events.Commands.DeleteEvent;
 using Application.Features.Events.Commands.UpdateAttendance;
@@ -15,10 +16,10 @@ public class EventsController : BaseApiController
     [HttpGet(Name = "GetAllEvents")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesDefaultResponseType]
-    public async Task<ActionResult<List<EventListVm>>> GetEvents()
+    public async Task<ActionResult<PagedList<EventListVm, DateTime?>>> GetEvents(DateTime? cursor)
     {
-        var dtos = await Mediator.Send(new GetEventsListQuery());
-        return HandleResult(dtos);
+        var events = await Mediator.Send(new GetEventsListQuery{Cursor = cursor});
+        return HandleResult(events);
     }
 
     [HttpGet("{id}")]
