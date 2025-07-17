@@ -1,27 +1,72 @@
-import type { Event } from '@/lib/types/index';
 import { format, parseISO } from 'date-fns';
 import { MapPin } from 'lucide-react';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import type { Event } from '@/lib/types/index';
+import { getCategoryColor } from '@/lib/utils';
 export const EventCardWithDetails = ({ event }: { event: Event }) => {
   return (
     <div
       key={event.id}
-      className='p-3 max-w-lg rounded-md bg-white flex items-center gap-4 border border-white hover:border-zinc-200 cursor-pointer transition-border duration-300'
+      className='p-3 cursor-pointer flex flex-col md:flex-row gap-4 bg-white rounded-lg overflow-hidden border border-transparent hover:border-zinc-200 transition-border duration-300'
     >
-      <div className='flex-1 space-y-1.5'>
-        <p className='text-muted-foreground'>
+      <div className='flex-1'>
+        <div className='text-gray-500 mb-1'>
           {format(parseISO(event.date), 'HH:mm')}
-        </p>
-        <h3 className='text-xl font-semibold'> {event.title}</h3>
-        <p className='text-muted-foreground '>{event.hostDisplayName}</p>
-        <p className='text-muted-foreground flex gap-2 items-center'>
-          <MapPin className='size-4' />
+        </div>
+        <h3 className='text-xl font-semibold mb-2'>{event.title}</h3>
+
+        <div className='flex flex-wrap items-center mb-2'>
+          <Avatar className='h-6 w-6'>
+            <AvatarFallback className='text-xs bg-gray-300'>
+              {event
+                .hostDisplayName!.split(' ')
+                .map((n) => n[0])
+                .join('')}
+            </AvatarFallback>
+          </Avatar>
+          <span className='ml-2 text-gray-500 text-sm'>
+            By {event.hostDisplayName}
+          </span>
+        </div>
+
+        <div className='flex items-center text-gray-500 text-sm'>
+          <MapPin className='h-4 w-4 mr-1' />
           {event.venue}
-        </p>
+        </div>
+
+        <div className='mt-3 flex items-center gap-3'>
+          <span
+            className={`px-3 py-1 rounded-full text-sm font-medium ${getCategoryColor(
+              event.category
+            )}`}
+          >
+            {event.category}
+          </span>
+
+          {event.attendees && event.attendees.length > 0 && (
+            <div className='flex -space-x-2'>
+              {event.attendees.slice(0, 5).map((attendee, index) => (
+                <Avatar key={index} className='h-6 w-6 border-2 border-white'>
+                  <AvatarImage src={attendee.imageUrl} />
+                  <AvatarFallback className='text-xs bg-gray-300'>
+                    {attendee.displayName?.[0] || '?'}
+                  </AvatarFallback>
+                </Avatar>
+              ))}
+              {event.attendees.length > 5 && (
+                <div className='h-6 w-6 rounded-full bg-gray-100 flex items-center justify-center text-xs text-gray-500 border-2 border-white'>
+                  +{event.attendees.length - 5}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
-      <div className='size-28 rounded-md overflow-hidden'>
+
+      <div className='md:w-32 md:h-32 h-24 flex-shrink-0 self-center md:self-auto rounded-md overflow-hidden'>
         <img
           src='./images/1.jpg'
-          alt=''
+          alt={event.title}
           className='w-full h-full object-cover'
         />
       </div>

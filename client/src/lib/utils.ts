@@ -34,3 +34,16 @@ export const formatDate = (date: string) => {
   }
   return format(eventDate, 'EEE, d MMM, yyyy');
 };
+
+export const getCategoryColor = (category: string) => {
+  const colors: Record<string, string> = {
+    drinks: 'bg-blue-100 text-blue-700',
+    culture: 'bg-purple-100 text-purple-700',
+    music: 'bg-pink-100 text-pink-700',
+    travel: 'bg-green-100 text-green-700',
+    food: 'bg-yellow-100 text-yellow-700',
+    film: 'bg-red-100 text-red-700',
+  };
+
+  return colors[category] || 'bg-gray-100 text-gray-700';
+};
