@@ -12,11 +12,17 @@ const agent = axios.create({
 
 agent.interceptors.response.use(
   async (response) => {
-    await sleep(1000);
+    if (import.meta.env.DEV) {
+      await sleep(1000);
+    }
+
     return response;
   },
   async (error) => {
-    await sleep(1000);
+    if (import.meta.env.DEV) {
+      await sleep(1000);
+    }
+
     console.log('Axios Error:', error);
 
     const { status, data } = error.response || {};
