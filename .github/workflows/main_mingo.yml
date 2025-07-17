@@ -26,7 +26,8 @@ jobs:
       - name: Install npm dependencies and build react app
         run: |
           cd client 
-          npm install
+          npm ci
+          npx tsc --version
           npm run build
 
       - name: Set up .NET Core
