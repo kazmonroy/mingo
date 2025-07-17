@@ -1,5 +1,7 @@
-namespace Domain;
+using Microsoft.EntityFrameworkCore;
 
+namespace Domain;
+[Index(nameof(Date))]
 public class Event
 {
     public string Id { get; set; } = Guid.NewGuid().ToString();
