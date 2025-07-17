@@ -27,7 +27,6 @@ jobs:
         run: |
           cd client 
           npm ci
-          npx tsc --version
           npm run build
 
       - name: Set up .NET Core
