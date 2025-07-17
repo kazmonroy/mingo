@@ -72,8 +72,12 @@ public static class StartupExtensions
 
         app.UseAuthentication();
         app.UseAuthorization();
+
+        app.UseDefaultFiles();
+        app.UseStaticFiles();
         app.MapControllers();
         app.MapGroup("api").MapIdentityApi<User>();
+        app.MapFallbackToController("Index", "Fallback");
 
         return app;
     }
