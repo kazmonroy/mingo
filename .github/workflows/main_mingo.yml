@@ -26,7 +26,8 @@ jobs:
       - name: Install npm dependencies and build react app
         run: |
           cd client 
-          npm ci
+          npm ci --legacy-peer-deps
+          npm install -g typescript
           npm run build
 
       - name: Set up .NET Core
