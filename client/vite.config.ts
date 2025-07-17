@@ -15,4 +15,9 @@ export default defineConfig({
   server: {
     port: 3000,
   },
+  build: {
+    outDir: '../API/wwwroot',
+    chunkSizeWarningLimit: 1500,
+    emptyOutDir: true,
+  },
 });
