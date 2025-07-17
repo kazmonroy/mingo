@@ -4,7 +4,7 @@ import { useInView } from 'react-intersection-observer';
 import { useEvents } from '@/api/apiEvents';
 import { useCurrentUser } from '@/api/apiAuth';
 import { PopularEventsCover } from './popularEvents/PopularEventsCover';
-import { EventsTimeline } from './popularEvents/EventsTimeLine';
+import { EventsListTimeline } from './popularEvents/EventsListTimeline';
 
 export const PopularEventsList = () => {
   const { ref, inView } = useInView({
@@ -42,7 +42,7 @@ export const PopularEventsList = () => {
                 ref={index === eventsGroup.pages.length - 1 ? ref : null}
                 className='flex flex-col gap-4 mt-4'
               >
-                <EventsTimeline events={events.items ?? []} />
+                <EventsListTimeline events={events.items ?? []} />
               </div>
             ))}
           </div>

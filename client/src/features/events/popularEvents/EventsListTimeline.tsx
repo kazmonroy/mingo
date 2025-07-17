@@ -1,12 +1,12 @@
+import { format } from 'date-fns';
 import type { Event } from '@/lib/types';
 import { EventCardWithDetails } from './EventCardWithDetails';
-import { format } from 'date-fns';
 
 interface EventsTimelineProps {
   events: Event[];
 }
 
-export function EventsTimeline({ events }: EventsTimelineProps) {
+export const EventsListTimeline = ({ events }: EventsTimelineProps) => {
   // Group events by date
   const groupedEvents = events.reduce<Record<string, Event[]>>((acc, event) => {
     const eventDate = new Date(event.date);
@@ -79,4 +79,4 @@ export function EventsTimeline({ events }: EventsTimelineProps) {
       </div>
     </div>
   );
-}
+};
