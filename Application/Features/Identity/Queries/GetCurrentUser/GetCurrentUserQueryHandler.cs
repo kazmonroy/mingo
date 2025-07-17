@@ -1,11 +1,12 @@
 using System.Security.Claims;
 using Application.Exceptions;
-using Application.Features.Identity.Queries.GetCurrentUser;
 using AutoMapper;
 using Domain;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+
+namespace Application.Features.Identity.Queries.GetCurrentUser;
 
 public class GetCurrentUserQueryHandler : IRequestHandler<GetCurrentUserQuery, Result<UserInfoVm>>
 {
