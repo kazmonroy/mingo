@@ -7,7 +7,7 @@ public class GetEventsListQuery : IRequest<Result<PagedList<EventListVm, DateTim
 {
     private const int MaxPageSize = 50;
     public DateTime? Cursor { get; set; }
-    private int _pageSize = 3;
+    private int _pageSize = 4;
 
     public int PageSize
     {
