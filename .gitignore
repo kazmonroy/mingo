@@ -86,3 +86,6 @@ fabric.properties
 # OS junk
 .DS_Store
 Thumbs.db
+
+appsettings.json
+appsettings.Development.json
