@@ -7,6 +7,10 @@ import { Button } from '@/components/ui/button';
 
 export const PopularEventsSection = () => {
   const { eventsGroup, isLoading } = useEvents();
+
+  const firstFourEvents =
+    eventsGroup?.pages.flatMap((page) => page.items).slice(0, 4) ?? [];
+
   return (
     <section className='mt-4'>
       <div className='flex items-center justify-between'>
@@ -28,13 +32,9 @@ export const PopularEventsSection = () => {
             .map((_, index) => PopularEventsSection.Skeleton(index))}
         </div>
       ) : (
-        <div>
-          {eventsGroup?.pages.map((events, index) => (
-            <div key={index} className='grid grid-cols-2 gap-4 mt-4'>
-              {events.items.map((event) => (
-                <EventCard key={event.id} event={event} />
-              ))}
-            </div>
+        <div className='grid grid-cols-2 gap-4 mt-4'>
+          {firstFourEvents.map((event) => (
+            <EventCard key={event.id} event={event} />
           ))}
         </div>
       )}
