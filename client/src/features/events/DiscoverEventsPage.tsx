@@ -1,4 +1,4 @@
-import { PopularEventsList } from './PopularEventsList';
+import { PopularEventsSection } from '@/features/events/popularEvents/PopularEventsSection';
 
 export const DiscoverEventsPage = () => {
   return (
@@ -12,7 +12,7 @@ export const DiscoverEventsPage = () => {
         </p>
       </div>
 
-      <PopularEventsList />
+      <PopularEventsSection />
     </div>
   );
 };

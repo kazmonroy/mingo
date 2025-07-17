@@ -12,6 +12,7 @@ import { AuthGuard } from './AuthGuard';
 import { SignUpPage } from '@/features/auth/signUp/SignUpPage';
 import { ProfileSettingsPage } from '@/features/profiles/ProfileSettingsPage';
 import { ProfilePage } from '@/features/profiles/ProfilePage';
+import { PopularEventsList } from '@/features/events/PopularEventsList';
 
 export const router = createBrowserRouter([
   {
@@ -32,6 +33,10 @@ export const router = createBrowserRouter([
               {
                 path: 'discover',
                 element: <DiscoverEventsPage />,
+              },
+              {
+                path: 'popular-events',
+                element: <PopularEventsList />,
               },
               {
                 path: '/:id',
