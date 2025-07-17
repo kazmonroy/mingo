@@ -43,7 +43,7 @@ export const PopularEventsList = () => {
                 className='flex flex-col gap-4 mt-4'
               >
                 {events.items.map((event) => (
-                  <EventCardWithDetails event={event} />
+                  <EventCardWithDetails key={event.id} event={event} />
                 ))}
               </div>
             ))}
