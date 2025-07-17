@@ -40,11 +40,20 @@ public class EventRepository : BaseRepository<Event>, IEventRepository
         return fullEventDetails;
     }
 
-    public async Task<List<EventListVm>> GetEventsWithHost()
+    public async Task<List<EventListVm>> GetEventsWithHost(
+        IQueryable<Event> query,
+        int pageSize
+    )
     {
-        return await _dbContext
-            .Events.ProjectTo<EventListVm>(_mapper.ConfigurationProvider)
+        return await query
+            .Take(pageSize + 1)
+            .ProjectTo<EventListVm>(_mapper.ConfigurationProvider)
             .OrderBy(x => x.Date)
             .ToListAsync();
+    }
+
+    public IQueryable<Event> GetQueryableEvents()
+    {
+        return _dbContext.Events.OrderBy(x => x.Date).AsQueryable();
     }
 }

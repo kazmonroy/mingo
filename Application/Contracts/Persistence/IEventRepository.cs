@@ -10,6 +10,8 @@ public interface IEventRepository : IAsyncRepository<Event>
 {
     Task<EventDetailsVm> ListEventWithAttendees(string eventId);
     Task<Event> GetFullEventInfo(string eventId);
-    Task<List<EventListVm>> GetEventsWithHost();
+    Task<List<EventListVm>> GetEventsWithHost(IQueryable<Event> query, int pageSize);
+    IQueryable<Event> GetQueryableEvents();
+    
 
 }
