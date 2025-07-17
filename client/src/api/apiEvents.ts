@@ -20,6 +20,7 @@ export const useEvents = () => {
     queryKey: ['events'],
     queryFn: async ({ pageParam = null }: { pageParam?: unknown }) =>
       getEvents(pageParam as string | null),
+    staleTime: 1000 * 60 * 5, // 5 minutes
     initialPageParam: null,
     getNextPageParam: (lastPage) => lastPage.nextCursor ?? null,
     enabled: !!currentUser,
