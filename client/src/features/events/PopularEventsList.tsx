@@ -1,13 +1,33 @@
+import { useEffect } from 'react';
+import { Navigate } from 'react-router';
+import { Loader2Icon } from 'lucide-react';
+import { useInView } from 'react-intersection-observer';
 import { EventCard } from './EventCard';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useEvents } from '@/api/apiEvents';
 import { useCurrentUser } from '@/api/apiAuth';
-import { Navigate } from 'react-router';
+import { Button } from '@/components/ui/button';
 export const PopularEventsList = () => {
-  const { eventsGroup, isLoading: isLoadingEvents } = useEvents();
+  const { ref, inView } = useInView({
+    threshold: 0.5,
+  });
+
+  const {
+    eventsGroup,
+    isLoading: isLoadingEvents,
+    isFetchingNextPage,
+    fetchNextPage,
+    hasNextPage,
+  } = useEvents();
 
   const { isAuthenticated, isLoading: isLoadingUser } = useCurrentUser();
-  console.log('Is user authenticated:', isAuthenticated);
+
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [fetchNextPage, hasNextPage, inView]);
+
   if (!isAuthenticated) {
     return <Navigate to='/login' replace />;
   }
@@ -23,16 +43,35 @@ export const PopularEventsList = () => {
           Lorem ipsum dolor.
         </p>
       </div>
-      <div className='grid grid-cols-2 gap-4 mt-4'>
-        {isLoading
-          ? Array(6)
+      <div>
+        {isLoading ? (
+          <div className='grid grid-cols-2 gap-4 mt-4'>
+            {Array(4)
               .fill(null)
-              .map((_, index) => PopularEventsList.Skeleton(index))
-          : eventsGroup?.pages.map((events) =>
-              events.items.map((event) => (
-                <EventCard key={event.id} event={event} />
-              ))
-            )}
+              .map((_, index) => PopularEventsList.Skeleton(index))}
+          </div>
+        ) : (
+          <div>
+            {eventsGroup?.pages.map((events, index) => (
+              <div
+                key={index}
+                ref={index === eventsGroup.pages.length - 1 ? ref : null}
+                className='grid grid-cols-2 gap-4 mt-4'
+              >
+                {events.items.map((event) => (
+                  <EventCard key={event.id} event={event} />
+                ))}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      <div className='mt-8 flex justify-center'>
+        <Button onClick={() => fetchNextPage()} disabled={!hasNextPage}>
+          {isFetchingNextPage && <Loader2Icon className='animate-spin' />}
+          Load more events
+        </Button>
       </div>
     </>
   );
