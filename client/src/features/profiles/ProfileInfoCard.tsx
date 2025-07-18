@@ -16,7 +16,7 @@ export const ProfileInfoCard = () => {
       <div>
         <Avatar className='size-28'>
           <AvatarImage
-            src={userProfile?.imageUrl || '/avatar_fallback.avif'}
+            src={userProfile?.imageUrl || '/avatar_fallback.png'}
             alt={`Profile picture of user ${userProfile?.displayName}`}
           />
           <AvatarFallback className='text-lg'>

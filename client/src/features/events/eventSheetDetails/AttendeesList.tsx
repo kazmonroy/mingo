@@ -35,7 +35,7 @@ export const AttendeesList = ({
                 <Link to={`/user/${attendee.id}`}>
                   <Avatar className='size-6 border shadow-md'>
                     <AvatarImage
-                      src={attendee.imageUrl ?? './avatar_fallback.avif'}
+                      src={attendee.imageUrl ?? './avatar_fallback.png'}
                       alt={attendee.displayName}
                     />
                     <AvatarFallback className='text-sm'>

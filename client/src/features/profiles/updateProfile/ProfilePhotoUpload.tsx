@@ -42,7 +42,7 @@ export const ProfilePhotoUpload = ({
     fileInputRef.current?.click();
   };
 
-  const imageUrl = currentUser?.imageUrl || value || '/avatar_fallback.avif';
+  const imageUrl = currentUser?.imageUrl || value || '/avatar_fallback.png';
 
   return (
     <div className='relative cursor-pointer' onClick={handleAvatarClick}>

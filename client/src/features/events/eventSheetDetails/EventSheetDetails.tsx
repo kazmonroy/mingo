@@ -95,7 +95,7 @@ export const EventSheetDetails = () => {
                   <div className='flex items-center gap-2'>
                     <Avatar className='size-6 border'>
                       <AvatarImage
-                        src={hostDetails?.imageUrl ?? './avatar_fallback.avif'}
+                        src={hostDetails?.imageUrl ?? './avatar_fallback.png'}
                         alt={hostDetails?.displayName}
                       />
                       <AvatarFallback className='text-sm'>
@@ -218,7 +218,7 @@ export const EventSheetDetails = () => {
                   <div className='flex items-center gap-2'>
                     <Avatar className='size-6 border'>
                       <AvatarImage
-                        src={hostDetails?.imageUrl ?? './avatar_fallback.avif'}
+                        src={hostDetails?.imageUrl ?? './avatar_fallback.png'}
                         alt={hostDetails?.displayName}
                       />
                       <AvatarFallback className='text-sm'>
@@ -244,7 +244,7 @@ export const EventSheetDetails = () => {
                 <div className='flex items-start flex-col gap-2'>
                   <Avatar className='size-12'>
                     <AvatarImage
-                      src={hostDetails?.imageUrl ?? './avatar_fallback.avif'}
+                      src={hostDetails?.imageUrl ?? './avatar_fallback.png'}
                       alt={hostDetails?.displayName}
                     />
                   </Avatar>

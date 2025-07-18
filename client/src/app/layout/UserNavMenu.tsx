@@ -31,7 +31,7 @@ export const UserNavMenu = () => {
           <div className='size-8 bg-muted flex items-center justify-center rounded-full text-sm font-semibold text-muted-foreground'>
             <Avatar className='size-8'>
               <AvatarImage
-                src={currentUser?.imageUrl ?? './avatar_fallback.avif'}
+                src={currentUser?.imageUrl ?? './avatar_fallback.png'}
                 alt={currentUser?.displayName}
               />
               <AvatarFallback className='text-sm'>
