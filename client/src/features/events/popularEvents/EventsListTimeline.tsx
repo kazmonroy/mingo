@@ -7,38 +7,47 @@ interface EventsTimelineProps {
 }
 
 export const EventsListTimeline = ({ events }: EventsTimelineProps) => {
+  const currentEvents = events.filter(
+    (event) => event.date >= format(new Date(), 'yyyy-MM-dd')
+  );
   // Group events by date
-  const groupedEvents = events.reduce<Record<string, Event[]>>((acc, event) => {
-    const eventDate = new Date(event.date);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+  const groupedEvents = currentEvents.reduce<Record<string, Event[]>>(
+    (acc, event) => {
+      const eventDate = new Date(event.date);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
 
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
+      const tomorrow = new Date(today);
+      tomorrow.setDate(tomorrow.getDate() + 1);
 
-    let dateKey;
-    // Compare dates ignoring time
-    const eventDateWithoutTime = new Date(eventDate);
-    eventDateWithoutTime.setHours(0, 0, 0, 0);
+      let dateKey;
+      // Compare dates ignoring time
+      const eventDateWithoutTime = new Date(eventDate);
+      eventDateWithoutTime.setHours(0, 0, 0, 0);
 
-    if (eventDateWithoutTime.getTime() === today.getTime()) {
-      dateKey = 'today';
-    } else if (eventDateWithoutTime.getTime() === tomorrow.getTime()) {
-      dateKey = 'tomorrow';
-    } else {
-      // Format as "DD MMM" (e.g., "11 Oct")
-      dateKey = `${eventDate.getDate()} ${eventDate.toLocaleString('default', {
-        month: 'short',
-      })}`;
-    }
+      if (eventDateWithoutTime.getTime() === today.getTime()) {
+        dateKey = 'today';
+      } else if (eventDateWithoutTime.getTime() === tomorrow.getTime()) {
+        dateKey = 'tomorrow';
+      } else {
+        // Format as "DD MMM" (e.g., "11 Oct")
+        dateKey = `${eventDate.getDate()} ${eventDate.toLocaleString(
+          'default',
+          {
+            month: 'short',
+          }
+        )}`;
+      }
 
-    if (!acc[dateKey]) {
-      acc[dateKey] = [];
-    }
-    acc[dateKey].push(event);
+      if (!acc[dateKey]) {
+        acc[dateKey] = [];
+      }
+      acc[dateKey].push(event);
 
-    return acc;
-  }, {});
+      return acc;
+    },
+    {}
+  );
 
   return (
     <div className='w-full max-w-4xl mx-auto'>
