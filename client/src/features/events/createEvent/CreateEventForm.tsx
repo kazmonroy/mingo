@@ -260,7 +260,7 @@ export const CreateEventForm = () => {
                             </div>
                           )}
 
-                          <MapPin className='text-muted-foreground' />
+                          <MapPin className='size-4 opacity-50' />
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
@@ -346,34 +346,6 @@ export const CreateEventForm = () => {
               </div>
             )}
           </div>
-
-          <FormField
-            control={form.control}
-            name='city'
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input placeholder='City' {...field} />
-                </FormControl>
-
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name='venue'
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input placeholder='Venue' {...field} />
-                </FormControl>
-
-                <FormMessage />
-              </FormItem>
-            )}
-          />
 
           <Button type='submit' className='w-full'>
             {isPending ? (
