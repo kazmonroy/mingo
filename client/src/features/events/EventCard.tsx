@@ -5,6 +5,7 @@ import { useEventStore } from '@/store/eventStore';
 import { formatDate } from '@/lib/utils';
 export const EventCard = ({ event }: { event: Event }) => {
   const setEventId = useEventStore((state) => state.setEventId);
+  const shortVenue = event.venue?.split(',')[0];
 
   return (
     <Sheet key={event.id}>
@@ -13,7 +14,7 @@ export const EventCard = ({ event }: { event: Event }) => {
         onClick={() => setEventId(event?.id ?? '')}
       >
         <div className='flex items-center gap-4'>
-          <div className='bg-zinc-100 size-18 rounded-md overflow-hidden'>
+          <div className='w-auto size-18 flex-shrink-0 rounded-md overflow-hidden'>
             <img
               src='./images/1.jpg'
               alt=''
@@ -25,7 +26,9 @@ export const EventCard = ({ event }: { event: Event }) => {
             <p className='text-muted-foreground text-sm'>
               {formatDate(event.date)}
             </p>
-            <p className='text-muted-foreground text-sm'>{event.venue}</p>
+            <p className='text-muted-foreground text-sm text-left'>
+              {shortVenue}
+            </p>
           </div>
         </div>
       </SheetTrigger>
