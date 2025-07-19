@@ -35,16 +35,18 @@ export const PopularEventsList = () => {
             Events
           </h2>
 
-          <div>
-            {eventsGroup?.pages.map((events, index) => (
-              <div
-                key={index}
-                ref={index === eventsGroup.pages.length - 1 ? ref : null}
-                className='flex flex-col gap-4 mt-4'
-              >
-                <EventsListTimeline events={events.items ?? []} />
-              </div>
-            ))}
+          <div className='w-full max-w-4xl mx-auto'>
+            <div className='space-y-4'>
+              {eventsGroup?.pages.map((events, index) => (
+                <div
+                  key={index}
+                  ref={index === eventsGroup.pages.length - 1 ? ref : null}
+                  className='flex flex-col gap-4 mt-4'
+                >
+                  <EventsListTimeline events={events.items ?? []} />
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
