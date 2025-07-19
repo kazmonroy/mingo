@@ -2,7 +2,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { capitalize, cn } from '@/lib/utils';
-import type { Event } from '@/lib/types';
+import type { Event, LocationIQSuggestion } from '@/lib/types';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -83,6 +83,32 @@ export const CreateEventForm = () => {
         form.reset();
       },
     });
+  };
+
+  // TODO: FIX COMPONENT STYLE
+
+  const getSelectedLocationDetails = (
+    suggestions: LocationIQSuggestion[],
+    fieldValue: string
+  ) => {
+    const locationName = suggestions?.find(
+      (location) => location.display_place === fieldValue
+    )?.display_place;
+
+    const locationAddress = suggestions?.find(
+      (location) => location.display_place === fieldValue
+    )?.display_address;
+    console.log('locationName:', locationName);
+    console.log('locationAddress:', locationAddress);
+
+    return (
+      <div className='w-full flex flex-col items-start overflow-hidden'>
+        <p>{locationName}</p>
+        <span className='text-muted-foreground text-xs overflow-ellipsis'>
+          {locationAddress}
+        </span>
+      </div>
+    );
   };
 
   console.log('Form state:', form.formState.errors);
@@ -213,19 +239,28 @@ export const CreateEventForm = () => {
                           variant='outline'
                           role='combobox'
                           className={cn(
-                            'justify-between text-muted-foreground',
+                            'h-full flex justify-between items-start',
                             !field.value ||
                               (!locationSelected && 'text-muted-foreground')
                           )}
                         >
-                          {locationSelected
-                            ? suggestions?.find(
-                                (location) =>
-                                  location.display_place === field.value
-                              )?.display_place
-                            : 'Add Event Location'}
+                          {locationSelected ? (
+                            <>
+                              {getSelectedLocationDetails(
+                                suggestions,
+                                field.value
+                              )}
+                            </>
+                          ) : (
+                            <div className='flex flex-col items-start'>
+                              <p>Add event location</p>
+                              <span className='text-xs text-muted-foreground'>
+                                Offline location or virtual link
+                              </span>
+                            </div>
+                          )}
 
-                          <MapPin />
+                          <MapPin className='text-muted-foreground' />
                         </Button>
                       </FormControl>
                     </PopoverTrigger>
