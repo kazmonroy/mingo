@@ -15,7 +15,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Calendar } from '@/components/ui/calendar';
-import { CalendarIcon, Check, ChevronsUpDown, Loader2Icon } from 'lucide-react';
+import { CalendarIcon, Check, Loader2Icon, MapPin } from 'lucide-react';
 import { format } from 'date-fns';
 import {
   Popover,
@@ -41,11 +41,17 @@ import {
 } from '@/components/ui/command';
 
 import { useDebouncedLocationSuggestions } from './useDebouncedLocationSuggestions';
+import { useState } from 'react';
+import { MapComponent } from '@/components/MapComponent';
 
 export const CreateEventForm = () => {
   const { createEvent, isPending } = useCreateEvent();
   const { suggestions, debouncedFetch, locationSelected, setLocationSelected } =
     useDebouncedLocationSuggestions(500);
+
+  const [locationLat, setLocationLat] = useState<null | number>(null);
+  const [locationLong, setLocationLong] = useState<null | number>(null);
+  const [openSuggestion, setOpenSuggestion] = useState(false);
 
   const form = useForm<z.infer<typeof createEventFormSchema>>({
     resolver: zodResolver(createEventFormSchema),
@@ -191,91 +197,120 @@ export const CreateEventForm = () => {
             )}
           />
 
-          <FormField
-            control={form.control}
-            name='location'
-            render={({ field }) => (
-              <FormItem className='flex flex-col'>
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <FormControl>
-                      <Button
-                        variant='outline'
-                        role='combobox'
-                        className={cn(
-                          'justify-between',
-                          !field.value ||
-                            (!locationSelected && 'text-muted-foreground')
-                        )}
-                      >
-                        {locationSelected
-                          ? suggestions?.find(
-                              (location) =>
-                                location.display_place === field.value
-                            )?.display_place
-                          : 'Add Event Location'}
-                        <ChevronsUpDown className='opacity-50' />
-                      </Button>
-                    </FormControl>
-                  </PopoverTrigger>
-                  <PopoverContent className='w-full p-0'>
-                    <Command className='w-[24rem]'>
-                      <CommandInput
-                        placeholder='Enter location'
-                        className='h-9'
-                        onValueChange={async (value: string) => {
-                          field.onChange(value);
-                          debouncedFetch(value);
-                        }}
-                      />
-                      <CommandList>
-                        <CommandEmpty>No location found.</CommandEmpty>
-                        {suggestions && suggestions?.length > 0 && (
-                          <CommandGroup>
-                            {suggestions?.map((location) => (
-                              <CommandItem
-                                value={location.display_place}
-                                key={location.place_id}
-                                onSelect={() => {
-                                  const city =
-                                    location.address?.city ||
-                                    location.address?.town ||
-                                    location.address?.village;
-                                  form.setValue(
-                                    'location',
-                                    location.display_place
-                                  );
+          <div className='flex flex-col'>
+            <FormField
+              control={form.control}
+              name='location'
+              render={({ field }) => (
+                <FormItem className='flex flex-col'>
+                  <Popover
+                    open={openSuggestion}
+                    onOpenChange={setOpenSuggestion}
+                  >
+                    <PopoverTrigger asChild>
+                      <FormControl>
+                        <Button
+                          variant='outline'
+                          role='combobox'
+                          className={cn(
+                            'justify-between text-muted-foreground',
+                            !field.value ||
+                              (!locationSelected && 'text-muted-foreground')
+                          )}
+                        >
+                          {locationSelected
+                            ? suggestions?.find(
+                                (location) =>
+                                  location.display_place === field.value
+                              )?.display_place
+                            : 'Add Event Location'}
 
-                                  form.setValue('city', city || '');
-                                  form.setValue('venue', location.display_name);
+                          <MapPin />
+                        </Button>
+                      </FormControl>
+                    </PopoverTrigger>
+                    <PopoverContent className='w-full p-0 z-[9000]'>
+                      <Command className='w-[24rem] z-[9000]'>
+                        <CommandInput
+                          placeholder='Enter location'
+                          className='h-9'
+                          onValueChange={async (value: string) => {
+                            field.onChange(value);
+                            debouncedFetch(value);
+                          }}
+                        />
+                        <CommandList>
+                          <CommandEmpty>
+                            No recently used locations.
+                          </CommandEmpty>
+                          {suggestions && suggestions?.length > 0 && (
+                            <CommandGroup>
+                              {suggestions?.map((location) => (
+                                <CommandItem
+                                  value={location.display_place}
+                                  key={location.place_id}
+                                  onSelect={() => {
+                                    const city =
+                                      location.address?.city ||
+                                      location.address?.town ||
+                                      location.address?.village;
+                                    form.setValue(
+                                      'location',
+                                      location.display_place
+                                    );
 
-                                  form.setValue('latitude', +location.lat);
-                                  form.setValue('longitude', +location.lon);
-                                  setLocationSelected(true);
-                                }}
-                              >
-                                {location.display_place}
-                                <Check
-                                  className={cn(
-                                    'ml-auto',
-                                    location.display_place === field.value
-                                      ? 'opacity-100'
-                                      : 'opacity-0'
-                                  )}
-                                />
-                              </CommandItem>
-                            ))}
-                          </CommandGroup>
-                        )}
-                      </CommandList>
-                    </Command>
-                  </PopoverContent>
-                </Popover>
+                                    form.setValue('city', city || '');
+                                    form.setValue(
+                                      'venue',
+                                      location.display_name
+                                    );
 
-                <FormMessage />
-              </FormItem>
+                                    const lat = +location.lat;
+                                    const lon = +location.lon;
+
+                                    form.setValue('latitude', lat);
+                                    form.setValue('longitude', lon);
+
+                                    setLocationLat(lat);
+                                    setLocationLong(lon);
+
+                                    setLocationSelected(true);
+                                    setOpenSuggestion(false);
+                                  }}
+                                >
+                                  {location.display_place}
+                                  <Check
+                                    className={cn(
+                                      'ml-auto',
+                                      location.display_place === field.value
+                                        ? 'opacity-100'
+                                        : 'opacity-0'
+                                    )}
+                                  />
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          )}
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {locationLat && locationLong && (
+              <div className='rounded-md mt-4 overflow-hidden'>
+                <MapComponent
+                  key={`${locationLat}-${locationLong}`}
+                  latitude={locationLat ?? 0}
+                  longitude={locationLong ?? 0}
+                />
+              </div>
             )}
-          />
+          </div>
 
           <FormField
             control={form.control}
