@@ -7,6 +7,7 @@ import {
 } from '@tanstack/react-query';
 import agent from './agent';
 import { useCurrentUser } from './apiAuth';
+import { transformShortVenue } from '@/lib/utils';
 
 export const useEvents = () => {
   const { currentUser } = useCurrentUser();
@@ -32,6 +33,7 @@ export const useEvents = () => {
             ...event,
             isHost: currentUser?.id === event.hostId,
             isGoing: event.attendees?.some((x) => x.id === currentUser?.id),
+            venue: transformShortVenue(event.venue) ?? 'Unknown Venue',
           };
         }),
       })),

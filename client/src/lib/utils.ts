@@ -47,3 +47,7 @@ export const getCategoryColor = (category: string) => {
 
   return colors[category] || 'bg-gray-100 text-gray-700';
 };
+
+export const transformShortVenue = (venue: string) => {
+  return venue.split(',')[0] ?? null;
+};

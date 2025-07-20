@@ -5,7 +5,6 @@ import { useEventStore } from '@/store/eventStore';
 import { formatDate } from '@/lib/utils';
 export const EventCard = ({ event }: { event: Event }) => {
   const setEventId = useEventStore((state) => state.setEventId);
-  const shortVenue = event.venue?.split(',')[0];
 
   return (
     <Sheet key={event.id}>
@@ -27,7 +26,7 @@ export const EventCard = ({ event }: { event: Event }) => {
               {formatDate(event.date)}
             </p>
             <p className='text-muted-foreground text-sm text-left'>
-              {shortVenue}
+              {event.venue}
             </p>
           </div>
         </div>

@@ -3,6 +3,7 @@ import { MapPin } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import type { Event } from '@/lib/types/index';
 import { getCategoryColor } from '@/lib/utils';
+
 export const EventCardWithDetails = ({ event }: { event: Event }) => {
   return (
     <div
