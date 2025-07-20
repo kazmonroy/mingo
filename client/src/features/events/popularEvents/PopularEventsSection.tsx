@@ -8,7 +8,8 @@ import { Button } from '@/components/ui/button';
 export const PopularEventsSection = () => {
   const { eventsGroup, isLoading } = useEvents();
 
-  const eventItems = eventsGroup?.pages.flatMap((page) => page.items) ?? [];
+  const eventItems =
+    eventsGroup?.pages.flatMap((page) => page.items).slice(0, 4) ?? [];
 
   return (
     <section className='mt-4'>
