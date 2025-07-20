@@ -173,6 +173,24 @@ export const useUpdateAttendance = () => {
   };
 };
 
+export const useUserEvents = () => {
+  const { data: userEvents, isLoading } = useQuery({
+    queryKey: ['user-events'],
+    queryFn: getUserEvents,
+    select: (data) => {
+      return data.map((event: Event) => ({
+        ...event,
+        venue: transformShortVenue(event.venue) ?? 'Unknown Venue',
+      }));
+    },
+  });
+
+  return {
+    userEvents,
+    isLoading,
+  };
+};
+
 const deleteEventApi = async (id: string) => {
   const response = await agent.delete(`/events/${id}`);
   const { data } = response;
@@ -213,4 +231,10 @@ const getEventById = async (id: string) => {
 
 const updateAttendanceApi = async (id: string) => {
   return await agent.post(`/events/${id}/attend`);
+};
+
+const getUserEvents = async () => {
+  const response = await agent.get('/events/user-events');
+  const { data } = response;
+  return data;
 };

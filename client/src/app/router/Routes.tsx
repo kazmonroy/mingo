@@ -13,6 +13,7 @@ import { SignUpPage } from '@/features/auth/signUp/SignUpPage';
 import { ProfileSettingsPage } from '@/features/profiles/ProfileSettingsPage';
 import { ProfilePage } from '@/features/profiles/ProfilePage';
 import { PopularEventsList } from '@/features/events/PopularEventsList';
+import { UserEventsPage } from '@/features/events/user/UserEventsPage';
 
 export const router = createBrowserRouter([
   {
@@ -49,6 +50,10 @@ export const router = createBrowserRouter([
               {
                 path: 'user/:userId',
                 element: <ProfilePage />,
+              },
+              {
+                path: 'events',
+                element: <UserEventsPage />,
               },
             ],
           },
