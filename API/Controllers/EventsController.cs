@@ -5,6 +5,7 @@ using Application.Features.Events.Commands.UpdateAttendance;
 using Application.Features.Events.Commands.UpdateEvent;
 using Application.Features.Events.Queries.GetEventDetails;
 using Application.Features.Events.Queries.GetEventsList;
+using Application.Features.Events.Queries.GetUserEventsQuery;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -66,4 +67,13 @@ public class EventsController : BaseApiController
         var attendEventCommand = new UpdateAttendanceCommand() { Id = id };
         return HandleResult(await Mediator.Send(attendEventCommand));
     }
+    
+    [HttpGet("user-events")]
+    public async Task<ActionResult<List<EventDetailsVm>>> GetUserEvents()
+    {
+        var result = await Mediator.Send(new GetUserEventsQuery());
+        return HandleResult(result);
+    }
+    
+    
 }

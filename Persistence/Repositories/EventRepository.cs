@@ -56,4 +56,16 @@ public class EventRepository : BaseRepository<Event>, IEventRepository
     {
          return _dbContext.Events.Where(x => x.Date >= DateTime.Today).OrderBy(x => x.Date).AsQueryable();
     }
+
+    public async Task<List<Event>> GetUserEvents(string userId)
+    {
+        var events = await _dbContext.Events
+            .Include(x => x.Attendees)
+            .ThenInclude(x => x.User)
+            .Where(x => x.Attendees.Any(a => a.IsHost && a.UserId == userId))
+            .OrderBy(x => x.Date)
+            .ToListAsync();
+        
+        return events;
+    }
 }
