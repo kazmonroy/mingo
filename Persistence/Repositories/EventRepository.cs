@@ -54,6 +54,6 @@ public class EventRepository : BaseRepository<Event>, IEventRepository
 
     public IQueryable<Event> GetQueryableEvents()
     {
-        return _dbContext.Events.OrderBy(x => x.Date).AsQueryable();
+         return _dbContext.Events.Where(x => x.Date >= DateTime.Today).OrderBy(x => x.Date).AsQueryable();
     }
 }
