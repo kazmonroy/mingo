@@ -8,8 +8,7 @@ import { Button } from '@/components/ui/button';
 export const PopularEventsSection = () => {
   const { eventsGroup, isLoading } = useEvents();
 
-  const firstFourEvents =
-    eventsGroup?.pages.flatMap((page) => page.items).slice(0, 4) ?? [];
+  const eventItems = eventsGroup?.pages.flatMap((page) => page.items) ?? [];
 
   return (
     <section className='mt-4'>
@@ -33,7 +32,7 @@ export const PopularEventsSection = () => {
         </div>
       ) : (
         <div className='grid grid-cols-2 gap-4 mt-4'>
-          {firstFourEvents.map((event) => (
+          {eventItems.map((event) => (
             <EventCard key={event.id} event={event} />
           ))}
         </div>
