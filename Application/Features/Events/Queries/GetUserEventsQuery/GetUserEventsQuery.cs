@@ -6,5 +6,5 @@ namespace Application.Features.Events.Queries.GetUserEventsQuery;
 
 public class GetUserEventsQuery : IRequest<Result<List<EventDetailsVm>>>
 {
-    
+    public string? Period { get; set; } 
 }

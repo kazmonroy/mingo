@@ -32,7 +32,7 @@ public class GetUserEventsQueryHandler :  IRequestHandler<GetUserEventsQuery, Re
             return Result<List<EventDetailsVm>>.Failure("User not found", 404);
         }
 
-        var eventsList = await _eventRepository.GetUserEvents(user.Id);
+        var eventsList = await _eventRepository.GetUserEvents(user.Id, request.Period);
            
 
         var eventsToReturn = _mapper.Map<List<EventDetailsVm>>(eventsList);

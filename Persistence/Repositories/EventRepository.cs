@@ -40,10 +40,7 @@ public class EventRepository : BaseRepository<Event>, IEventRepository
         return fullEventDetails;
     }
 
-    public async Task<List<EventListVm>> GetEventsWithHost(
-        IQueryable<Event> query,
-        int pageSize
-    )
+    public async Task<List<EventListVm>> GetEventsWithHost(IQueryable<Event> query, int pageSize)
     {
         return await query
             .Take(pageSize + 1)
@@ -54,18 +51,38 @@ public class EventRepository : BaseRepository<Event>, IEventRepository
 
     public IQueryable<Event> GetQueryableEvents()
     {
-         return _dbContext.Events.Where(x => x.Date >= DateTime.Today).OrderBy(x => x.Date).AsQueryable();
+        return _dbContext
+            .Events.Where(x => x.Date >= DateTime.Today)
+            .OrderBy(x => x.Date)
+            .AsQueryable();
     }
 
-    public async Task<List<Event>> GetUserEvents(string userId)
+    public async Task<List<Event>> GetUserEvents(string userId, string? period)
     {
-        var events = await _dbContext.Events
-            .Include(x => x.Attendees)
+        // var events = await _dbContext
+        //     .Events.Include(x => x.Attendees)
+        //     .ThenInclude(x => x.User)
+        //     .Where(x => x.Attendees.Any(a => a.IsHost && a.UserId == userId))
+        //     .OrderBy(x => x.Date)
+        //     .ToListAsync();
+
+        // return events;
+
+
+        var query = _dbContext
+            .Events.Include(x => x.Attendees)
             .ThenInclude(x => x.User)
-            .Where(x => x.Attendees.Any(a => a.IsHost && a.UserId == userId))
-            .OrderBy(x => x.Date)
-            .ToListAsync();
-        
-        return events;
+            .Where(x => x.Attendees.Any(a => a.IsHost && a.UserId == userId));
+
+        if (period == "past")
+        {
+            query = query.Where(x => x.Date < DateTime.Today);
+        }
+        else
+        {
+            query = query.Where(x => x.Date >= DateTime.Today);
+        }
+
+        return await query.OrderBy(x => x.Date).ToListAsync();
     }
 }

@@ -69,9 +69,9 @@ public class EventsController : BaseApiController
     }
     
     [HttpGet("user-events")]
-    public async Task<ActionResult<List<EventDetailsVm>>> GetUserEvents()
+    public async Task<ActionResult<List<EventDetailsVm>>> GetUserEvents(string? period)
     {
-        var result = await Mediator.Send(new GetUserEventsQuery());
+        var result = await Mediator.Send(new GetUserEventsQuery{ Period = period });
         return HandleResult(result);
     }
     
