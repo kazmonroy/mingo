@@ -1,5 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
+import { Link } from 'react-router';
 
 export const UserEventsEmpty = () => {
   return (
@@ -18,9 +19,11 @@ export const UserEventsEmpty = () => {
       <p className='text-muted-foreground'>
         You have no upcoming events. Why not host one?
       </p>
-      <Button size='sm' className='mt-4'>
-        <Plus className='size-4' />
-        Create event
+      <Button size='sm' className='mt-4' asChild>
+        <Link to='/create'>
+          <Plus className='size-4' />
+          Create event
+        </Link>
       </Button>
     </div>
   );
