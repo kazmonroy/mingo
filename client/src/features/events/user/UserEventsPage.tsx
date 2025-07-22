@@ -4,11 +4,13 @@ import { useUserEvents } from '@/api/apiEvents';
 import { UserEventsListTimeline } from './UserEventsListTimeline';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Skeleton } from '@/components/ui/skeleton';
+import { UserEventsEmpty } from './UserEventsEmpty';
 
 export const UserEventsPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const period = (searchParams.get('period') as Period) ?? '';
   const { userEvents, isLoading } = useUserEvents(period);
+  const isEmpty = userEvents.length === 0 && !isLoading;
 
   const handlePeriodChange = (value: string) => {
     if (value === '') {
@@ -38,7 +40,13 @@ export const UserEventsPage = () => {
       {isLoading ? (
         UserEventsPage.UserEventsListSkeleton()
       ) : (
-        <UserEventsListTimeline events={userEvents} />
+        <div className='mt-4'>
+          {isEmpty ? (
+            <UserEventsEmpty />
+          ) : (
+            <UserEventsListTimeline events={userEvents} />
+          )}
+        </div>
       )}
     </div>
   );

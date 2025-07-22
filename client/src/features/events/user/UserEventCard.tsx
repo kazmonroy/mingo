@@ -67,7 +67,7 @@ export const UserEventCard = ({ event }: { event: Event }) => {
         <Button size='sm' variant='secondary' className='mt-2' asChild>
           <Link to={`/events/${event.id}`}>
             Manage event
-            <MoveRight />
+            <MoveRight className='size-4' />
           </Link>
         </Button>
       </div>
