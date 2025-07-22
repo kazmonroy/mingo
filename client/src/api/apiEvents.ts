@@ -1,4 +1,4 @@
-import type { Event, PagedList } from '@/lib/types';
+import type { Event, PagedList, Period } from '@/lib/types';
 import {
   useInfiniteQuery,
   useMutation,
@@ -173,10 +173,10 @@ export const useUpdateAttendance = () => {
   };
 };
 
-export const useUserEvents = () => {
+export const useUserEvents = (period: Period) => {
   const { data, isLoading } = useQuery({
-    queryKey: ['user-events'],
-    queryFn: getUserEvents,
+    queryKey: ['user-events', period],
+    queryFn: () => getUserEvents(period),
     select: (data) => {
       return data.map((event: Event) => ({
         ...event,
@@ -235,8 +235,9 @@ const updateAttendanceApi = async (id: string) => {
   return await agent.post(`/events/${id}/attend`);
 };
 
-const getUserEvents = async () => {
-  const response = await agent.get<Event[]>('/events/user-events');
+const getUserEvents = async (period: Period) => {
+  const query = period ? `?period=${period}` : '';
+  const response = await agent.get<Event[]>(`/events/user-events${query}`);
   const { data } = response;
   return data;
 };

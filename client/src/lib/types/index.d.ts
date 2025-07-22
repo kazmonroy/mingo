@@ -79,3 +79,5 @@ export type Photo = {
   id: string;
   url: string;
 };
+
+export type Period = 'past' | '';
