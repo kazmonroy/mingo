@@ -1,4 +1,5 @@
 import { useUserEvents } from '@/api/apiEvents';
+import { UserEventsListTimeline } from './UserEventsListTimeline';
 
 export const UserEventsPage = () => {
   const { userEvents, isLoading } = useUserEvents();
@@ -7,10 +8,14 @@ export const UserEventsPage = () => {
     return <div>Loading...</div>;
   }
 
-  console.log('User Events:', userEvents);
   return (
     <div>
-      <h1>User Events</h1>
+      <div className='my-4'>
+        <h1 className='font-display text-3xl font-medium tracking-tighter sm:text-3xl'>
+          Events
+        </h1>
+      </div>
+      <UserEventsListTimeline events={userEvents} />
     </div>
   );
 };
