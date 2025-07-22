@@ -174,7 +174,7 @@ export const useUpdateAttendance = () => {
 };
 
 export const useUserEvents = () => {
-  const { data: userEvents, isLoading } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['user-events'],
     queryFn: getUserEvents,
     select: (data) => {
@@ -184,6 +184,8 @@ export const useUserEvents = () => {
       }));
     },
   });
+
+  const userEvents = data || [];
 
   return {
     userEvents,
@@ -234,7 +236,7 @@ const updateAttendanceApi = async (id: string) => {
 };
 
 const getUserEvents = async () => {
-  const response = await agent.get('/events/user-events');
+  const response = await agent.get<Event[]>('/events/user-events');
   const { data } = response;
   return data;
 };
